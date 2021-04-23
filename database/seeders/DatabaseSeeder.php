@@ -13,6 +13,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call(OrgUnitTableSeeder::class);
+        $this->command->info('Таблица подразделений успешно заполнена!');
+
+        $this->call(UserTableSeeder::class);
+        $this->command->info('Таблица пользователей успешно заполнена!');
+
+        $this->call(RoleTableSeeder::class);
+        $this->command->info('Таблица ролей успешно заполнена!');
+
+        $this->call(PermissionTableSeeder::class);
+        $this->command->info('Таблица прав успешно заполнена!');
+        
+        $this->call(UserRoleTableSeeder::class);
+        $this->command->info('Таблица ролей пользователей успешно заполнена!');
+
+        $this->call(RolePermissionTableSeeder::class);
+        $this->command->info('Таблица прав ролей успешно заполнена!');
     }
 }
