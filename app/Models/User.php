@@ -7,19 +7,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use App\Traits\HasRolesAndPermissions;
+
+use App\Models\OrgUnit;
+
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory, HasRolesAndPermissions;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    //заполняемые поля
     protected $fillable = [
-        'name',
-        'email',
+        'username',
         'password',
+
+        'FIO',
+        'orgunit_id',
+        'position',
+        'reason',
+        'blocked',
+        'needChangePassword'
+
     ];
 
     /**
@@ -32,12 +39,10 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function orgUnit()
+    {
+        return $this->belongsTo(OrgUnit::class, 'orgunit_id', 'id');
+    }
+
+
 }
