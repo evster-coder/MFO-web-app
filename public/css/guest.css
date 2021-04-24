@@ -1,0 +1,30 @@
+.header-guest{
+	height: 25vh;
+	background: url('../img/skif.png') no-repeat center rgb(240, 240, 240);
+}
+
+.login-block{
+	margin-top:20px;
+	width: 60%;
+	margin-right: auto;
+	margin-left:auto;
+	background-color: #fff;
+	padding:40px;
+	-webkit-box-shadow:0 3px 50px 0 rgba(0,0,0,.1);
+	box-shadow:0 3px 50px 0 rgba(0,0,0,.1);
+	border-radius:5px;
+	text-align: center;
+}
+
+.login-block h2{
+	margin-bottom: 50px;
+}
+
+.login-form{
+	padding-left:2rem;
+	padding-right:2rem;
+	width: 35vw;
+	margin-right: auto;
+	margin-left: auto;
+}
+.login-form div { margin-bottom: 10px; }

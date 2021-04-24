@@ -7,26 +7,16 @@
 
         <title>@yield('title')</title>
 
+        <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-
         <link rel="stylesheet" href="{{ asset('css/webapp.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/guest.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
 
-        <script src= "{{ asset('js/bootstrap.min.js') }}"></script>
+        <!-- Scripts -->
+        <script src="{{ asset('js/bootstrap.min.js') }}" defer></script>
     </head>
     <body>
-        <header> 
-            <div class="header-guest">
-            </div>
-        </header>
-
         <main>
-            <div class="container">
-                @yield('content')
-            </div>
+            @yield('content')
         </main>
-
-        @include ('layouts/partials/_footer')
     </body>
 </html>
