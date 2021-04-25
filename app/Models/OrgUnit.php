@@ -14,6 +14,17 @@ class OrgUnit extends Model
     //отключение полей updated_at, created_at
     public $timestamps = false;
 
+    //сортировка древовидной структуры
+    public function scopeOfSort($query, $sort)
+    {
+        foreach ($sort as $column => $direction) {
+            $query->orderBy($column, $direction);
+        }
+
+        return $query;
+    }
+
+
     //заполняемые поля
     protected $fillable = [
     	'orgUnitCode',
@@ -21,14 +32,15 @@ class OrgUnit extends Model
     	'orgunit_id',
     ];
 
+
     public function parentOrgUnit()
     {
-    	return $this->belongsTo(OrgUnit::class, 'orgunit_id', 'id');
+    	return $this->belongsTo(OrgUnit::class, 'orgunit_id');
     }
 
     public function childsOrgUnit()
     {
-    	return $this->hasMany(OrgUnit::class, 'orgunit_id', 'id');
+    	return $this->hasMany(OrgUnit::class, 'orgunit_id');
     }
 
 }

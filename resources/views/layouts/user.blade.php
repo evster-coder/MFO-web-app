@@ -9,14 +9,23 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        
         <link rel="stylesheet" href="{{ asset('css/webapp.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
+
 
         <!-- Scripts -->
         <script src="{{ asset('js/bootstrap.min.js') }}" defer></script>
     </head>
     <body>
+
+        @include ('layouts.partials._header')
+
         <main>
             @yield('content')
         </main>
+
+        @include ('layouts.partials._footer')
+
     </body>
 </html>

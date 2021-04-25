@@ -32,6 +32,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        //помещаем ключ подразделения в сессию
+        $request->session()->put('OrgUnit', Auth::user()->orgunit_id);
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 
@@ -48,6 +51,9 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        //извлекаем ключ подразделения
+        $request->session()->forget('OrgUnit');
 
         return redirect('/');
     }
