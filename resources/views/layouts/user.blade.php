@@ -12,9 +12,11 @@
         
         <link rel="stylesheet" href="{{ asset('css/webapp.css') }}">
         <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
-
+        <link rel="stylesheet" href="{{ asset('css/header.css') }}">
 
         <!-- Scripts -->
+        <script src="{{ asset('js/orgUnitList.js') }}" defer></script>
+
         <script src="{{ asset('js/bootstrap.min.js') }}" defer></script>
     </head>
     <body>

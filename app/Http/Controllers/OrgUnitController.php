@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\OrgUnit;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
@@ -21,6 +21,21 @@ class OrgUnitController extends Controller
     {
 
         return view('auth.login');
+    }
+
+    public function changeorgunit(Request $request)
+    {
+        $orgUnitIdChange = $request->input('orgUnit');
+
+
+    	if($orgUnitIdChange != null 
+        && Auth::user()->canSetOrgUnit($orgUnitIdChange))
+        {
+            session(['OrgUnit' => $orgUnitIdChange]);
+            return redirect()->route('welcome');
+        }
+        else
+            abort(404);
     }
 
 }

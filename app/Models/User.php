@@ -44,5 +44,18 @@ class User extends Authenticatable
         return $this->belongsTo(OrgUnit::class, 'orgunit_id', 'id');
     }
 
+    public function canSetOrgUnit($id)
+    {
+        if($this->orgunit_od == $id)
+            return true;
+
+        $subtree = OrgUnit::find($this->id)->with('getSubtree')->get();
+
+        foreach ($subtree as $node)
+            if($node->id == $id)
+                return true;
+        return false;
+    }
+
 
 }

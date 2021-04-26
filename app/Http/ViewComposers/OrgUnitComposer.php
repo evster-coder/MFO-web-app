@@ -3,19 +3,21 @@
 namespace App\Http\ViewComposers;
 
 use App\Models\OrgUnit;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class OrgUnitComposer
 {
     public function compose(View $view)
     {
-        $orgUnitItems = OrgUnit::whereNotNull('hasDictionaries')
-            ->ofSort(['orgunit_id' => 'asc'])
-            ->get();
+        $childs = OrgUnit::find(Auth::user()->orgunit_id)->with('getSubtree')->get();
+        $subtree = OrgUnit::where('id', Auth::user()->orgunit_id)
+                        ->get()
+                        ->merge($childs);
 
-        $orgUnitItems = $this->buildTree($orgUnitItems);
+        $subtree = $this->buildTree($subtree);
 
-        return $view->with('orgUnits', $orgUnitItems);
+        return $view->with('orgUnits', $subtree);
     }
 
     public function buildTree($items)
@@ -27,7 +29,6 @@ class OrgUnitComposer
                 $item->childOrgUnits = $grouped[$item->id];
             }
         }
-
-        return $items->where('orgunit_id', null);
+        return $items->where('id', Auth::user()->orgunit_id);
     }
 }

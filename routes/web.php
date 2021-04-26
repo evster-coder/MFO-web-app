@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\OrgunitController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,7 +26,10 @@ Route::group(['middleware' => 'auth'], function() {
 
 	Route::get('/', function () {
 	    return view('welcome');
-	});
+	})->name('welcome');
+
+	Route::put('changeorgunit', [OrgUnitController::class, 'changeorgunit'])
+														->name('orgunits.change');
 
 });
 require __DIR__.'/auth.php';

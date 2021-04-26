@@ -1,3 +1,18 @@
-#orgUnitsList li:active{
-	text-decoration-color: red;
+#orgUnitsList li {
+	list-style: none;
+}
+
+#orgUnitsList .expandIcon:hover{
+    cursor: pointer;
+}
+.expandIcon, .space {
+	width: 20px;
+	user-select: none;
+}
+#orgUnitsList label {
+	user-select: none;	
+}
+
+#orgUnitsList div {
+	display: flex;
 }

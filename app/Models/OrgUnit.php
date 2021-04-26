@@ -24,6 +24,10 @@ class OrgUnit extends Model
         return $query;
     }
 
+    public function getSubtree()
+    {
+        return $this->childsOrgUnit()->with('getSubtree');
+    }
 
     //заполняемые поля
     protected $fillable = [
