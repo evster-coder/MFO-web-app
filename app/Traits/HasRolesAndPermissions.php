@@ -17,7 +17,14 @@ trait HasRolesAndPermissions {
     }
 
     public function permissions() {
-        return $this->roles->permissions();
+        $permissions = [];
+        foreach ($this->roles as $role) {
+            $perms = $role->permissions;
+            foreach ($perms as $perm) {
+                $permissions[] = $perm->slug;            
+            }
+        }
+        return collect(array_values(array_unique($permissions)));
     }
 
     /**
@@ -31,7 +38,7 @@ trait HasRolesAndPermissions {
     //проверка на наличие права $permission*
     */
     public function hasPermission($permission) {
-        return $this->permissions->contains('slug', $permission);
+        return $this->permissions()->contains($permission);
     }
 
     /**
@@ -57,27 +64,6 @@ trait HasRolesAndPermissions {
             }
         }
         return false;
-    }
-
-    /**
-    //Возвращает массив всех прав пользователя
-    */
-    public function getAllPerms() {
-        $permissions = [];
-        foreach ($this->roles as $role) {
-            $perms = $role->permissions;
-            foreach ($perms as $perm) {
-                $permissions[] = $perm->slug;
-            }
-        }
-        return array_values(array_unique($permissions));
-    }
-
-    /**
-    //Возвращает массив всех ролей текущего пользователя
-    */
-    public function getAllRoles() {
-        return $this->roles->pluck('slug')->toArray();
     }
 
     /**

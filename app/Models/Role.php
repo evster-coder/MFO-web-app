@@ -11,6 +11,7 @@ use App\Models\User;
 class Role extends Model
 {
     use HasFactory;
+
     //все права этой роли
     public function permissions()
     {
@@ -20,6 +21,6 @@ class Role extends Model
     //все пользователи с этой ролью
     public function users()
     {
-    	return $thos->belongsToMany(User::class, 'user_role')->withTimestamps();
+    	return $this->belongsToMany(User::class, 'user_role')->withTimestamps();
     }
 }
