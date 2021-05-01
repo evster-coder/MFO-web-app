@@ -42,6 +42,8 @@ Route::group(['middleware' => 'auth'], function() {
 
 	Route::group(['middleware' => 'perm:manage-users'], function(){
 		//user routes
+		Route::get('/users/get-users', [UserController::class, 'getUsers'])->name('user.list');
+
 		Route::get('/user', [UserController::class, 'index'])->name('user.index');
 		Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
 		Route::post('/user', [UserController::class, 'store'])->name('user.store');
@@ -84,15 +86,13 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::delete('/loanterm/{id}', [LoanTermController::class, 'destroy'])
 										->name('loanterm.destroy');
 
-		//MartialStatus routes
-		Route::get('/maritalstatus', [MaritalStatusController::class, 'index'])
-										->name('maritalstatus.index');
+		//MartialStatus route
+		Route::get('/maritalstatus/{id}', [MaritalStatusController::class, 'show'])
+										->name('maritalstatus.show');
 		Route::get('/maritalstatus/create', [MaritalStatusController::class, 'create'])
 										->name('maritalstatus.create');
 		Route::post('/maritalstatus', [MaritalStatusController::class, 'store'])
 										->name('maritalstatus.store');
-		Route::get('/maritalstatus/{id}', [MaritalStatusController::class, 'show'])
-										->name('maritalstatus.show');
 		Route::get('/maritalstatus/{id}/edit', [MaritalStatusController::class, 'edit'])
 										->name('maritalstatus.edit');
 		Route::put('/maritalstatus/{id}', [MaritalStatusController::class, 'update'])

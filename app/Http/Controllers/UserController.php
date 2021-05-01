@@ -12,12 +12,40 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $req)
     {
         $users = User::find(Auth::user()->id)->getDownUsers()
+                            ->with('roles')
+                            ->with('orgUnit')
                             ->orderBy('username')
-                            ->paginate(10);
+                            ->paginate(4);
+        //dd($users);
+
         return view('users.index', ['users' => $users]);
+    }
+
+    public function getUsers(Request $req)
+    {
+    if($req->ajax())
+    {
+        $sortBy = $req->get('sortby');
+        $sortDesc = $req->get('sortdesc');
+        $query = $req->get('query');
+        $query = str_replace(" ", "%", $query);
+
+        $users = User::find(Auth::user()->id)
+                    ->getDownUsers()
+                    ->select('users.*')
+                    ->join('orgunits', 'orgunits.id', '=', 'users.orgunit_id')
+                    ->where('username', 'like', '%'.$query.'%')
+                    ->OrWhere('orgunits.orgUnitCode', 'like', '%'.$query.'%')
+                    ->OrWhere('FIO', 'like', '%'.$query.'%')
+                    ->orderBy($sortBy, $sortDesc)
+                    ->with(['roles', 'orgUnit'])
+                    ->paginate(4);
+        //dd($users);
+        return view('components.users-tbody', compact('users'))->render();
+    }
     }
 
     public function create()

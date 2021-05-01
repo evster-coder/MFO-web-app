@@ -1,5 +1,5 @@
 footer {
-	margin-right: 1000px;
+	margin-right: 1000px !important;
 	min-width: 100%;
 	position: absolute;
 	bottom: 0;
@@ -8,4 +8,8 @@ footer {
 
 footer a {
 	text-decoration: none;
+}
+
+main{
+	margin-bottom:50px;
 }

@@ -11,7 +11,9 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
-        "staudenmeir/laravel-adjacency-list": "^1.0"
+        "laravel/ui": "^3.2",
+        "staudenmeir/laravel-adjacency-list": "^1.0",
+		"kyslik/column-sortable": "^6.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

@@ -7,6 +7,7 @@
 
 @push('assets')
     <link rel="stylesheet" href="{{ asset('css/users.css') }}">
+    <script src="{{ asset('js/usersCRUD/index.js') }}"></script>
 @endpush
 
 @section('content')
@@ -16,70 +17,43 @@
 		@perm('create-user')
 	      	<div class="add-user-btn">
 	        	<a class="btn btn-primary" href="{{ route('user.create') }}" role="button">Добавить</a>
+	        	<div class="form-group has-search">
+				    <span class="fa fa-search form-control-feedback"></span>
+	      			<input type="text" name="search" id="search" class="form-control" placeholder="Выполните поиск..." />
+			  	</div>
 	      	</div>
       	@endperm
 
-	<table class="table table-bordered mb-5">
-		<thead>
-			<tr class="table-info">
-				<th scope="col">Логин</th>
-				<th scope="col">ФИО</th>
-				<th scope="col">Блокировка</th>
-				<th scope="col">Роли</th>
-				<th scope="col">Действия</th>
-			</tr>
-		</thead>
-		<tbody>
+		<table class="table user-table table-bordered mb-5">
+			<thead>
+				<tr class="table-info">
 
-			@foreach($users as $user)
-			<tr>
-				<td>{{ $user->username }}</td>
-				<td>{{ $user->FIO }}</td>
-				<td>@if ($user->blocked)
-						Да
-					@else
-						Нет
-					@endif
-				</td>
-				<td>
-					<ul>
-						@foreach($user->roles as $role)
-						<li>{{ $role->name }}</li>
-						@endforeach
-					</ul>
-				</td>
+					<th scope="col" class="sorting" data-sorting-type="asc" 
+													data-column-name="username">Логин
+												<span id="icon-username"></span></th>
+					<th scope="col" class="sorting" 
+										data-sorting-type="asc" 
+										data-column-name="FIO">ФИО
+												<span id="icon-FIO"></span></th>
+					<th scope="col" class="sorting"
+										data-sorting-type="asc" 
+										data-column-name="orgunits.orgUnitCode">Подразделение
+												<span id="icon-orgunit"></span></th>
+					<th scope="col" class="sorting" 
+										data-sorting-type="asc" 
+										data-column-name="blocked">Блокировка
+												<span id="icon-blocked"></span></th>
+					<th scope="col">Роли</th>
+					<th scope="col">Действия</th>
+				</tr>
+			</thead>
+			<tbody>
+				<x-users-tbody :users="$users"></x-users-tbody>
+			</tbody>
+		</table>
 
-				<td>
-					<div class = "d-flex manage-btns">
-		                <!-- Админские кнопки редактирования и удаления -->
-		                <a class="btn btn-success" href="{{route('user.show', $user)}}" role="button">
-		                	Просмотр
-	            		</a>
-
-						@perm('edit-user')
-	                  	<a class="btn btn-info" href="{{route('user.edit', $user) }}" role="button">
-	                  		Изменить
-	                  	</a>
-	         			@endperm
- 	
- 						@perm('delete-user')
-		                <form method="POST" action="{{route('user.destroy', $user) }}">
-		                  @method('DELETE')
-		                  @csrf
-		                  <button type="submit" class="btn btn-danger" onclick="return confirm('Вы действительно хотите удалить запись?');">Удалить</button>
-		                </form>
-		                @endperm
-
-            		</div>
-				</td>
-			</tr>
-			@endforeach
-
-		</tbody>
-	</table>
-
-	<div class="justify-content-center">
-		{{ $users->links('pagination::bootstrap-4') }}
-	</div>
+	    <input type="hidden" name="hiddenPage" id="hiddenPage" value="1" />
+    	<input type="hidden" name="hiddenSortColumn" id="hiddenSortColumn" value="username" />
+    	<input type="hidden" name="hiddenSortDesc" id="hiddenSortDesc" value="desc" />
 
 @endsection

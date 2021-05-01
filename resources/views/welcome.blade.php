@@ -6,6 +6,8 @@
 @endsection
 
 @section('content')
+        <example-component></example-component>
+
     <div class="mt-2 bg-white">
         Контентная часть сайта
         @auth
@@ -15,6 +17,7 @@
         @else
             <p>Не авторизован </p>
         @endauth
+
 
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,

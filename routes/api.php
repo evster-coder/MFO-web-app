@@ -3,6 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\DictsData\MaritalStatusController;
+
+use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,3 +21,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+		Route::get('/maritalstatus', [MaritalStatusController::class, 'index'])
+										->name('maritalstatus.index');
+
+												Route::get('/users', [UserController::class, 'all'])
+										->name('maritalstatus.asll');
+

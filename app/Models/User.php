@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function getDownUsers()
     {
-        return User::whereIn('orgunit_id', OrgUnit::find(session('OrgUnit'))->descendantsAndSelf
+        return User::whereIn('users.orgunit_id', OrgUnit::find(session('OrgUnit'))->descendantsAndSelf
                                                     ->pluck('id'));
     }
 

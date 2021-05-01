@@ -16,8 +16,9 @@ class MaritalStatusController extends Controller
      */
     public function index()
     {
-        $items = MaritalStatus::orderBy('name', 'desc')->paginate(10);
-        return $items;
+        return response()->json(MaritalStatus::get(), 200);
+        //$items = MaritalStatus::orderBy('name', 'desc')->paginate(10);
+        //return $items;
         //return view('dicts.seniority.index', ['items' => $items]);
 
     }
@@ -49,7 +50,7 @@ class MaritalStatusController extends Controller
      * @param  \App\Models\MaritalStatus  $maritalStatus
      * @return \Illuminate\Http\Response
      */
-    public function show(MaritalStatus $maritalStatus)
+    public function show( $maritalStatus)
     {
         //
     }
