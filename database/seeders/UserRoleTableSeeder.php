@@ -24,7 +24,7 @@ class UserRoleTableSeeder extends Seeder
                 if ($user->id == 2 && $role->slug == 'director') { // два админа
                     $user->roles()->attach($role->id);
                 }
-                if ($user->id == 3 && $role->slug == 'user') { // обычные пользователи
+                if ($user->id == 3 && $role->slug == 'cashier') { // обычные пользователи
                     $user->roles()->attach($role->id);
                 }
             }

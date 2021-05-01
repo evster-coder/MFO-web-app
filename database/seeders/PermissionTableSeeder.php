@@ -34,6 +34,8 @@ class PermissionTableSeeder extends Seeder
             ['slug' => 'edit-clients', 'name' => 'Редактирование клиента'],
             ['slug' => 'delete-clients', 'name' => 'Удаление клиента'],
 
+            ['slug' => 'manage-datadicts', 'name' => 'Управление справочной информацией'],
+
         ];
 
         foreach ($permissions as $permission) {
