@@ -49,12 +49,17 @@ class User extends Authenticatable
         if($this->orgunit_od == $id)
             return true;
 
-        $subtree = OrgUnit::find($this->id)->with('getSubtree')->get();
-
+        $subtree = OrgUnit::find($this->id)->descendantsAndSelf;
         foreach ($subtree as $node)
             if($node->id == $id)
                 return true;
         return false;
+    }
+
+    public function getDownUsers()
+    {
+        return User::whereIn('orgunit_id', OrgUnit::find(session('OrgUnit'))->descendantsAndSelf
+                                                    ->pluck('id'));
     }
 
 

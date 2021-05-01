@@ -32,7 +32,7 @@ class OrgUnitController extends Controller
         && Auth::user()->canSetOrgUnit($orgUnitIdChange))
         {
             session(['OrgUnit' => $orgUnitIdChange]);
-            return redirect()->route('welcome');
+            return back();
         }
         else
             abort(404);

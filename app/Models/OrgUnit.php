@@ -5,28 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
+
 class OrgUnit extends Model
 {
-    use HasFactory;
+    use HasFactory;    
+    use HasRecursiveRelationships;
+
 
     protected $table = 'orgunits';
 
     //отключение полей updated_at, created_at
     public $timestamps = false;
 
-    //сортировка древовидной структуры
-    public function scopeOfSort($query, $sort)
-    {
-        foreach ($sort as $column => $direction) {
-            $query->orderBy($column, $direction);
-        }
 
-        return $query;
-    }
-
-    public function getSubtree()
+    //устанавилваем id для родительского элемента
+    public function getParentKeyName()
     {
-        return $this->childsOrgUnit()->with('getSubtree');
+        return 'orgunit_id';
     }
 
     //заполняемые поля
