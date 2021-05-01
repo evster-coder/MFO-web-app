@@ -3,6 +3,7 @@ footer {
 	min-width: 100%;
 	position: absolute;
 	bottom: 0;
+	background: rgb(240, 240, 240);
 }
 
 footer a {

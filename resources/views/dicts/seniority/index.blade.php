@@ -2,20 +2,18 @@
 @extends('layouts.user')
 
 @section('title')
-	Пользователи системы
+	Стаж работы
 @endsection
-
-@push('assets')
-    <link rel="stylesheet" href="{{ asset('css/users.css') }}">
-@endpush
 
 @section('content')
 
-		<h1>Пользователи системы:</h1>
+		<h1>Стаж работы - список</h1>
 
 		@perm('create-user')
 	      	<div class="add-user-btn">
-	        	<a class="btn btn-primary" href="{{ route('user.create') }}" role="button">Добавить</a>
+	        	<a class="btn btn-primary" href="{{ route('seniority.create') }}" role="button">
+	        		Добавить
+        		</a>
 	      	</div>
       	@endperm
 

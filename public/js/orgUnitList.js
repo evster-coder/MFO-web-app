@@ -13,7 +13,8 @@ function ready() {
 		items[i].click();
 	}
 
-
+	if (orgUnits == null)
+		return;
 	var radioBtns = orgUnits.querySelectorAll('.orgUnitItem label span input');
 	var checked;
 	for(var i = 0; i < radioBtns.length; i++)
@@ -27,12 +28,14 @@ function ready() {
 	while(parentNode != null)
 	{
 		parentNode = parentNode.parentNode.closest('div');
-		if(parentNode)
+		if(parentNode && parentNode.classList.contains('modal-body') == false)
 		{
 			spanClick = parentNode.querySelector('.expandIcon');
 			if(spanClick)
 				spanClick.click();
+			else break;
 		}
+		else break;
 	}
 }
 

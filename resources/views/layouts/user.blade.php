@@ -14,17 +14,30 @@
         <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
         <link rel="stylesheet" href="{{ asset('css/header.css') }}">
 
+        <link rel="stylesheet" href="{{ asset('css/crudindex.css') }}">
+
+        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+
+
+        <script src="{{ asset('js/menu.js') }}" defer></script>
+        <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
+
+        
         <!-- Scripts -->
         <script src="{{ asset('js/orgUnitList.js') }}" defer></script>
 
         <script src="{{ asset('js/bootstrap.min.js') }}" defer></script>
+
+        @stack('assets')
     </head>
     <body>
 
-        @include ('layouts.partials._header')
+        <header>
+            @include ('layouts.partials._header')
+        </header>
 
         <main>
-            <div class="container">
+            <div class="container wrap">
                 @yield('content')
             </div>
         </main>

@@ -16,3 +16,89 @@
 #orgUnitsList div {
 	display: flex;
 }
+
+nav{
+    background: rgb(220, 220, 220);
+}
+
+.modal-backdrop {
+  position: unset !important;
+  background: #000;
+}
+
+.navbar-toggler{
+    color: black;
+}
+
+.navbar{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    font-family: Ubuntu, Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+.nav-link:hover {
+    transition: all 0.4s;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: rgb(0, 47, 85);
+
+}
+
+.navbar-nav .active{
+    background: rgb(100, 100, 100);
+    border-left: 4px solid black;
+}
+
+.wrap {
+    padding: 70px 15px 20px;
+    position: relative;
+}
+@media (min-width: 1200px){
+    main .container{
+        max-width: 80%;
+    }
+}
+
+.has-sub ul {
+    display: none;
+}
+
+
+@media (min-width: 992px) {
+    .container {
+        padding-left: 230px !important;
+    }
+    .navbar .container{
+        height: 40px;
+    }
+    .navbar-brand{
+        position:absolute;
+        left: 50px;
+    }
+    .sidenav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 230px;
+        height: calc(100vh - 3.5rem);
+        margin-top: 3.5rem;
+        background: rgb(220, 220, 220);
+        border-top: 1px solid rgba(0, 0, 0, 0.3);
+    }
+    .navbar-expand-lg .sidenav {
+        flex-direction: column;
+    }
+}
+
+.navbar-brand{
+    color:black;
+}
+.navbar-brand:hover{
+    color:white;
+}
+
+.nav-link{
+    color: rgb(0, 47, 85);
+    font-variant: small-caps;
+}

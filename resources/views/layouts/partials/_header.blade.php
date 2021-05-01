@@ -1,16 +1,86 @@
-<x-select-orgunit :orgUnits=$orgUnits />
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
 
-<ul>
-    @perm('manage-users')
-        <li class="nav-item">
-            <a href="{{route('user.index')}}" class="nav-link">Пользователи</a>
-        </li>
-    @endperm
+        <a href="{{url('/')}}" class="navbar-brand">Система МФО</a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="#navContent" aria-expanded="false" aria-label="Toggle navigation"><span><i class="fas fa-bars"></i></span></button>
+        <div id="navContent" class="collapse navbar-collapse">
 
-    @perm('manage-orgunits')
-        <li class="nav-item">
-            Подразделения
-        </li>
-    @endperm
-    
-</ul>
+
+        <!-- Горизонтальная часть меню -->
+        <div class="navbar-nav ms-auto">
+            @auth
+                <form method="POST" class="row" action="{{ route('logout') }}">
+                    @csrf
+                    <div class="col">
+                        <a id="userLink" class="nav-link nav-item" href="#">
+                        {{ Auth::user()->username }}
+                        </a>
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn nav-item">Выход</button>
+                    </div>
+                </form>
+
+                <x-select-orgunit :orgUnits=$orgUnits />
+
+            @endauth
+        </div>
+
+
+        <!-- Вертикальная часть меню -->
+        <div class="navbar-nav">
+            <ul class="navbar-nav me-auto sidenav">
+                <li class="nav-item">
+                    <a href="{{url('/')}}" class="nav-link">Главная</a>
+                </li>
+
+                @perm('manage-users')
+                    <li class="nav-item">
+                        <a href="{{route('user.index')}}" class="nav-link">Пользователи</a>
+                    </li>
+                @endperm
+
+                @perm('manage-orgunits')
+                    <li class="nav-item">
+                        <a href="{{route('user.index')}}" class="nav-link">Подразделения</a>
+                    </li>
+                @endperm
+
+                @perm('manage-datadicts')
+                    <li class="nav-item has-sub">
+
+
+                        <a class="nav-link " href="#" id="dictionarities" role="button" aria-expanded="false">
+                            Справочные данные
+                            <i class="fas fa-sort-down"></i>
+                        </a>
+
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('interestrate.index')}}">
+                                Процентная ставка
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('maritalstatus.index')}}">
+                                Семейное положение
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('loanterm.index')}}">
+                                Сроки займа
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('seniority.index')}}">
+                                Стаж на месте работы
+                                </a>
+                            </li>
+                        </ul>
+
+                    </li>
+                @endperm
+            </ul>
+        </div>
+    </div>
+</nav>
