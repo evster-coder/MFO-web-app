@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
+use App\Models\OrgUnit;
+
 
 class OrgUnitController extends Controller
 {
@@ -37,5 +39,17 @@ class OrgUnitController extends Controller
         else
             abort(404);
     }
+
+    /*public function getDownOrgUnits(Request $req)
+    {
+        $query = $req->get('query');
+
+        $orgunits = OrgUnit::find(Auth::user()->orgunit_id)
+                            ->with('descendantsAndSelf')
+                            ->where('orgUnitCode', 'like', '%'.$query.'%')
+                            ->get();
+
+        return response()->json($orgunits);
+    }*/
 
 }

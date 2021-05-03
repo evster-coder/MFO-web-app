@@ -16,6 +16,7 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
         $permissions = [
+            ['slug' => 'view-users', 'name' => 'Просматривать пользователей'],
             ['slug' => 'manage-users', 'name' => 'Управление пользователями'],
             ['slug' => 'create-user', 'name' => 'Создание пользователя'],
             ['slug' => 'edit-user', 'name' => 'Редактирование пользователя'],

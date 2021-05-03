@@ -12,3 +12,6 @@ $fa-font-path:        "../webfonts";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 @import "~@fortawesome/fontawesome-free/scss/regular";
+
+@import "node_modules/select2/src/scss/core";
+@import "node_modules/select2-bootstrap-5-theme/src/include-all";

@@ -46,13 +46,14 @@ class User extends Authenticatable
 
     public function canSetOrgUnit($id)
     {
-        if($this->orgunit_od == $id)
+        if($this->orgunit_id == $id)
             return true;
 
-        $subtree = OrgUnit::find($this->id)->descendantsAndSelf;
+        $subtree = OrgUnit::find($this->orgunit_id)->descendantsAndSelf;
         foreach ($subtree as $node)
             if($node->id == $id)
                 return true;
+   
         return false;
     }
 

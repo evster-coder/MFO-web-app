@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DictsData\MaritalStatusController;
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrgUnitController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,13 +20,19 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth:web')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-		Route::get('/maritalstatus', [MaritalStatusController::class, 'index'])
-										->name('maritalstatus.index');
+Route::group(['middleware' => 'auth'], function() {
 
-												Route::get('/users', [UserController::class, 'all'])
-										->name('maritalstatus.asll');
+	//Route::get('/orgunits-down', [OrgUnitController::class, 'getDownOrgUnits'])
+	//							->name('orgunit.showdown');
+
+
+
+	Route::get('/maritalstatus', [MaritalStatusController::class, 'index'])
+								->name('maritalstatus.index');
+
+});
 

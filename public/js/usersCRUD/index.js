@@ -42,21 +42,29 @@ $(document).ready(function(){
  $(document).on('click', '.sorting', function(){
     var sortColumn = $(this).data('column-name');
     var orderDesc = $(this).data('sorting-type');
-    console.log(orderDesc);
+
     var newOrder = '';
     if(orderDesc == 'asc')
     {
        $(this).data('sorting-type', 'desc');
        newOrder = 'desc';
        clearIconData();
-       $('#icon-'+sortColumn).html('<i class="fas fa-angle-up"></i>');
+
+       if(sortColumn == "orgunits.orgUnitCode")
+        $('#icon-orgunit').html('<i class="fas fa-angle-up"></i>');
+      else
+        $('#icon-'+sortColumn).html('<i class="fas fa-angle-up"></i>');
     }
     if(orderDesc == 'desc')
     {
        $(this).data('sorting-type', 'asc');
        newOrder = 'asc';
        clearIconData();
-       $('#icon-' + sortColumn).html('<i class="fas fa-angle-down"></i>');
+
+      if(sortColumn == "orgunits.orgUnitCode")
+        $('#icon-orgunit').html('<i class="fas fa-angle-down"></i>');
+      else
+        $('#icon-' + sortColumn).html('<i class="fas fa-angle-down"></i>');
     }
 
     $('#hiddenSortColumn').val(sortColumn);

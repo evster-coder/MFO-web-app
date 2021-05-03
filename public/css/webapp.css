@@ -4,3 +4,12 @@ html{
 	margin: 0;
     padding: 0;
 }
+
+.content-block{
+	margin-top:35px;
+}
+
+.block-padding{
+	margin-top:10px;
+	margin-bottom: 20px;	
+}
