@@ -53,7 +53,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{route('loanterm.index')}}">
+                                <a class="nav-link" href="{{route('perm.index')}}">
                                 Права
                                 </a>
                             </li>

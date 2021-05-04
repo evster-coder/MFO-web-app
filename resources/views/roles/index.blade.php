@@ -6,7 +6,8 @@
 @endsection
 
 @push('assets')
-
+    <script src="{{ asset('js/rolesCRUD/table.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/roles.css') }}">
 @endpush
 
 @section('content')
@@ -16,46 +17,31 @@
 		<x-auth-session-status class="mb-4" :status="session('status')" />
     	<x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-      	<div class="add-user-btn">
-        	<a class="btn btn-primary" href="{{ route('role.create') }}" role="button" 
-                  style="margin:10px;">Добавление</a>
+      	<div class="add-role-btn">
+        	<a class="btn btn-primary" href="{{ route('role.create') }}" role="button">Добавление</a>
+              <div class="form-group has-search">
+              <span class="fa fa-search form-control-feedback"></span>
+                <input type="text" name="search" id="search" class="form-control" placeholder="Выполните поиск..." />
+            </div>
       	</div>
 
-      	<table class="table table-bordered table-hover">
+      	<table class="table table-bordered table-hover role-table">
             <thead>
             <tr class="table-primary">
-              <th scope="col">Роль</th>
-              <th scope="col">Сокращение</th>
+              <th scope="col" class="sorting" data-sorting-type="asc" 
+                            data-column-name="name">Роль <span id="icon-name"></span></th>
+              <th scope="col"  class="sorting" data-sorting-type="asc" 
+                            data-column-name="slug">Сокращение <span id="icon-slug"></span></th>
               <th scope="col">Действия</th>
             </tr>
             </thead>
             <tbody>
-        		@foreach($roles as $role)
-            <tr>
-              <td>
-        			 {{$role->name}}
-              </td>
-              <td>
-                {{$role->slug}}
-              </td>
-              <td>
-                <div class = "d-flex manage-btns">
-                  <a class="btn btn-success" href="{{route('role.show', [$role->id])}}" role="button">
-                    Подробности
-                  </a>
-
-                  <form method="POST" action="{{route('role.destroy', [$role->id]) }}">
-                    @method('DELETE')
-                    @csrf
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Вы действительно хотите удалить запись?');">Удаление</button>
-                  </form>
-
-                </div>
-              </td>
-            </tr>
-        		@endforeach
+              <x-roles-tbody :roles="$roles"></x-roles-tbody>
           </tbody>
       	</table>
+        <input type="hidden" name="hiddenPage" id="hiddenPage" value="1" />
+        <input type="hidden" name="hiddenSortColumn" id="hiddenSortColumn" value="name" />
+        <input type="hidden" name="hiddenSortDesc" id="hiddenSortDesc" value="desc" />
 
     </div>
 @endsection

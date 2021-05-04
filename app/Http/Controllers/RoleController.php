@@ -18,9 +18,28 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all();
+        $roles = Role::orderBy('name')->paginate(10);
 
         return view('roles.index', ['roles' => $roles]);
+    }
+
+    public function getRoles(Request $req)
+    {
+        if($req->ajax())
+        {
+            $sortBy = $req->get('sortby');
+            $sortDesc = $req->get('sortdesc');
+            $query = $req->get('query');
+            $query = str_replace(" ", "%", $query);
+
+            $roles = Role::where('name', 'like', '%'.$query.'%')
+                        ->OrWhere('slug','like', '%'.$query.'%')
+                        ->orderBy($sortBy, $sortDesc)
+                        ->paginate(10);
+
+            return view('components.roles-tbody', compact('roles'))->render();
+        }
+
     }
 
     /**

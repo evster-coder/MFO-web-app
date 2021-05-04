@@ -69,6 +69,9 @@ Route::group(['middleware' => 'auth'], function() {
 	//Роли пользователя
 	Route::group(['middleware' => 'perm:manage-roles'], function(){
 		Route::get('/role', [RoleController::class, 'index'])->name('role.index');
+
+		Route::get('/roles/get-roles', [RoleController::class, 'getRoles'])->name('role.list');
+
 		Route::get('/role/create', [RoleController::class, 'create'])->name('role.create');
 		Route::post('/role', [RoleController::class, 'store'])->name('role.store');
 		Route::delete('/role/{id}', [RoleController::class, 'destroy'])->name('role.destroy');
@@ -79,12 +82,13 @@ Route::group(['middleware' => 'auth'], function() {
 
 	Route::group(['middleware' => 'perm:manage-perms'], function(){
 		Route::get('/perm', [PermissionController::class, 'index'])->name('perm.index');
+
+		Route::get('/perms/get-perms', [PermissionController::class, 'getPerms'])->name('perm.list');
+		
 		Route::get('/perm/create', [PermissionController::class, 'create'])->name('perm.create');
+		Route::get('/perm/edit/{id}', [PermissionController::class, 'edit'])->name('perm.edit');
 		Route::post('/perm', [PermissionController::class, 'store'])->name('perm.store');
 		Route::delete('/perm/{id}', [PermissionController::class, 'destroy'])->name('perm.destroy');
-		Route::get('/perm/{id}', [PermissionController::class, 'show'])->name('perm.show');
-		Route::put('/perm/{id}', [PermissionController::class, 'update'])->name('perm.update');
-
 	});
 
 	Route::group(['middleware' => 'perm:manage-datadicts'], function(){

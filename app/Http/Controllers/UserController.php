@@ -57,7 +57,7 @@ class UserController extends Controller
                         ->OrWhere('FIO', 'like', '%'.$query.'%')
                         ->orderBy($sortBy, $sortDesc)
                         ->with(['roles', 'orgUnit'])
-                        ->paginate(4);
+                        ->paginate(10);
 
             return view('components.users-tbody', compact('users'))->render();
         }
