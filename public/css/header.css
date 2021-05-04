@@ -37,9 +37,12 @@ nav{
     background: rgb(220, 220, 220);
 }
 
-.modal-backdrop {
-  position: unset !important;
-  background: #000;
+ .modal-backdrop {
+    display: none;    
+}
+
+.modal{
+    background-color: rgba(10,10,10,0.45);
 }
 
 .navbar-toggler{
