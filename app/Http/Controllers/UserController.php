@@ -18,6 +18,8 @@ class UserController extends Controller
 {
     public function index(Request $req)
     {
+        //dd("index");
+
         $users = User::find(Auth::user()->id)->getDownUsers()
                             ->with('roles')
                             ->with('orgUnit')
@@ -29,13 +31,16 @@ class UserController extends Controller
 
     public function show($id)
     {
+        //dd("show");
         $user = User::find($id);
+        $roles = Role::all();
 
         return view('users.show', ['user' => $user]);
     }
 
     public function getUsers(Request $req)
     {
+        //dd("getUsers");
         if($req->ajax())
         {
             $sortBy = $req->get('sortby');
@@ -60,6 +65,7 @@ class UserController extends Controller
 
     public function create()
     {
+        //dd("create");
     	$newUser = new User();
 
         $orgunits = OrgUnit::find(Auth::user()->orgunit_id)
@@ -68,7 +74,6 @@ class UserController extends Controller
                             ->get();
 
         $roles = Role::all();
-
 
     	return view('users.create', 
     				['curUser' => $newUser,
@@ -79,6 +84,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $req)
     {
+        //dd("store");
         $data = $req->all();
 
         //создаем пользователя
@@ -108,6 +114,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
+        //dd("edit");
         $curUser = User::find($id);
 
 
@@ -131,6 +138,7 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $req, $id)
     {
+        //dd("update");
         $editUser = User::find($id);
 
         if(empty($editUser))
@@ -169,13 +177,12 @@ class UserController extends Controller
             return back()->withErrors(['msg' => "Ошибка обновления записи"])->withInput();
         }
 
-
-
     }
 
-    public function destroy($user)
+    public function destroy($id)
     {
-        $deletingItem = User::find($user);
+        //dd("destroy");
+        $deletingItem = User::find($id);
 
         if($deletingItem)
         {
@@ -190,6 +197,7 @@ class UserController extends Controller
 
     public function block($id)
     {
+        //dd("block");
         if(Auth::user()->id == $id)
             return back()->withErrors(['msg' => 'Нельзя заблокировать себя']);
         else
@@ -213,6 +221,8 @@ class UserController extends Controller
 
     public function unblock($id)
     {
+        //dd("unblock");
+
         if(Auth::user()->id == $id)
             return back()->withErrors(['msg' => 'Нельзя разблокировать себя']);
         else
@@ -227,7 +237,7 @@ class UserController extends Controller
                 $unbanUser->blocked = false;
                 $unbanUser->save();
 
-                redirect()->route('user.show', $unbanUser->id)->with(['status' => 'Успешно разблокирован']);
+                return redirect()->route('user.show', $unbanUser->id)->with(['status' => 'Успешно разблокирован']);
             }
             else
                 return response()->json(['Ошибка' => 'Вы не можете разблокировать этого пользователя!']);
@@ -237,6 +247,8 @@ class UserController extends Controller
 
     public function resetPassword($id)
     {
+        //dd("resetPassword");
+        
         $user = User::find($id);
 
         if($user == null)

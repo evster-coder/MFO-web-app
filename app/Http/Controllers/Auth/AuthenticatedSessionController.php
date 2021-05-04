@@ -8,6 +8,8 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\OrgUnit;
+
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -34,6 +36,8 @@ class AuthenticatedSessionController extends Controller
 
         //помещаем ключ подразделения в сессию
         $request->session()->put('OrgUnit', Auth::user()->orgunit_id);
+        $request->session()->put('OrgUnitCode', OrgUnit::find(Auth::user()->orgunit_id)->orgUnitCode);
+
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
@@ -54,6 +58,7 @@ class AuthenticatedSessionController extends Controller
 
         //извлекаем ключ подразделения
         $request->session()->forget('OrgUnit');
+        $request->session()->forget('OrgUnitCode');
 
         return redirect('/');
     }

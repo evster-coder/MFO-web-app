@@ -22,12 +22,6 @@ use App\Http\Controllers\DictsData\SeniorityController;
 |
 */
 
-
-Route::get('/aboba', function(Request $request){
-	dd($request->session()->all());
-	return view('welcome');
-});
-
 Route::group(['middleware' => 'auth'], function() {
 
 	Route::get('/', function () {
@@ -42,32 +36,25 @@ Route::group(['middleware' => 'auth'], function() {
 
 	Route::group(['middleware' => 'perm:view-users'], function(){
 		//user routes
+		Route::get('/user', [UserController::class, 'index'])->name('user.index');
+
 		Route::get('/users/get-users', [UserController::class, 'getUsers'])->name('user.list');
 
-		Route::get('/user', [UserController::class, 'index'])->name('user.index');
-		Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
+		Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
+		Route::post('/user', [UserController::class, 'store'])->name('user.store');
+		Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy');
 
-		Route::group(['middleware' => 'perm:create-user'], function(){
-			Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
-			Route::post('/user', [UserController::class, 'store'])->name('user.store');
-		});
+		Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+		Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
 
-		Route::group(['middleware' => 'perm:edit-user'], function(){
-			Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
-			Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
-		});
 
-		Route::group(['middleware' => 'perm:edit-user'], function(){
-			Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
-		});
-
-		Route::group(['middleware' => 'perm:edit-user'], function(){
-			Route::get('/user/block/{user}', [UserController::class, 'block'])->name('user.block');
-			Route::get('/user/unblock/{user}', [UserController::class, 'unblock'])->name('user.unblock');
-			Route::get('/user/resetpassword/{user}', [UserController::class, 'resetPassword'])
+		Route::group(['middleware' => 'perm:manage-users'], function(){
+			Route::get('/user/block/{id}', [UserController::class, 'block'])->name('user.block');
+			Route::get('/user/unblock/{id}', [UserController::class, 'unblock'])->name('user.unblock');
+			Route::get('/user/resetpassword/{id}', [UserController::class, 'resetPassword'])
 																	->name('user.resetpassword');
-
 		});
+		Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show');
 	});
 
 	Route::group(['middleware' => 'perm:manage-datadicts'], function(){

@@ -19,15 +19,15 @@
 	    	<x-auth-validation-errors class="mb-4" :errors="$errors" />
 
 
-			@perm('create-user')
 		      	<div class="add-user-btn">
+	      		@perm('create-user')
 		        	<a class="btn btn-primary" href="{{ route('user.create') }}" role="button">Добавить</a>
+		      	@endperm
 		        	<div class="form-group has-search">
 					    <span class="fa fa-search form-control-feedback"></span>
 		      			<input type="text" name="search" id="search" class="form-control" placeholder="Выполните поиск..." />
 				  	</div>
 		      	</div>
-	      	@endperm
 
 			<table class="table user-table table-bordered mb-5">
 				<thead>

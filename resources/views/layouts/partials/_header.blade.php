@@ -34,7 +34,7 @@
                     <a href="{{url('/')}}" class="nav-link">Главная</a>
                 </li>
 
-                @perm('manage-users')
+                @perm('view-users')
                     <li class="nav-item">
                         <a href="{{route('user.index')}}" class="nav-link">Пользователи</a>
                     </li>

@@ -28,16 +28,16 @@
 		@if($curUser->exists)
 			<div class="block-padding">
 				@if(!$curUser->blocked)
-					<a href="{{route ('user.block', $curUser->id)}}" class="btn btn-danger" onclick="return confirm('Вы действительно хотите заблокировать пользователя?');">Заблокировать</a>
+					<a href="{{route ('user.block', [$curUser->id])}}" class="btn btn-danger" onclick="return confirm('Вы действительно хотите заблокировать пользователя?');">Заблокировать</a>
 				@else
-					<a href="{{route ('user.unblock', $curUser->id)}}" class="btn btn-info">Разблокировать</a>
+					<a href="{{route ('user.unblock', [$curUser->id])}}" class="btn btn-info">Разблокировать</a>
 				@endif
-				<a href="{{route ('user.resetpassword', $curUser->id)}}" class="btn btn-success">Сбросить пароль</a>
+				<a href="{{route ('user.resetpassword', [$curUser->id])}}" class="btn btn-info">Сбросить пароль</a>
 			</div>
 
 
 
-			<form method="POST" action="{{ route('user.update', $curUser) }}">
+			<form method="POST" action="{{ route('user.update', [$curUser->id]) }}">
 				@method('PUT')
 		@else
 			<form method="POST" action="{{ route('user.store') }}" id="formStore">

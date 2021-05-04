@@ -59,13 +59,15 @@
 	flex-wrap: wrap;
 }
 
-.autocomplete-items{
-    width:100%; 
-    position:absolute; 
-    max-height:200px;
-    overflow-y:auto; 
-    padding-right: 20px;
+#userinfo{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size:14px;
 }
-.autocomplete-div{
-    position: relative;
+
+.tab-pane{
+    padding:35px;
+
+    -webkit-box-shadow:0 3px 50px 0 rgba(0,0,0,.1);
+    box-shadow:0 3px 50px 0 rgba(0,0,0,.1);
+    border-radius:5px;
 }

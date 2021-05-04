@@ -20,18 +20,18 @@
 		<td>
 			<div class = "d-flex manage-btns">
                 <!-- Админские кнопки редактирования и удаления -->
-                <a class="btn btn-success" href="{{route('user.show', $user)}}" role="button">
+                <a class="btn btn-success" href="{{route('user.show', [$user->id])}}" role="button">
                 	<i class="fas fa-eye"></i>
         		</a>
 
 				@perm('edit-user')
-              	<a class="btn btn-info" href="{{route('user.edit', $user) }}" role="button">
+              	<a class="btn btn-info" href="{{route('user.edit', [$user->id]) }}" role="button">
                 	<i class="fas fa-edit"></i>
               	</a>
      			@endperm
 
 					@perm('delete-user')
-                <form method="POST" action="{{route('user.destroy', $user) }}">
+                <form method="POST" action="{{route('user.destroy', [$user->id]) }}">
                   @method('DELETE')
                   @csrf
                   <button type="submit" class="btn btn-danger" onclick="return confirm('Вы действительно хотите удалить запись?');"><i class="fas fa-trash-alt"></i></button>

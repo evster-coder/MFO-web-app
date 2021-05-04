@@ -1,7 +1,10 @@
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Сменить подразделение
-</button>
+<div class="orgunit-manage">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Сменить подразделение
+    </button>
+    <p>Текущее : {{ session('OrgUnitCode') }}</p>
+</div>
 
 
 <!-- Modal -->

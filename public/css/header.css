@@ -17,6 +17,22 @@
 	display: flex;
 }
 
+.orgunit-manage{
+    display:inline-block;
+    max-height: 38px;
+}
+.orgunit-manage p{
+    text-align: center;
+    font-size: 13px;
+    margin:0;
+
+}
+
+.orgunit-manage .btn{
+    font-size: 13px;
+    padding:3px;
+}
+
 nav{
     background: rgb(220, 220, 220);
 }

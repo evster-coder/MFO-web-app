@@ -33,7 +33,8 @@ class OrgUnitController extends Controller
     	if($orgUnitIdChange != null 
         && Auth::user()->canSetOrgUnit($orgUnitIdChange))
         {
-            session(['OrgUnit' => $orgUnitIdChange]);
+            session(['OrgUnit' => $orgUnitIdChange,
+                     'OrgUnitCode' => OrgUnit::find($orgUnitIdChange)->orgUnitCode],);
             return back();
         }
         else

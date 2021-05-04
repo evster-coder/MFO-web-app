@@ -13,3 +13,19 @@ html{
 	margin-top:10px;
 	margin-bottom: 20px;	
 }
+
+.block-padding .btn {
+    margin-right: 10px;
+}
+
+
+.autocomplete-items{
+    width:100%; 
+    position:absolute; 
+    max-height:200px;
+    overflow-y:auto; 
+    padding-right: 20px;
+}
+.autocomplete-div{
+    position: relative;
+}
