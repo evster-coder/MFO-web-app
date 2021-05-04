@@ -17,7 +17,7 @@ class CheckUserPermission
     public function handle(Request $request, Closure $next, $perm)
     {
         if (!auth()->user()->hasPermission($perm)) {
-            abort(404);
+            abort(403, 'Нет прав на данное действие');
         }
         return $next($request);
     }

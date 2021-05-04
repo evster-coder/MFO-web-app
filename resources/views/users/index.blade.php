@@ -7,6 +7,7 @@
 
 @push('assets')
     <link rel="stylesheet" href="{{ asset('css/users.css') }}">
+	<script src="{{ asset('js/usersCRUD/index.js') }}" defer></script>
 @endpush
 
 @section('content')

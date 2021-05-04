@@ -139,6 +139,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $req, $id)
     {
         //dd("update");
+        
         $editUser = User::find($id);
 
         if(empty($editUser))
@@ -212,7 +213,8 @@ class UserController extends Controller
                 $banUser->blocked = true;
                 $banUser->save();
 
-                return redirect()->route('user.show', $banUser->id)->with(['status' => 'Успешно заблокирован']);
+                return redirect()->route('user.show', $banUser->id)
+                                            ->with(['status' => 'Успешно заблокирован']);
             }
             else
                 return response()->json(['Ошибка' => 'Вы не можете заблокировать этого пользователя!']);
@@ -237,7 +239,8 @@ class UserController extends Controller
                 $unbanUser->blocked = false;
                 $unbanUser->save();
 
-                return redirect()->route('user.show', $unbanUser->id)->with(['status' => 'Успешно разблокирован']);
+                return redirect()->route('user.show', $unbanUser->id)
+                                            ->with(['status' => 'Успешно разблокирован']);
             }
             else
                 return response()->json(['Ошибка' => 'Вы не можете разблокировать этого пользователя!']);

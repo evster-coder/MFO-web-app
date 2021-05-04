@@ -17,7 +17,7 @@ class CheckUserRole
     public function handle(Request $request, Closure $next, $role)
     {
         if (!auth()->user()->hasRole($role)) {
-            abort(404);
+            abort(403, 'Нет нужной роли для выполнения действия');
         }
         return $next($request);
     }

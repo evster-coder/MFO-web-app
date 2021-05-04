@@ -25,7 +25,7 @@ class RolePermissionTableSeeder extends Seeder
             }
             if ($role->slug == 'cashier') { // для обычного пользователя совсем чуть-чуть
                     $role->permissions()->attach(Permission::where('slug','change-curr-orgunit')->first()->id);
-                    $role->permissions()->attach(Permission::where('slug', 'view-users'))->first()->id);
+                    $role->permissions()->attach(Permission::where('slug', 'view-users')->first()->id);
                 }
         }
     }

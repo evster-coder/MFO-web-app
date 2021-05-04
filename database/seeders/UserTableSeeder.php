@@ -26,6 +26,33 @@ class UserTableSeeder extends Seeder
 
     	$user->save();
 
-        User::factory()->count(2)->create();
+        $directorUser = new User();
+
+        $directorUser->username = 'director_user';
+        $directorUser->password = Hash::make('director');
+        $directorUser->FIO = 'Director D.Y';
+        $directorUser->orgunit_id = OrgUnit::where('hasDictionaries', false)->first()->id;
+        $directorUser->blocked = false;
+        $directorUser->needChangePassword = false;
+        $directorUser->remember_token = Str::random(10);
+
+        $directorUser->save();
+
+
+        $cashier = new User();
+
+        $cashier->username = 'cashier_user';
+        $cashier->password = Hash::make('cashier');
+        $cashier->FIO = 'Cashier D.Y';
+        $cashier->orgunit_id = OrgUnit::where('hasDictionaries', false)->first()->id;
+        $cashier->blocked = false;
+        $cashier->needChangePassword = false;
+        $cashier->remember_token = Str::random(10);
+
+        $cashier->save();
+
+
+
+
     }
 }

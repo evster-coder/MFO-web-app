@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\OrgunitController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PermissionController;
 
 use App\Http\Controllers\DictsData\InterestRateController;
 use App\Http\Controllers\DictsData\LoanTermController;
@@ -40,21 +42,49 @@ Route::group(['middleware' => 'auth'], function() {
 
 		Route::get('/users/get-users', [UserController::class, 'getUsers'])->name('user.list');
 
-		Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
-		Route::post('/user', [UserController::class, 'store'])->name('user.store');
-		Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+		Route::group(['middleware' => 'perm:create-user'], function(){
+			Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
+			Route::post('/user', [UserController::class, 'store'])->name('user.store');
+		});
 
-		Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
-		Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
+		Route::group(['middleware' => 'perm:delete-user'], function(){
+			Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+		});
 
+		Route::group(['middleware' => 'perm:edit-user'], function(){
+			Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+			Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
+		});
 
 		Route::group(['middleware' => 'perm:manage-users'], function(){
 			Route::get('/user/block/{id}', [UserController::class, 'block'])->name('user.block');
 			Route::get('/user/unblock/{id}', [UserController::class, 'unblock'])->name('user.unblock');
 			Route::get('/user/resetpassword/{id}', [UserController::class, 'resetPassword'])
-																	->name('user.resetpassword');
+																->name('user.resetpassword');
 		});
+
 		Route::get('/user/{id}', [UserController::class, 'show'])->name('user.show');
+	});
+
+	//Роли пользователя
+	Route::group(['middleware' => 'perm:manage-roles'], function(){
+		Route::get('/role', [RoleController::class, 'index'])->name('role.index');
+		Route::get('/role/create', [RoleController::class, 'create'])->name('role.create');
+		Route::post('/role', [RoleController::class, 'store'])->name('role.store');
+		Route::delete('/role/{id}', [RoleController::class, 'destroy'])->name('role.destroy');
+		Route::get('/role/{id}', [RoleController::class, 'show'])->name('role.show');
+		Route::put('/role/{id}', [RoleController::class, 'update'])->name('role.update');
+	});
+
+
+	Route::group(['middleware' => 'perm:manage-perms'], function(){
+		Route::get('/perm', [PermissionController::class, 'index'])->name('perm.index');
+		Route::get('/perm/create', [PermissionController::class, 'create'])->name('perm.create');
+		Route::post('/perm', [PermissionController::class, 'store'])->name('perm.store');
+		Route::delete('/perm/{id}', [PermissionController::class, 'destroy'])->name('perm.destroy');
+		Route::get('/perm/{id}', [PermissionController::class, 'show'])->name('perm.show');
+		Route::put('/perm/{id}', [PermissionController::class, 'update'])->name('perm.update');
+
 	});
 
 	Route::group(['middleware' => 'perm:manage-datadicts'], function(){

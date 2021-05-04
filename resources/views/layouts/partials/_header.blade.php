@@ -34,11 +34,40 @@
                     <a href="{{url('/')}}" class="nav-link">Главная</a>
                 </li>
 
-                @perm('view-users')
-                    <li class="nav-item">
-                        <a href="{{route('user.index')}}" class="nav-link">Пользователи</a>
+                @role('admin')
+                    <li class="nav-item has-sub">
+                        <a class="nav-link " href="#" id="dictionarities" role="button" aria-expanded="false">
+                            Пользователи и права
+                            <i class="fas fa-sort-down"></i>
+                        </a>
+
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a href="{{route('user.index')}}" class="nav-link">
+                                Пользователи
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('role.index')}}">
+                                Роли
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{route('loanterm.index')}}">
+                                Права
+                                </a>
+                            </li>
+                        </ul>
+
                     </li>
-                @endperm
+                @else
+                    @perm('view-users')
+                        <li class="nav-item">
+                            <a href="{{route('user.index')}}" class="nav-link">Пользователи</a>
+                        </li>
+                    @endperm
+
+                @endrole
 
                 @perm('manage-orgunits')
                     <li class="nav-item">

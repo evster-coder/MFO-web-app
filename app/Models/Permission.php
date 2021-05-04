@@ -12,6 +12,16 @@ class Permission extends Model
 {
     use HasFactory;
 
+
+    //заполняемые поля
+    protected $fillable = [
+        'name',
+        'slug',
+
+    ];
+
+
+
     //все роли, содержащие это право
     public function roles()
     {

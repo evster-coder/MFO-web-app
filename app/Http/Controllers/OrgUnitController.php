@@ -38,7 +38,7 @@ class OrgUnitController extends Controller
             return back();
         }
         else
-            abort(404);
+            abort(403, 'Нет прав на данное действие');
     }
 
     /*public function getDownOrgUnits(Request $req)

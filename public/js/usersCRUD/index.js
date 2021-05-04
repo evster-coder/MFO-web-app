@@ -10,6 +10,7 @@ $(document).ready(function(){
 
  function loadData(page, sortDesc, sortColumn, query)
  {
+  console.log("here");
     $.ajax({
      url:"/users/get-users?page="+ page +
           "&sortby=" + sortColumn +

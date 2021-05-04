@@ -16,19 +16,23 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            ['slug' => 'view-users', 'name' => 'Просматривать пользователей'],
+            ['slug' => 'view-users', 'name' => 'Просмотр пользователей'],
             ['slug' => 'manage-users', 'name' => 'Управление пользователями'],
             ['slug' => 'create-user', 'name' => 'Создание пользователя'],
             ['slug' => 'edit-user', 'name' => 'Редактирование пользователя'],
             ['slug' => 'delete-user', 'name' => 'Удаление пользователя'],
 
-            ['slug' => 'change-curr-orgunit', 'name' => 'Изменить текущее подразделение'],
+            ['slug' => 'assign-role', 'name' => 'Назначение роли для пользователя'],
+
+            ['slug' => 'manage-roles', 'name' => 'Управление ролями'],
+            ['slug' => 'manage-perms', 'name' => 'Управление правами'],
+
+            ['slug' => 'change-curr-orgunit', 'name' => 'Изменение текущего подразделения'],
             ['slug' => 'manage-orgunits', 'name' => 'Управление подразделениями'],
             ['slug' => 'create-orgunits', 'name' => 'Создание подразделения'],
             ['slug' => 'edit-orgunits', 'name' => 'Редактирование подразделения'],
             ['slug' => 'delete-orgunits', 'name' => 'Удаление подразделения'],
 
-            ['slug' => 'assign-role', 'name' => 'Назначение роли для пользователя'],
 
             ['slug' => 'manage-clients', 'name' => 'Управление клиентами'],
             ['slug' => 'create-clients', 'name' => 'Создание клиента'],

@@ -12,6 +12,15 @@ class Role extends Model
 {
     use HasFactory;
 
+    //заполняемые поля
+    protected $fillable = [
+        'name',
+        'slug',
+
+    ];
+
+
+
     //все права этой роли
     public function permissions()
     {
@@ -22,5 +31,10 @@ class Role extends Model
     public function users()
     {
     	return $this->belongsToMany(User::class, 'user_role')->withTimestamps();
+    }
+
+    public function contains($permSlug)
+    {
+        return $this->permissions->contains('slug', $permSlug);
     }
 }

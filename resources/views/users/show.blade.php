@@ -12,7 +12,7 @@
 
 
 @section('content')
-	<button type="button" class="btn btn-default" onclick="javascript:history.back()">< Назад</button>
+	<a href="{{route('user.index')}}" class="btn btn-default">< Назад</a>
 
 	<h1> Пользователь {{$user->username}}</h1>
 
@@ -63,7 +63,7 @@
 			<div class="tab-pane active" id="tabs-1" role="tabpanel">
 				<h5>Сведения: </h5><br>
 				<p>Логин: {{$user->username}}</p>
-				<p>ФИО сотрудника: {{$user->username}}</p>
+				<p>ФИО сотрудника: {{$user->FIO}}</p>
 				<p>Статус: 
 					@if ($user->blocked)
 						<span class="badge bg-danger">ЗАБЛОКИРОВАН</span>

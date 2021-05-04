@@ -14,10 +14,33 @@ html{
 	margin-bottom: 20px;	
 }
 
+.block-section{
+    -webkit-box-shadow:0 3px 50px 0 rgba(0,0,0,.1);
+    box-shadow:0 3px 50px 0 rgba(0,0,0,.1);
+    border-radius:5px;
+
+    margin-top:20px;
+    margin-bottom: 20px;
+
+    padding-left:50px;
+    padding-right: 50px;
+
+    padding-top:10px;
+    padding-bottom: 20px;
+    
+}
+
+.block-section h4{
+    text-align: center;
+}
+
 .block-padding .btn {
     margin-right: 10px;
 }
 
+.edit-fields{
+    margin-bottom: 10px;
+}
 
 .autocomplete-items{
     width:100%; 

@@ -109,7 +109,8 @@
 			            <input name="reason" id="reason" type="text" class="form-control" placeholder="Введите Основание" value= "{{ old( 'reason', $curUser->reason) }}">
 		          	</div>
 	          	</div>
-
+	        <!-- Блок редактирования ролей пользователя, если пользователь имеет право присваивать роли -->
+	        @perm('assign-role')
 	          	<div class="block-section">
 	          		<h4>Роли пользователя</h4>
 
@@ -128,6 +129,7 @@
 					</div>
 
 	          	</div>
+	        @endperm
 
 	        </form>
     </div>
