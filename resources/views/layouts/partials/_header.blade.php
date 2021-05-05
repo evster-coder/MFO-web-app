@@ -75,12 +75,16 @@
                     </li>
                 @endperm
 
+                @perm('view-dictionaries')
+
+                @endperm
+
                 @perm('manage-datadicts')
                     <li class="nav-item has-sub">
 
 
                         <a class="nav-link " href="#" id="dictionarities" role="button" aria-expanded="false">
-                            Справочные данные
+                            Справочные поля
                             <i class="fas fa-sort-down"></i>
                         </a>
 
