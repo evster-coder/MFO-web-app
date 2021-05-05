@@ -34,13 +34,18 @@ class PermissionTableSeeder extends Seeder
             ['slug' => 'delete-orgunits', 'name' => 'Удаление подразделения'],
 
 
-            ['slug' => 'view-dictionaries', 'name' => 'Просмотр справочников']
+            ['slug' => 'view-dictionaries', 'name' => 'Просмотр справочников'],
             ['slug' => 'manage-dictionaries', 'name' => 'Управление справочниками'],
             ['slug' => 'create-clients', 'name' => 'Создание клиента'],
             ['slug' => 'edit-clients', 'name' => 'Редактирование клиента'],
             ['slug' => 'delete-clients', 'name' => 'Удаление клиента'],
 
             ['slug' => 'manage-datadicts', 'name' => 'Управление справочной информацией'],
+
+            ['slug' => 'view-orgunits', 'name' => 'Просмотр структуры подразделений'],
+            ['slug' => 'create-orgunit', 'name' => 'Создание подразделения'],
+            ['slug' => 'edit-orgunit', 'name' => 'Редактирование подразделения'],
+            ['slug' => 'delete-orgunit', 'name' => 'Удаление подразделения'],
 
         ];
 

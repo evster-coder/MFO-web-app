@@ -30,5 +30,21 @@ class DatabaseSeeder extends Seeder
 
         $this->call(RolePermissionTableSeeder::class);
         $this->command->info('Таблица прав ролей успешно заполнена!');
+
+        $this->call(InterestRateSeeder::class);
+        $this->command->info('Таблица процентная ставка успешно заполнена!');
+
+
+        $this->call(LoanTermSeeder::class);
+        $this->command->info('Таблица сроки займа успешно заполнена!');
+
+
+        $this->call(SenioritySeeder::class);
+        $this->command->info('Таблица стаж работы успешно заполнена!');
+
+
+        $this->call(MaritalStatusSeeder::class);
+        $this->command->info('Таблица семейные положения успешно заполнена!');
+
     }
 }

@@ -20,9 +20,7 @@ class CreateOrgUnitsTable extends Migration
 
             $table->boolean('hasDictionaries');
 
-            $table->foreignId('orgunit_id')->nullable()->references('id')->on('orgunits')
-                            ->onUpdate('cascade')
-                            ->onDelete('cascade');
+            $table->nestedSet();
         });
     }
 

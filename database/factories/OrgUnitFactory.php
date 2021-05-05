@@ -25,7 +25,7 @@ class OrgUnitFactory extends Factory
         return [
             'orgUnitCode' => "OU-" . $this->faker->numberBetween(1, 100),
             'hasDictionaries' => false,
-            'orgunit_id' => OrgUnit::where('hasDictionaries', true)->first()->id,
+            'parent_id' => OrgUnit::where('hasDictionaries', true)->first()->id,
         ];
     }
 }

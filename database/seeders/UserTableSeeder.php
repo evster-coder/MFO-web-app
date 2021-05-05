@@ -14,12 +14,15 @@ class UserTableSeeder extends Seeder
 
     public function run()
     {
+        $orgunit = OrgUnit::whereIsRoot()->first();
+
+
     	$user = new User();
 
     	$user->username = 'admin';
     	$user->password = Hash::make('admin');
     	$user->FIO = 'Admin E.K';
-    	$user->orgunit_id = OrgUnit::whereNotNull('orgUnitCode')->first()->id;
+    	$user->orgunit_id = $orgunit->id;
     	$user->blocked = false;
     	$user->needChangePassword = false;
         $user->remember_token = Str::random(10);
@@ -31,7 +34,7 @@ class UserTableSeeder extends Seeder
         $directorUser->username = 'director_user';
         $directorUser->password = Hash::make('director');
         $directorUser->FIO = 'Director D.Y';
-        $directorUser->orgunit_id = OrgUnit::where('hasDictionaries', false)->first()->id;
+        $directorUser->orgunit_id = $orgunit->children()->first()->id;
         $directorUser->blocked = false;
         $directorUser->needChangePassword = false;
         $directorUser->remember_token = Str::random(10);
@@ -44,7 +47,7 @@ class UserTableSeeder extends Seeder
         $cashier->username = 'cashier_user';
         $cashier->password = Hash::make('cashier');
         $cashier->FIO = 'Cashier D.Y';
-        $cashier->orgunit_id = OrgUnit::where('hasDictionaries', false)->first()->id;
+        $cashier->orgunit_id = $orgunit->children()->first()->children()->first()->id;
         $cashier->blocked = false;
         $cashier->needChangePassword = false;
         $cashier->remember_token = Str::random(10);

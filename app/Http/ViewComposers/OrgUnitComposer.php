@@ -10,7 +10,7 @@ class OrgUnitComposer
 {
     public function compose(View $view)
     {
-        $subtree = OrgUnit::find(Auth::user()->orgunit_id)->descendantsAndSelf;
+        $subtree = OrgUnit::whereDescendantOrSelf(Auth::user()->OrgUnit)->get();
         $subtree = $this->buildTree($subtree);
 
         return $view->with('orgUnits', $subtree);
@@ -18,7 +18,7 @@ class OrgUnitComposer
 
     public function buildTree($items)
     {
-        $grouped = $items->groupBy('orgunit_id');
+        $grouped = $items->groupBy('parent_id');
 
         foreach ($items as $item) {
             if ($grouped->has($item->id)) {

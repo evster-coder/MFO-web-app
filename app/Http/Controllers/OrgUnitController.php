@@ -21,8 +21,18 @@ class OrgUnitController extends Controller
      */
     public function index()
     {
+        $orgunits = OrgUnit::all();
 
-        return view('auth.login');
+        $grouped = $orgunits->groupBy('parent_id');
+
+        foreach ($orgunits as $orgunit) {
+            if ($grouped->has($orgunit->id)) {
+                $orgunit->childOrgUnits = $grouped[$orgunit->id];
+            }
+        }
+        $orgunits = $orgunits->where('parent_id', null);
+
+        return view('orgunits.index', ['orgunits' => $orgunits]);
     }
 
     public function changeorgunit(Request $request)
@@ -45,8 +55,7 @@ class OrgUnitController extends Controller
     {
         $query = $req->get('query');
 
-        $orgunits = OrgUnit::find(Auth::user()->orgunit_id)
-                            ->with('descendantsAndSelf')
+        $orgunits = OrgUnit::whereDescendantAndSelf(Auth::user()->orgunit_id)
                             ->where('orgUnitCode', 'like', '%'.$query.'%')
                             ->get();
 

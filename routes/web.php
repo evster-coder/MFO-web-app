@@ -30,12 +30,6 @@ Route::group(['middleware' => 'auth'], function() {
 	    return view('welcome');
 	})->name('welcome');
 
-	Route::group(['middleware' => 'perm:change-curr-orgunit'], function(){
-
-		Route::put('changeorgunit', [OrgUnitController::class, 'changeorgunit'])
-															->name('orgunits.change');	
-	});
-
 	Route::group(['middleware' => 'perm:view-users'], function(){
 		//user routes
 		Route::get('/user', [UserController::class, 'index'])->name('user.index');
@@ -142,6 +136,35 @@ Route::group(['middleware' => 'auth'], function() {
 	});
 
 
+	Route::group(['middleware' => 'perm:change-curr-orgunit'], function(){
+
+		Route::put('changeorgunit', [OrgUnitController::class, 'changeorgunit'])
+															->name('orgunit.change');	
+	});
+
+	Route::group(['middleware' => 'perm:view-orgunits'], function() {
+		Route::get('/orgunit', [OrgUnitController::class, 'index'])	
+																->name('orgunit.index');
+
+		Route::group(['middleware' => 'perm:create-orgunit'], function(){
+			Route::get('/orgunit/create', [OrgUnitController::class, 'create'])
+																->name('orgunit.create');
+			Route::post('/orgunit', [OrgUnitController::class, 'store'])
+																->name('orgunit.store');
+		});
+
+		Route::group(['middleware' => 'perm:edit-orgunit'], function(){
+			Route::get('/orgunit/{id}/edit', [OrgUnitController::class, 'edit'])
+																->name('orgunit.edit');
+			Route::put('/orgunit/{id}', [OrgUnitController::class, 'update'])
+																->name('orgunit.update');
+		});
+
+		Route::group(['middleware' => 'perm:delete-orgunit'], function(){
+			Route::delete('/orgunit/{id}', [OrgUnitController::class, 'destroy'])
+																->name('orgunit.destroy');
+		});
+	});
 
 
 });
