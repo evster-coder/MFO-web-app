@@ -1,3 +1,10 @@
+@if($perms->total() == 0)
+<tr>
+  <td colspan="3">
+    Ничего не найдено...
+  </td>
+</tr>
+@endif
 @foreach($perms as $perm)
 	<tr>
 		<td>
@@ -20,10 +27,9 @@
       	</td>
 	</tr>
 @endforeach
-
-	<tr>
-		<td colspan="6" align="center">
-			{{ $perms->links('pagination::bootstrap-4') }}
-		</td>
-	</tr>
-
+<tr class="pagination-tr">
+  <td colspan="6" align="center">
+    <p class="pagination-p">Текущая страница {{$perms->currentPage()}} из {{$perms->lastPage()}}</p>
+    {{ $perms->links('pagination::bootstrap-4') }}
+  </td>
+</tr>

@@ -23,16 +23,3 @@ use App\Http\Controllers\OrgUnitController;
 Route::middleware('auth:web')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::group(['middleware' => 'auth'], function() {
-
-	//Route::get('/orgunits-down', [OrgUnitController::class, 'getDownOrgUnits'])
-	//							->name('orgunit.showdown');
-
-
-
-	Route::get('/maritalstatus', [MaritalStatusController::class, 'index'])
-								->name('maritalstatus.index');
-
-});
-

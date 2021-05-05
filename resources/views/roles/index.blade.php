@@ -25,7 +25,7 @@
             </div>
       	</div>
 
-      	<table class="table table-bordered table-hover role-table">
+      	<table class="table table-bordered role-table">
             <thead>
             <tr class="table-primary">
               <th scope="col" class="sorting" data-sorting-type="asc" 

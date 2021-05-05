@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
+use Response;
+
 class InterestRateController extends Controller
 {
     /**
@@ -16,20 +18,25 @@ class InterestRateController extends Controller
      */
     public function index()
     {
-        $items = InterestRate::orderBy('percentValue', 'desc')->paginate(10);
-        return $items;
-        //return view('dicts.seniority.index', ['items' => $items]);
+        $items = InterestRate::orderBy('percentValue')->paginate(10);
+        return view('dictfields.interestrate.index', ['rates' => $items]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function getRates(Request $req)
     {
-        //
+        if($req->ajax())
+        {
+            $query = $req->get('query');
+            $query = str_replace(" ", "%", $query);
+
+            $rates = InterestRate::where('percentValue', 'like', '%'.$query.'%')
+                        ->orderBy('percentValue')
+                        ->paginate(10);
+
+            return view('components.interestrates-tbody', compact('rates'))->render();
+        }
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -39,19 +46,21 @@ class InterestRateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //simple validation (no need to add Request class)
+        $request->validate([
+                'percentValue' => 'required|numeric|between:0,1000000.999',
+        ]);
+
+        $rateId = $request->dataId;
+        InterestRate::updateOrCreate(['id' => $rateId],['percentValue' => $request->percentValue]);
+        if(empty($request->dataId))
+            $msg = 'Элемент успешно создан.';
+        else
+            $msg = 'Элемент успешно обновлен.';
+        return redirect()->route('interestrate.index')->with(['status' => $msg]);
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\InterestRate  $interestRate
-     * @return \Illuminate\Http\Response
-     */
-    public function show(InterestRate $interestRate)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -59,21 +68,10 @@ class InterestRateController extends Controller
      * @param  \App\Models\InterestRate  $interestRate
      * @return \Illuminate\Http\Response
      */
-    public function edit(InterestRate $interestRate)
+    public function edit($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\InterestRate  $interestRate
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, InterestRate $interestRate)
-    {
-        //
+        $interestRate = InterestRate::find($id);
+        return Response::json($interestRate);
     }
 
     /**
@@ -82,8 +80,19 @@ class InterestRateController extends Controller
      * @param  \App\Models\InterestRate  $interestRate
      * @return \Illuminate\Http\Response
      */
-    public function destroy(InterestRate $interestRate)
+    public function destroy($id)
     {
-        //
+        $deletingItem = InterestRate::find($id);
+
+        if($deletingItem)
+        {
+            $deletingItem->delete();
+            return redirect()->route('interestrate.index')
+                            ->with(['status' => 'Элемент успешно удален.']);
+        }
+        else
+            return redirect()->route('interestrate.index')
+                ->withErrors(['msg' => 'Ошибка удаления в InterestRateController::destroy']);
+
     }
 }

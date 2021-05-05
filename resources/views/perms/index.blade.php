@@ -25,7 +25,7 @@
             </div>
       	</div>
 
-      	<table class="table table-bordered table-hover perm-table">
+      	<table class="table table-bordered perm-table">
             <thead>
             <tr class="table-primary">
               <th scope="col" class="sorting" data-sorting-type="asc" 

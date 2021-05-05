@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
+use Response;
+
 class LoanTermController extends Controller
 {
     /**
@@ -16,19 +18,25 @@ class LoanTermController extends Controller
      */
     public function index()
     {
-        $items = LoanTerm::orderBy('daysAmount', 'desc')->paginate(10);
-        return $items;
-        //return view('dicts.seniority.index', ['items' => $items]);
+        $items = LoanTerm::orderBy('daysAmount')->paginate(10);
+        return view('dictfields.loanterm.index', ['terms' => $items]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    //возврат данных по запросу
+    public function getTerms(Request $req)
     {
-        //
+        if($req->ajax())
+        {
+            $query = $req->get('query');
+            $query = str_replace(" ", "%", $query);
+
+            $terms = LoanTerm::where('daysAmount', 'like', '%'.$query.'%')
+                        ->orderBy('daysAmount')
+                        ->paginate(10);
+
+            return view('components.loanterms-tbody', compact('terms'))->render();
+        }
+
     }
 
     /**
@@ -39,18 +47,19 @@ class LoanTermController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        //simple validation (no need to add Request class)
+        $request->validate([
+                'daysAmount' => 'required|numeric|between:1, 1000',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\LoanTerm  $loanTerm
-     * @return \Illuminate\Http\Response
-     */
-    public function show(LoanTerm $loanTerm)
-    {
-        //
+        $termId = $request->dataId;
+        LoanTerm::updateOrCreate(['id' => $termId],['daysAmount' => $request->daysAmount]);
+        if(empty($request->dataId))
+            $msg = 'Элемент успешно создан.';
+        else
+            $msg = 'Элемент успешно обновлен.';
+        return redirect()->route('loanterm.index')->with(['status' => $msg]);
+
     }
 
     /**
@@ -59,21 +68,10 @@ class LoanTermController extends Controller
      * @param  \App\Models\LoanTerm  $loanTerm
      * @return \Illuminate\Http\Response
      */
-    public function edit(LoanTerm $loanTerm)
+    public function edit($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\LoanTerm  $loanTerm
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, LoanTerm $loanTerm)
-    {
-        //
+        $loanTerm = LoanTerm::find($id);
+        return Response::json($loanTerm);
     }
 
     /**
@@ -82,8 +80,17 @@ class LoanTermController extends Controller
      * @param  \App\Models\LoanTerm  $loanTerm
      * @return \Illuminate\Http\Response
      */
-    public function destroy(LoanTerm $loanTerm)
+    public function destroy($id)
     {
-        //
+        $deletingItem = LoanTerm::find($id);
+
+        if($deletingItem)
+        {
+            $deletingItem->delete();
+            return redirect()->route('loanterm.index')->with(['status' => 'Элемент успешно удален.']);
+        }
+        else
+            return redirect()->route('loanterm.index')
+                ->withErrors(['msg' => 'Ошибка удаления в LoanTermController::destroy']);
     }
 }

@@ -1,3 +1,10 @@
+@if($roles->total() == 0)
+<tr>
+  <td colspan="3">
+    Ничего не найдено...
+  </td>
+</tr>
+@endif
 @foreach($roles as $role)
 	<tr>
 		<td>
@@ -23,9 +30,10 @@
 	</tr>
 @endforeach
 
-	<tr>
-		<td colspan="6" align="center">
-			{{ $roles->links('pagination::bootstrap-4') }}
-		</td>
-	</tr>
+<tr class="pagination-tr">
+  <td colspan="6" align="center">
+    <p class="pagination-p">Текущая страница {{$roles->currentPage()}} из {{$roles->lastPage()}}</p>
+    {{ $roles->links('pagination::bootstrap-4') }}
+  </td>
+</tr>
 

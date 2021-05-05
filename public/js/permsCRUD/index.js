@@ -60,19 +60,22 @@ $(document).ready(function () {
  	}
 
 
- 	$(document).on('keyup', '#search', function(){
-	    //параметры поиска
-	    var query = $('#search').val();
+ 	$(document).on('keyup', '#search', function(e){
+ 		if(e.key=="Enter")
+ 		{
+		    //параметры поиска
+		    var query = $('#search').val();
 
-	    //название колонки и направление сортировки
-	    var sortColumn = $('#hiddenSortColumn').val();
-	    var sortDesc = $('#hiddenSortDesc').val();
+		    //название колонки и направление сортировки
+		    var sortColumn = $('#hiddenSortColumn').val();
+		    var sortDesc = $('#hiddenSortDesc').val();
 
-	    //текущая страница
-	    var page = $('#hiddenPage').val();
+		    //текущая страница
+		    var page = $('#hiddenPage').val();
 
-	    //получение данных
-	    loadData(page, sortDesc, sortColumn, query);
+		    //получение данных
+		    loadData(page, sortDesc, sortColumn, query);
+		}
  	});
 
  	$(document).on('click', '.sorting', function(){

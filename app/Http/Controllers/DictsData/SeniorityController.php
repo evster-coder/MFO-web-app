@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
+use Response;
+
 class SeniorityController extends Controller
 {
     /**
@@ -16,19 +18,26 @@ class SeniorityController extends Controller
      */
     public function index()
     {
-        $items = Seniority::orderBy('name', 'desc')->paginate(10);
-        return $items;
-        //return view('dicts.seniority.index', ['items' => $items]);
+        $items = Seniority::orderBy('name')->paginate(10);
+        return view('dictfields.seniority.index', ['senioritis' => $items]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    //возврат данных по запросу
+    public function getSenioritis(Request $req)
     {
-        //
+        if($req->ajax())
+        {
+            $query = $req->get('query');
+            $query = str_replace(" ", "%", $query);
+
+            $senioritis = Seniority::where('name', 'like', '%'.$query.'%')
+                        ->orderBy('name')
+                        ->paginate(10);
+
+            return view('components.senioritis-tbody', compact('senioritis'))->render();
+        }
+
     }
 
     /**
@@ -39,18 +48,18 @@ class SeniorityController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        //simple validation (no need to add Request class)
+        $request->validate([
+                'name' => 'required|string|min:1|max:100',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Seniority  $seniority
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Seniority $seniority)
-    {
-        //
+        $seniorityId = $request->dataId;
+        Seniority::updateOrCreate(['id' => $seniorityId],['name' => $request->name]);
+        if(empty($request->dataId))
+            $msg = 'Элемент успешно создан.';
+        else
+            $msg = 'Элемент успешно обновлен.';
+        return redirect()->route('seniority.index')->with(['status' => $msg]);
     }
 
     /**
@@ -59,21 +68,10 @@ class SeniorityController extends Controller
      * @param  \App\Models\Seniority  $seniority
      * @return \Illuminate\Http\Response
      */
-    public function edit(Seniority $seniority)
+    public function edit($id)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Seniority  $seniority
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Seniority $seniority)
-    {
-        //
+        $seniority = Seniority::find($id);
+        return Response::json($seniority);
     }
 
     /**
@@ -82,8 +80,18 @@ class SeniorityController extends Controller
      * @param  \App\Models\Seniority  $seniority
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Seniority $seniority)
+    public function destroy($id)
     {
-        //
+        $deletingItem = Seniority::find($id);
+
+        if($deletingItem)
+        {
+            $deletingItem->delete();
+            return redirect()->route('seniority.index')->with(['status' => 'Элемент успешно удален.']);
+        }
+        else
+            return redirect()->route('seniority.index')
+                ->withErrors(['msg' => 'Ошибка удаления в SeniorityController::destroy']);
+
     }
 }

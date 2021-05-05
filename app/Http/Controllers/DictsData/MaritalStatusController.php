@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
+use Redirect,Response;
+
 class MaritalStatusController extends Controller
 {
     /**
@@ -16,21 +18,25 @@ class MaritalStatusController extends Controller
      */
     public function index()
     {
-        return response()->json(MaritalStatus::get(), 200);
-        //$items = MaritalStatus::orderBy('name', 'desc')->paginate(10);
-        //return $items;
-        //return view('dicts.seniority.index', ['items' => $items]);
-
+        $items = MaritalStatus::orderBy('name')->paginate(10);
+        return view('dictfields.maritalstatus.index', ['statuses' => $items]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    //возврат данных по запросу
+    public function getStatuses(Request $req)
     {
-        //
+        if($req->ajax())
+        {
+            $query = $req->get('query');
+            $query = str_replace(" ", "%", $query);
+
+            $statuses = MaritalStatus::where('name', 'like', '%'.$query.'%')
+                        ->orderBy('name')
+                        ->paginate(10);
+
+            return view('components.maritalstatuses-tbody', compact('statuses'))->render();
+        }
+
     }
 
     /**
@@ -41,18 +47,18 @@ class MaritalStatusController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        //simple validation (no need to add Request class)
+        $request->validate([
+                'name' => 'required|string|min:1|max:100',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\MaritalStatus  $maritalStatus
-     * @return \Illuminate\Http\Response
-     */
-    public function show( $maritalStatus)
-    {
-        //
+        $statusId = $request->dataId;
+        MaritalStatus::updateOrCreate(['id' => $statusId],['name' => $request->name]);
+        if(empty($request->dataId))
+            $msg = 'Элемент успешно создан.';
+        else
+            $msg = 'Элемент успешно обновлен.';
+        return redirect()->route('maritalstatus.index')->with(['status' => $msg]);
     }
 
     /**
@@ -61,21 +67,11 @@ class MaritalStatusController extends Controller
      * @param  \App\Models\MaritalStatus  $maritalStatus
      * @return \Illuminate\Http\Response
      */
-    public function edit(MaritalStatus $maritalStatus)
+    public function edit($id)
     {
-        //
-    }
+        $status = MaritalStatus::find($id);
+        return Response::json($status);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\MaritalStatus  $maritalStatus
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, MaritalStatus $maritalStatus)
-    {
-        //
     }
 
     /**
@@ -84,8 +80,17 @@ class MaritalStatusController extends Controller
      * @param  \App\Models\MaritalStatus  $maritalStatus
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MaritalStatus $maritalStatus)
+    public function destroy($id)
     {
-        //
+        $deletingItem = MaritalStatus::find($id);
+
+        if($deletingItem)
+        {
+            $deletingItem->delete();
+            return redirect()->route('maritalstatus.index')->with(['status' => 'Элемент успешно удален.']);
+        }
+        else
+            return redirect()->route('maritalstatus.index')
+                ->withErrors(['msg' => 'Ошибка удаления в MaritalStatusController::destroy']);
     }
 }

@@ -84,8 +84,7 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('/perm', [PermissionController::class, 'index'])->name('perm.index');
 
 		Route::get('/perms/get-perms', [PermissionController::class, 'getPerms'])->name('perm.list');
-		
-		Route::get('/perm/create', [PermissionController::class, 'create'])->name('perm.create');
+
 		Route::get('/perm/edit/{id}', [PermissionController::class, 'edit'])->name('perm.edit');
 		Route::post('/perm', [PermissionController::class, 'store'])->name('perm.store');
 		Route::delete('/perm/{id}', [PermissionController::class, 'destroy'])->name('perm.destroy');
@@ -95,62 +94,49 @@ Route::group(['middleware' => 'auth'], function() {
 		//interestRate routes
 		Route::get('/interestrate', [InterestRateController::class, 'index'])
 										->name('interestrate.index');
-		Route::get('/interestrate/create', [InterestRateController::class, 'create'])
-										->name('interestrate.create');
+		Route::get('/interestrates/get-interestrates', [InterestRateController::class, 'getRates'])
+										->name('interestrate.list');
 		Route::post('/interestrate', [InterestRateController::class, 'store'])
 										->name('interestrate.store');
-		Route::get('/interestrate/{id}', [InterestRateController::class, 'show'])
-										->name('interestrate.show');
 		Route::get('/interestrate/{id}/edit', [InterestRateController::class, 'edit'])
 										->name('interestrate.edit');
-		Route::put('/interestrate/{id}', [InterestRateController::class, 'update'])
-										->name('interestrate.update');
 		Route::delete('/interestrate/{id}', [InterestRateController::class, 'destroy'])
 										->name('interestrate.destroy');
 
 		//LoanTerm routes
 		Route::get('/loanterm', [LoanTermController::class, 'index'])
 										->name('loanterm.index');
-		Route::get('/loanterm/create', [LoanTermController::class, 'create'])
-										->name('loanterm.create');
+		Route::get('/loanterms/get-loanterms', [LoanTermController::class, 'getTerms'])
+										->name('loanterm.list');
 		Route::post('/loanterm', [LoanTermController::class, 'store'])
 										->name('loanterm.store');
-		Route::get('/loanterm/{id}', [LoanTermController::class, 'show'])
-										->name('loanterm.show');
 		Route::get('/loanterm/{id}/edit', [LoanTermController::class, 'edit'])
 										->name('loanterm.edit');
-		Route::put('/loanterm/{id}', [LoanTermController::class, 'update'])
-										->name('loanterm.update');
 		Route::delete('/loanterm/{id}', [LoanTermController::class, 'destroy'])
 										->name('loanterm.destroy');
 
 		//MartialStatus route
-		Route::get('/maritalstatus/{id}', [MaritalStatusController::class, 'show'])
-										->name('maritalstatus.show');
-		Route::get('/maritalstatus/create', [MaritalStatusController::class, 'create'])
-										->name('maritalstatus.create');
+		Route::get('/maritalstatus', [MaritalStatusController::class, 'index'])
+										->name('maritalstatus.index');
+		Route::get('/maritalstatuses/get-statuses', [MaritalStatusController::class, 'getStatuses'])
+										->name('maritalstatus.list');
+
 		Route::post('/maritalstatus', [MaritalStatusController::class, 'store'])
 										->name('maritalstatus.store');
 		Route::get('/maritalstatus/{id}/edit', [MaritalStatusController::class, 'edit'])
 										->name('maritalstatus.edit');
-		Route::put('/maritalstatus/{id}', [MaritalStatusController::class, 'update'])
-										->name('maritalstatus.update');
 		Route::delete('/maritalstatus/{id}', [MaritalStatusController::class, 'destroy'])
 										->name('maritalstatus.destroy');
 
 		//Seniority routes
 		Route::get('/seniority', [SeniorityController::class, 'index'])
 										->name('seniority.index');
-		Route::get('/seniority/create', [SeniorityController::class, 'create'])
-										->name('seniority.create');
+		Route::get('/senioritis/get-senioritis', [SeniorityController::class, 'getSenioritis'])
+										->name('seniority.list');								
 		Route::post('/seniority', [SeniorityController::class, 'store'])
 										->name('seniority.store');
-		Route::get('/seniority/{id}', [SeniorityController::class, 'show'])
-										->name('seniority.show');
 		Route::get('/seniority/{id}/edit', [SeniorityController::class, 'edit'])
 										->name('seniority.edit');
-		Route::put('/seniority/{id}', [SeniorityController::class, 'update'])
-										->name('seniority.update');
 		Route::delete('/seniority/{id}', [SeniorityController::class, 'destroy'])
 										->name('seniority.destroy');
 	});

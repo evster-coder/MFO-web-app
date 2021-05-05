@@ -1,3 +1,10 @@
+@if($users->total() == 0)
+<tr>
+  <td colspan="6">
+    Ничего не найдено...
+  </td>
+</tr>
+@endif
 @foreach($users as $user)
 	<tr>
 		<td>{{ $user->username }}</td>
@@ -43,9 +50,9 @@
 	</tr>
 @endforeach
 
-	<tr>
-		<td colspan="6" align="center">
-			{{ $users->links('pagination::bootstrap-4') }}
-		</td>
-	</tr>
-
+<tr class="pagination-tr">
+  <td colspan="6" align="center">
+    <p class="pagination-p">Текущая страница {{$users->currentPage()}} из {{$users->lastPage()}}</p>
+    {{ $users->links('pagination::bootstrap-4') }}
+  </td>
+</tr>
