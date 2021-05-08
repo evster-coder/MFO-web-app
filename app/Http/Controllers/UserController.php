@@ -68,7 +68,9 @@ class UserController extends Controller
         //dd("create");
     	$newUser = new User();
 
-        $orgunits = OrgUnit::whereDescendantAndSelf(Auth::user()->orgunit_id)
+        $orgunit = OrgUnit::find(Auth::user()->orgunit_id);
+
+        $orgunits = OrgUnit::whereDescendantOrSelf($orgunit)
                             ->select('id', 'orgUnitCode as text')
                             ->get();
 
@@ -118,7 +120,8 @@ class UserController extends Controller
 
 
         //получаем опции для селектов
-        $orgunits = OrgUnit::whereDescendantAndSelf(Auth::user()->orgunit_id)
+        $orgunit = OrgUnit::find(Auth::user()->orgunit_id);
+        $orgunits = OrgUnit::whereDescendantOrSelf($orgunit)
                             ->select('id', 'orgUnitCode as text')
                             ->get();
 

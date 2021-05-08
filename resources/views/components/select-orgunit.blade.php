@@ -17,7 +17,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('orgunits.change') }}" id="formChange">
+                <form method="POST" action="{{ route('orgunit.change') }}" id="formChange">
                     @method('PUT')
                     @csrf
 

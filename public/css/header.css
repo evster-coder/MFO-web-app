@@ -65,6 +65,11 @@ nav{
 
 }
 
+.is-open{
+    background: rgb(200, 200, 200);
+    box-shadow: 0 0 2px rgba(0,0,0,0.5); /* Параметры тени */
+}
+
 .navbar-nav .active{
     background: rgb(100, 100, 100);
     border-left: 4px solid black;

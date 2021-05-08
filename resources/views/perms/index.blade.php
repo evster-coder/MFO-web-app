@@ -15,7 +15,7 @@
 	<div class="content-block">
 
 		<x-auth-session-status class="mb-4" :status="session('status')" />
-    	<x-auth-validation-errors class="mb-4" :errors="$errors" />
+  	<x-auth-validation-errors class="mb-4" :errors="$errors" />
 
       	<div class="add-perm-btn">
         	<a class="btn btn-primary" href="javascript:void(0)" data-toggle="modal" id="new-perm">Добавление</a>

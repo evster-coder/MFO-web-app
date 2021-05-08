@@ -36,16 +36,3 @@
 .d-flex{
 	flex-wrap: wrap;
 }
-
-#userinfo{
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size:14px;
-}
-
-.tab-pane{
-    padding:35px;
-
-    -webkit-box-shadow:0 3px 50px 0 rgba(0,0,0,.1);
-    box-shadow:0 3px 50px 0 rgba(0,0,0,.1);
-    border-radius:5px;
-}

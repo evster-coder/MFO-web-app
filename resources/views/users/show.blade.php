@@ -12,7 +12,7 @@
 
 
 @section('content')
-	<a href="{{route('user.index')}}" class="btn btn-default">< Назад</a>
+	<a href="{{route('user.index')}}" class="btn btn-default">< К списку</a>
 
 	<h1> Пользователь {{$user->username}}</h1>
 
@@ -48,7 +48,7 @@
     	<x-auth-validation-errors class="mb-4" :errors="$errors" />
 
 
-		<ul class="nav nav-tabs" id="userinfo" role="tablist">
+		<ul class="nav nav-tabs" id="blockinfo" role="tablist">
 			<li class="nav-item">
 				<a class="nav-link active" data-bs-toggle="tab" href="#tabs-1" role="tab">Основное</a>
 			</li>

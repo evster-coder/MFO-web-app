@@ -3,8 +3,8 @@
 
         <a href="{{url('/')}}" class="navbar-brand">Система МФО</a>
         <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="#navContent" aria-expanded="false" aria-label="Toggle navigation"><span><i class="fas fa-bars"></i></span></button>
-        <div id="navContent" class="collapse navbar-collapse">
 
+        <div id="navContent" class="collapse navbar-collapse">
 
         <!-- Горизонтальная часть меню -->
         <div class="navbar-nav ms-auto">
@@ -26,7 +26,6 @@
             @endauth
         </div>
 
-
         <!-- Вертикальная часть меню -->
         <div class="navbar-nav">
             <ul class="navbar-nav me-auto sidenav">
@@ -36,7 +35,7 @@
 
                 @role('admin')
                     <li class="nav-item has-sub">
-                        <a class="nav-link " href="#" id="dictionarities" role="button" aria-expanded="false">
+                        <a class="nav-link" id="users" role="button" aria-expanded="false">
                             Пользователи и права
                             <i class="fas fa-sort-down"></i>
                         </a>
@@ -69,9 +68,27 @@
 
                 @endrole
 
-                @perm('manage-orgunits')
-                    <li class="nav-item">
-                        <a href="{{route('user.index')}}" class="nav-link">Подразделения</a>
+                @perm('view-orgunits')
+                    <li class="nav-item has-sub">
+                        <a class="nav-link" id="dictionarities" role="button" aria-expanded="false">
+                            Структура организации
+                            <i class="fas fa-sort-down"></i>
+                        </a>
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a href="{{route('orgunit.index')}}" class="nav-link">
+                                Подразделения
+                                </a>
+                            </li>
+                            @perm('view-orgunits-param')
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{route('orgunit.index')}}">
+                                    Параметры подразделений
+                                    </a>
+                                </li>
+                            @endperm
+                        </ul>
+
                     </li>
                 @endperm
 
@@ -83,7 +100,7 @@
                     <li class="nav-item has-sub">
 
 
-                        <a class="nav-link " href="#" id="dictionarities" role="button" aria-expanded="false">
+                        <a class="nav-link" id="dictionarities" role="button" aria-expanded="false">
                             Справочные поля
                             <i class="fas fa-sort-down"></i>
                         </a>

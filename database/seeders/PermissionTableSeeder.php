@@ -27,12 +27,6 @@ class PermissionTableSeeder extends Seeder
             ['slug' => 'manage-roles', 'name' => 'Управление ролями'],
             ['slug' => 'manage-perms', 'name' => 'Управление правами'],
 
-            ['slug' => 'change-curr-orgunit', 'name' => 'Изменение текущего подразделения'],
-            ['slug' => 'manage-orgunits', 'name' => 'Управление подразделениями'],
-            ['slug' => 'create-orgunits', 'name' => 'Создание подразделения'],
-            ['slug' => 'edit-orgunits', 'name' => 'Редактирование подразделения'],
-            ['slug' => 'delete-orgunits', 'name' => 'Удаление подразделения'],
-
 
             ['slug' => 'view-dictionaries', 'name' => 'Просмотр справочников'],
             ['slug' => 'manage-dictionaries', 'name' => 'Управление справочниками'],
@@ -42,10 +36,13 @@ class PermissionTableSeeder extends Seeder
 
             ['slug' => 'manage-datadicts', 'name' => 'Управление справочной информацией'],
 
+            ['slug' => 'change-curr-orgunit', 'name' => 'Изменение текущего подразделения'],
             ['slug' => 'view-orgunits', 'name' => 'Просмотр структуры подразделений'],
             ['slug' => 'create-orgunit', 'name' => 'Создание подразделения'],
             ['slug' => 'edit-orgunit', 'name' => 'Редактирование подразделения'],
             ['slug' => 'delete-orgunit', 'name' => 'Удаление подразделения'],
+            ['slug' => 'view-orgunits-param', 'name' => 'Просмотр параметров подразделений'],
+
 
         ];
 

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 use App\Models\OrgUnit;
-
+use App\Models\User;
 
 class OrgUnitController extends Controller
 {
@@ -51,15 +51,136 @@ class OrgUnitController extends Controller
             abort(403, 'Нет прав на данное действие');
     }
 
-    /*public function getDownOrgUnits(Request $req)
+    public function create($parentId)
     {
-        $query = $req->get('query');
+        if(OrgUnit::whereDescendantOrSelf(Auth::user()->orgunit_id)
+                                ->get()
+                                ->contains('id', $parentId))
+        {
+            $parent = OrgUnit::find($parentId);
 
-        $orgunits = OrgUnit::whereDescendantAndSelf(Auth::user()->orgunit_id)
-                            ->where('orgUnitCode', 'like', '%'.$query.'%')
-                            ->get();
+            $orgunit = new OrgUnit();
+            return view('orgunits.create', [
+                'currOrgunit' => $orgunit,
+                'parent' => $parent]);
+        }
+        else
+            return back()->withErrors(['msg' => "Недостаточно прав для добавления в это подразделение!"]);
+    }
 
-        return response()->json($orgunits);
-    }*/
+    public function store(Request $req)
+    {
+        if(OrgUnit::whereDescendantOrSelf(Auth::user()->orgunit_id)
+                        ->get()
+                        ->contains('id', $req->get('parent_id')))
 
+        {
+            $orgUnit = new OrgUnit();
+
+            $orgUnit->orgUnitCode = $req->get('orgUnitCode');
+            $orgUnit->hasDictionaries = $req->get('hasDictionaries');
+
+            $orgUnit->parent_id = $req->get('parent_id');
+
+            $orgUnit->save();
+
+            return redirect()->route('orgunit.show', $orgUnit->id);
+        }
+        else
+            return back()->withErrors(['msg' => "Недостаточно прав для Добавления к этому подразделению!"]);
+
+    }
+
+    public function update(Request $req, $id)
+    {
+        $editOrgunit = OrgUnit::find($id);
+
+        if(OrgUnit::whereDescendantOrSelf(Auth::user()->orgunit_id)
+                        ->get()
+                        ->contains('id', $id))
+        {
+            if($req->get('hasDictionaries') == 0)
+            {
+                //рекурсивный запрет справочников для дочерних узлов
+                $childs = OrgUnit::whereDescendantOrSelf($editOrgunit)->get();
+                foreach($childs as $child)
+                {
+                    $child->hasDictionaries = false;
+                    $child->save();
+                }
+            }
+            else
+                $editOrgunit->hasDictionaries = true;
+
+            $editOrgunit->orgUnitCode = $req->get('orgUnitCode');
+
+            $editOrgunit->save();
+
+            if($editOrgunit)
+            {
+                return redirect()->route('orgunit.show', $editOrgunit->id)
+                        ->with(['status' => 'Успешно изменен']);
+            }
+            else
+            {
+                return redirect()->route('orgunit.show', $editOrgunit->id)
+                        ->withErrors(['msg' => "Ошибка обновления записи"]);
+
+            }
+        }
+        else
+            return back()->withErrors(['msg' => "Недостаточно прав для Редактирования этого подразделения!"]);
+
+    }
+
+    public function show($id)
+    {
+        $orgunit = OrgUnit::find($id);
+        $users = User::where('orgunit_id', $id)->get();
+        return view('orgunits.show', ['orgunit' => $orgunit, 'users' => $users]);
+    }
+
+    public function destroy(Request $req, $id = null)
+    {
+        if($id == null)
+            $id = $req->orgunit_id;
+
+        if(OrgUnit::whereDescendantOrSelf(Auth::user()->orgunit_id)
+                                ->get()
+                                ->contains('id', $id))
+        {
+            if(OrgUnit::find($id)->isLeaf())
+            {
+                $orgunit = OrgUnit::find($id);
+                $orgunit->delete();
+                return redirect()->route('orgunit.index')->with(['status' => 'Успешно удален.']);
+
+            }
+            else
+                return back()->withErrors(['msg' => 'Невозможно удалить подразделение, т.к. у него присутствуют дочерние узлы']);
+        }
+        else
+            return back()->withErrors(['msg' => "Недостаточно прав для удаления этого подразделения!"]);
+
+    }
+
+    public function edit($id)
+    {
+        if(OrgUnit::whereDescendantOrSelf(Auth::user()->orgunit_id)
+                                ->get()
+                                ->contains('id', $id))
+        {
+            $editOrgunit = OrgUnit::find($id);
+
+            $parent = $editOrgunit->parent()->first();
+
+            return view('orgunits.create',[
+                'currOrgunit' => $editOrgunit,
+                'parent' => $parent,
+            ]);
+        }
+        else
+            return back()->withErrors(['msg' => "Недостаточно прав для редактирования этого подразделения!"]);
+
+    }
 }

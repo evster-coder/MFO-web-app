@@ -145,9 +145,11 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::group(['middleware' => 'perm:view-orgunits'], function() {
 		Route::get('/orgunit', [OrgUnitController::class, 'index'])	
 																->name('orgunit.index');
+		Route::get('/orgunit/{id}', [OrgUnitController::class, 'show'])	
+																->name('orgunit.show');
 
 		Route::group(['middleware' => 'perm:create-orgunit'], function(){
-			Route::get('/orgunit/create', [OrgUnitController::class, 'create'])
+			Route::get('/orgunit/create/{parent?}', [OrgUnitController::class, 'create'])
 																->name('orgunit.create');
 			Route::post('/orgunit', [OrgUnitController::class, 'store'])
 																->name('orgunit.store');
@@ -161,7 +163,7 @@ Route::group(['middleware' => 'auth'], function() {
 		});
 
 		Route::group(['middleware' => 'perm:delete-orgunit'], function(){
-			Route::delete('/orgunit/{id}', [OrgUnitController::class, 'destroy'])
+			Route::delete('/orgunit/{id?}', [OrgUnitController::class, 'destroy'])
 																->name('orgunit.destroy');
 		});
 	});
