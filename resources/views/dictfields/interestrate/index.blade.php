@@ -7,6 +7,7 @@
 
 @push('assets')
     <script src="{{ asset('js/datadictsCRUD/index.js') }}" defer></script>
+    <script src="{{ asset('js/datadictsCRUD/interestrate.js') }}" defer></script>
     <link rel="stylesheet" href="{{ asset('css/datadicts.css') }}">
 @endpush
 
@@ -46,7 +47,7 @@
             <h4 class="modal-title" id="dataCrudModal"></h4>
             </div>
               <div class="modal-body">
-                <form name="dataForm" action="{{ route('interestrate.store') }}" method="POST">
+                <form name="dataForm" id="dataForm" action="{{ route('interestrate.store') }}" method="POST">
                   <input type="hidden" name="dataId" id="dataId" >
                   @csrf
                   <div class="row">
@@ -68,13 +69,3 @@
         </div>
     </div>
 @endsection
-
-<script>
-  function validate()
-  {
-    if(document.dataForm.percentValue.value !='')
-      document.dataForm.btnsave.disabled=false
-    else
-      document.dataForm.btnsave.disabled=true
-  }
-</script>

@@ -86,16 +86,50 @@
 			</div>
 			<div class="tab-pane" id="tabs-2" role="tabpanel">
 				<h5>Значения параметров: </h5><br>
-				<ol>
-				</ol>
+				<table class="table mb-5 table-hover">
+					<thead>
+						<tr>
+							<th>Параметр</th>
+							<th>Значение</th>
+							<th>Источник параметра</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach($params as $param)
+						<tr>
+							@if($param->OrgUnitParam)
+								<td>{{$param->OrgUnitParam->name}}</td>
+								<td>
+									@if($param->OrgUnitParam->dataType == 'date')
+										{{$param->dataAsDate}}
+									@elseif($param->OrgUnitParam->dataType == 'number')
+										{{$param->dataAsNumber}}
+									@elseif($param->OrgUnitParam->dataType == 'string')
+										{{$param->dataAsString}}
+									@else
+									- Не установлено
+									@endif
+								</td>
+								<td align="right">
+									{{$param->OrgUnit->orgUnitCode}}
+								</td>
+							@else
+							<td>{{$param->name}}</td>
+							<td>Не установлено</td> 
+							<td>-</td>
+							@endif
+						<tr>
+						@endforeach
+					</tbody>
+				</table>
 			</div>
 			<div class="tab-pane" id="tabs-3" role="tabpanel">
-				<h5>Пользователи в подразделении:</h5>
+				<h5>Пользователи в подразделении:</h5><br>
 				<table class="table mb-5">
 					<thead>
 						<tr>
 							<th>Пользователь</th>
-							<th>Блокировка</th>
+							<th>Статус</th>
 						</tr>
 					</thead>
 					<tbody>

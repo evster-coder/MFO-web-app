@@ -126,3 +126,13 @@ $(document).ready(function () {
 	 });
 
 });
+
+  function validate()
+  {
+    if(document.permForm.name.value !='' && document.permForm.slug.value !='')
+    {
+      document.permForm.btnsave.disabled=false
+    }
+    else
+      document.permForm.btnsave.disabled=true
+  }

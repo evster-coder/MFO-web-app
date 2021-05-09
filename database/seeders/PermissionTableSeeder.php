@@ -41,7 +41,11 @@ class PermissionTableSeeder extends Seeder
             ['slug' => 'create-orgunit', 'name' => 'Создание подразделения'],
             ['slug' => 'edit-orgunit', 'name' => 'Редактирование подразделения'],
             ['slug' => 'delete-orgunit', 'name' => 'Удаление подразделения'],
-            ['slug' => 'view-orgunits-param', 'name' => 'Просмотр параметров подразделений'],
+
+            ['slug' => 'view-orgunit-params', 'name' => 'Просмотр параметров подразделений'],
+            ['slug' => 'create-orgunit-param', 'name' => 'Создание параметра подразделения'],
+            ['slug' => 'edit-orgunit-param', 'name' => 'Редактирование параметра подразделений'],
+            ['slug' => 'delete-orgunit-param', 'name' => 'Удаление параметра подразделений'],
 
 
         ];

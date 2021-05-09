@@ -49,7 +49,7 @@
             <h4 class="modal-title" id="permCrudModal"></h4>
             </div>
               <div class="modal-body">
-                <form name="permForm" action="{{ route('perm.store') }}" method="POST">
+                <form name="permForm" id="permForm" action="{{ route('perm.store') }}" method="POST">
                   <input type="hidden" name="permId" id="permId" >
                   @csrf
                   <div class="row">
@@ -73,15 +73,3 @@
         </div>
     </div>
 @endsection
-
-<script>
-  function validate()
-  {
-    if(document.permForm.name.value !='' && document.permForm.slug.value !='')
-    {
-      document.permForm.btnsave.disabled=false
-    }
-    else
-      document.permForm.btnsave.disabled=true
-  }
-</script>

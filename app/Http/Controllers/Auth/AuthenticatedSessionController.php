@@ -38,6 +38,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->put('OrgUnit', Auth::user()->orgunit_id);
         $request->session()->put('OrgUnitCode', OrgUnit::find(Auth::user()->orgunit_id)->orgUnitCode);
 
+        if(Auth::user()->needChangePassword)
+            return redirect()->route('auth.change-password');
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

@@ -7,6 +7,7 @@ use App\Http\Controllers\OrgunitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\OrgUnitParamController;
 
 use App\Http\Controllers\DictsData\InterestRateController;
 use App\Http\Controllers\DictsData\LoanTermController;
@@ -24,7 +25,12 @@ use App\Http\Controllers\DictsData\SeniorityController;
 |
 */
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth', 'change-pass'], function() {
+	Route::get('/changepassword', [UserController::class, 'changePassword'])
+																->name('auth.change-password');
+	Route::put('/changepassword', [UserController::class, 'updatePassword'])
+																->name('auth.update-password');
+
 
 	Route::get('/', function () {
 	    return view('welcome');
@@ -165,6 +171,28 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::group(['middleware' => 'perm:delete-orgunit'], function(){
 			Route::delete('/orgunit/{id?}', [OrgUnitController::class, 'destroy'])
 																->name('orgunit.destroy');
+		});
+	});
+
+	//orgunitparams routes
+	Route::group(['middleware' => 'perm:view-orgunit-params'], function() {
+		Route::get('/orgunitparam', [OrgUnitParamController::class, 'index'])
+																->name('param.index');
+		Route::get('/orgunitparams/get-orgunitparams', [OrgUnitParamController::class, 'getParams'])
+																->name('param.list');
+
+		Route::group(['middleware' => 'perm:create-orgunit-param'], function(){
+			Route::post('/orgunitparam', [OrgUnitParamController::class, 'store'])
+																->name('param.store');
+		});
+
+		Route::group(['middleware' => 'perm:edit-orgunit-param'], function(){
+			Route::get('/orgunitparam/{id}/edit', [OrgUnitParamController::class, 'edit'])
+																->name('param.edit');
+		});
+		Route::group(['middleware' => 'perm:delete-orgunit-param'], function(){
+			Route::delete('/orgunitparam/{id}', [OrgUnitParamController::class, 'destroy'])
+																->name('param.destroy');
 		});
 	});
 

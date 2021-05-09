@@ -11,6 +11,7 @@
 
 @push('assets')
     <link rel="stylesheet" href="{{ asset('css/orgunits.css') }}">
+    <script src="{{ asset('js/orgunitscreate.js') }}" defer></script>
 @endpush
 
 @section('content')
@@ -135,7 +136,75 @@
         	</div>
 
         	<div class="block-section">
-        		<h4>Параметры подразделений</h4>
+        		<h4>Параметры подразделения</h4>
+        		<table class="table table-hover" id="table-params">
+    			<tbody>
+				@foreach($params as $param)
+				<tr>
+
+					@if($param->OrgUnitParam)
+						<td>{{$param->OrgUnitParam->name}}</td>
+					@else
+						<td>{{$param->name}}</td>
+					@endif
+					<td>
+
+					<div class="form-group edit-fields">
+						@if($param->OrgUnitParam)
+							@if($param->orgunit_id == $currOrgunit->id)
+								<div class="input-group mb-3">
+									<div class="input-group-text">
+										<input class="form-check-input mt-0" name="params_cb[]" type="checkbox" value="{{$param->orgunit_param_id}}">
+										<label for="params_cb[]" class="ms-2">Удалить</label>
+									</div>
+								@if($param->OrgUnitParam->dataType == 'number')
+									<input type="number" class="form-control" 
+															name="params[{{$param->OrgUnitParam->slug}}]"
+															value="{{$param->dataAsNumber}}">
+								@elseif($param->OrgUnitParam->dataType == 'date')
+									<input type="date" class="form-control"															name="params[{{$param->OrgUnitParam->slug}}]"
+															value="{{$param->dataAsDate}}">
+								@else
+									<input type="text" class="form-control" 
+															name="params[{{$param->OrgUnitParam->slug}}]"
+															value="{{$param->dataAsString}}">
+								@endif
+								</div>
+							@else
+								<div class="input group mb-3">
+								@if($param->OrgUnitParam->dataType == 'number')
+									<input type="number" class="form-control" 
+													name="params[{{$param->OrgUnitParam->slug}}]"
+													placeholder="Наследуется {{$param->dataAsNumber}}">
+								@elseif($param->OrgUnitParam->dataType == 'date')
+									<input type="date" class="form-control"													name="params[{{$param->OrgUnitParam->slug}}]"
+													placeholder="Наследуется {{$param->dataAsDate}}">
+								@else
+									<input type="text" class="form-control" 
+													name="params[{{$param->OrgUnitParam->slug}}]"
+													placeholder="Наследуется {{$param->dataAsString}}">
+								@endif
+								</div>
+							@endif
+			            @else
+							<div class="input group mb-3">
+								@if($param->dataType == 'number')
+									<input type="number" class="form-control" 
+															name="params[{{$param->slug}}]">
+								@elseif($param->dataType == 'date')
+									<input type="date" class="form-control"															name="params[{{$param->slug}}]">
+								@else
+									<input type="text" class="form-control" 
+															name="params[{{$param->slug}}]">
+								@endif
+							</div>
+			            @endif
+		          	</div>
+		          	</td>
+	          	</tr>
+	          	@endforeach
+	          	</tbody>
+	          	</table>
 
         	</div>
 	</div>

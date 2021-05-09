@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 
 
 use App\Models\OrgUnit;
+use App\Models\OrgUnitParam;
+use App\Models\ParamValue;
 use App\Models\User;
 
 class OrgUnitController extends Controller
@@ -59,10 +61,19 @@ class OrgUnitController extends Controller
         {
             $parent = OrgUnit::find($parentId);
 
+            $orgunitparams = OrgUnitParam::orderBy('name')->get();
+
+            $paramsArr = [];
+            foreach($orgunitparams as $param)
+                $paramsArr[] = $param->getClosestValue($parentId);
+            $params = collect($paramsArr);
+
+
             $orgunit = new OrgUnit();
             return view('orgunits.create', [
                 'currOrgunit' => $orgunit,
-                'parent' => $parent]);
+                'parent' => $parent,
+                'params' => $params]);
         }
         else
             return back()->withErrors(['msg' => "Недостаточно прав для добавления в это подразделение!"]);
@@ -83,6 +94,35 @@ class OrgUnitController extends Controller
             $orgUnit->parent_id = $req->get('parent_id');
 
             $orgUnit->save();
+
+            //запись параметров
+            $params = $req->params;
+            foreach($params as $key=>$value)
+            {
+                if($value != null)
+                {
+                    $param = OrgUnitParam::where('slug', $key)->first();
+                    $paramValue = ParamValue::create(
+                        [
+                            'orgunit_id' => $orgUnit->id,
+                            'orgunit_param_id' => $param->id,
+                        ]);
+
+                    switch($param->dataType)
+                    {
+                        case 'string':
+                            $paramValue->dataAsString = $value; break;
+                        case 'number':
+                            $paramValue->dataAsNumber = $value; break;
+                        case 'date':
+                            $paramValue->dataAsDate = $value; break;
+                        default:
+                            $paramValue->dataAsString = $value; break;
+                    }
+
+                    $paramValue->save();
+                }
+            }
 
             return redirect()->route('orgunit.show', $orgUnit->id);
         }
@@ -118,6 +158,48 @@ class OrgUnitController extends Controller
 
             if($editOrgunit)
             {
+            //запись параметров
+            $params = $req->params;
+            foreach($params as $key=>$value)
+            {
+                if($value != null)
+                {
+                    $param = OrgUnitParam::where('slug', $key)->first();
+                    $paramValue = ParamValue::updateOrCreate(
+                        [
+                            'orgunit_id' => $editOrgunit->id,
+                            'orgunit_param_id' => $param->id,
+                        ], []);
+
+                    switch($param->dataType)
+                    {
+                        case 'string':
+                            $paramValue->dataAsString = $value; break;
+                        case 'number':
+                            $paramValue->dataAsNumber = $value; break;
+                        case 'date':
+                            $paramValue->dataAsDate = $value; break;
+                        default:
+                            $paramValue->dataAsString = $value; break;
+                    }
+
+                    $paramValue->save();
+
+                    if($req->params_cb)
+                    {
+                        $deletedItems = $req->params_cb;
+                        foreach($deletedItems as $key=>$value)
+                        {
+                            $delete = ParamValue::where('orgunit_id', $editOrgunit->id)
+                                        ->where('orgunit_param_id', $value)
+                                        ->first();
+                            if($delete)
+                                $delete->delete();
+                        }
+                    }
+                }
+            }
+
                 return redirect()->route('orgunit.show', $editOrgunit->id)
                         ->with(['status' => 'Успешно изменен']);
             }
@@ -136,8 +218,18 @@ class OrgUnitController extends Controller
     public function show($id)
     {
         $orgunit = OrgUnit::find($id);
+        $orgunitparams = OrgUnitParam::orderBy('name')->get();
+
+        $paramsArr = [];
+        foreach($orgunitparams as $param)
+            $paramsArr[] = $param->getClosestValue($id);
+        $params = collect($paramsArr);
+
         $users = User::where('orgunit_id', $id)->get();
-        return view('orgunits.show', ['orgunit' => $orgunit, 'users' => $users]);
+        //dd($params);
+        return view('orgunits.show', ['orgunit' => $orgunit, 
+                                        'users' => $users,
+                                        'params' => $params]);
     }
 
     public function destroy(Request $req, $id = null)
@@ -174,9 +266,18 @@ class OrgUnitController extends Controller
 
             $parent = $editOrgunit->parent()->first();
 
+            $orgunitparams = OrgUnitParam::orderBy('name')->get();
+
+            $paramsArr = [];
+            foreach($orgunitparams as $param)
+                $paramsArr[] = $param->getClosestValue($id);
+            $params = collect($paramsArr);
+
+
             return view('orgunits.create',[
                 'currOrgunit' => $editOrgunit,
                 'parent' => $parent,
+                'params' => $params,
             ]);
         }
         else

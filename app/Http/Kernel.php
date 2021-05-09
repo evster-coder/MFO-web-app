@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
 
         'role' => \App\Http\Middleware\CheckUserRole::class,
         'perm' => \App\Http\Middleware\CheckUserPermission::class,
+        'change-pass' => \App\Http\Middleware\NeedChangePassword::class,
     ];
 }

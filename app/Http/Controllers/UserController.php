@@ -29,6 +29,18 @@ class UserController extends Controller
         return view('users.index', ['users' => $users]);
     }
 
+    public function changePassword()
+    {
+        if(Auth::user()->needChangePassword)
+            return view('users.change-password');
+        else abort(404);
+    }
+
+    public function updatePassword(Request $req)
+    {
+        dd($req->all());
+    }
+
     public function show($id)
     {
         //dd("show");
@@ -261,6 +273,7 @@ class UserController extends Controller
         if(Auth::user()->canSetOrgUnit($user->orgunit_id))
         {
             $user->needChangePassword = true;
+            $user->password = Hash::make($user->username);
             $user->save();
 
 

@@ -80,9 +80,9 @@
                                 Подразделения
                                 </a>
                             </li>
-                            @perm('view-orgunits-param')
+                            @perm('view-orgunit-params')
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('orgunit.index')}}">
+                                    <a class="nav-link" href="{{route('param.index')}}">
                                     Параметры подразделений
                                     </a>
                                 </li>
