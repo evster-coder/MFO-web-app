@@ -20,6 +20,7 @@ class NeedChangePassword
         {
             return redirect()->route('auth.change-password');
         }
-        return $next($request);
+        else
+            return $next($request);
     }
 }

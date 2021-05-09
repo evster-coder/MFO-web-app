@@ -160,5 +160,7 @@ return [
         'year'                  => 'Год',
         'roles'                 => 'Роли пользователя',
         'daysAmount'            => 'Количество дней',
+        'new-password'          => 'Новый пароль',
+        'new-password-confirm'  => 'Подтверждение пароля'
     ],  
 ];

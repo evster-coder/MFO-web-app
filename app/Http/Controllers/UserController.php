@@ -38,7 +38,31 @@ class UserController extends Controller
 
     public function updatePassword(Request $req)
     {
-        dd($req->all());
+        //simple validation (no need to add Request class)
+        $req->validate([
+            'new-password' => 'required', 'same:new-password', 'min:3',
+            'new-password-confirm' => 'required|same:new-password',
+        ]);
+
+        $user = User::find(Auth::user()->id);
+        $user->password = Hash::make($req->get('new-password'));
+        $user->needChangePassword = false;
+        $user->save();
+        return redirect()->route('user.profile')->with(['status' => 'Пароль был успешно изменен!']);
+    }
+
+    public function profile()
+    {
+        $curUser = Auth::user();
+        return view('users.profile', ['user' => $curUser]);
+    }
+
+    public function resetYourselfPassword()
+    {
+        $user = Auth::user();
+        $user->needChangePassword = true;
+        $user->save();
+        return redirect()->route('user.profile')->with(['status' => 'Запрошена смена пароля!']);
     }
 
     public function show($id)

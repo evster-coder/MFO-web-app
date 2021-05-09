@@ -28,6 +28,10 @@
 
 }
 
+#userLink{
+    border-radius: 8px;
+}
+
 .orgunit-manage .btn{
     font-size: 13px;
     padding:3px;

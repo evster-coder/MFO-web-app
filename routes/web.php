@@ -25,12 +25,18 @@ use App\Http\Controllers\DictsData\SeniorityController;
 |
 */
 
-Route::group(['middleware' => 'auth', 'change-pass'], function() {
+Route::group(['middleware' => 'auth'], function() {
 	Route::get('/changepassword', [UserController::class, 'changePassword'])
-																->name('auth.change-password');
+													->name('auth.change-password');
 	Route::put('/changepassword', [UserController::class, 'updatePassword'])
 																->name('auth.update-password');
 
+	Route::group(['middleware' => 'changepass'], function() {
+
+		Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
+
+		Route::get('resetyourpassword', [UserController::class, 'resetYourselfPassword'])
+																->name('user.resetyourpassword');
 
 	Route::get('/', function () {
 	    return view('welcome');
@@ -195,7 +201,6 @@ Route::group(['middleware' => 'auth', 'change-pass'], function() {
 																->name('param.destroy');
 		});
 	});
-
-
+});
 });
 require __DIR__.'/auth.php';
