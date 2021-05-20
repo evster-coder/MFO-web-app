@@ -148,6 +148,8 @@ return [
         'mobile'                => 'Моб. номер',
         'month'                 => 'Месяц',
         'name'                  => 'Имя',
+        'patronymic'            => 'Отчество',
+        'surname'               => 'Фамилия',
         'password'              => 'Пароль',
         'password_confirmation' => 'Подтверждение пароля',
         'phone'                 => 'Телефон',

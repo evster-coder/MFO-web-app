@@ -29,6 +29,44 @@
         <!-- Вертикальная часть меню -->
         <div class="navbar-nav">
             <ul class="navbar-nav me-auto sidenav">
+            {{--  
+                @role('director')
+                    <li class="nav-item">
+                        <a href="{{route('clientform.approval-list')}}" class="nav-link">
+                        Задачи
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('client.index')}}" class="nav-link">
+                        Клиенты
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('loan.index')}}" class="nav-link">
+                        Договоры займов
+                        </a>
+                    </li>
+                @endrole
+
+                @role('cashier')
+                    <li class="nav-item">
+                        <a href="{{route('clientform.index')}}" class="nav-link">
+                        Заявки на займы
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('client.index')}}" class="nav-link">
+                        Клиенты
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{route('loan.index')}}" class="nav-link">
+                        Договоры займов
+                        </a>
+                    </li>
+
+                @endrole
+                --}}
                 <li class="nav-item">
                     <a href="{{url('/')}}" class="nav-link">Главная</a>
                 </li>
@@ -92,8 +130,19 @@
                     </li>
                 @endperm
 
-                @perm('view-dictionaries')
-
+                @perm('view-clientforms')
+                <li class="nav-item">
+                    <a href="{{route('clientform.index')}}" class="nav-link">
+                    Заявки на займы
+                    </a>
+                </li>
+                @endperm
+                @perm('view-clients')
+                    <li class="nav-item">
+                        <a href="{{route('client.index')}}" class="nav-link">
+                        Клиенты
+                        </a>
+                    </li>
                 @endperm
 
                 @perm('manage-datadicts')
@@ -130,6 +179,7 @@
 
                     </li>
                 @endperm
+
             </ul>
         </div>
     </div>

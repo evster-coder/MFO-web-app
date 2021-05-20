@@ -22,6 +22,17 @@ class InterestRateController extends Controller
         return view('dictfields.interestrate.index', ['rates' => $items]);
     }
 
+    public function axiosRates(Request $req)
+    {
+        $query = $req->get('query');
+
+        $terms = InterestRate::where('percentValue', 'like', '%'.$query.'%') 
+                        ->orderBy('percentValue')->get();
+        return Response::json($terms);
+
+    }
+
+    //получение данных по запросу
     public function getRates(Request $req)
     {
         if($req->ajax())

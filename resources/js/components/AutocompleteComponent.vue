@@ -1,19 +1,28 @@
 <template>
 
 	<div class="form-group edit-fields autocomplete-div">
-        <label for="input_field"> {{rusname}} </label>
-		<input type="text" id="input_field "name="input_field"
-					placeholder="Введите Подразделение" class="form-control"
-					v-model="query" 
+        <label :for="id"> {{rusname}} </label>
+		<div class="input-group">
+			<input :type="type" :id="id" :name="id"
+					:placeholder="rusname" class="form-control"
+					v-model="query" v-if="step" :step="step"
 					@input="autoComplete">
+
+			<input :type="type" :id="id" :name="id"
+					:placeholder="rusname" class="form-control"
+					v-model="query" v-else :step="step"
+					@input="autoComplete">
+			<span class="input-group-text">{{groupText}}</span>
+		</div>
+
 		<input type="hidden" :id="name" :name="name">
 
-		   <ul class="list-group autocomplete-items" v-show="isOpen" >
+		   <ul class="list-group autocomplete-items" v-show="isOpen" style="z-index:10000;">
 			    <li class="list-group-item" v-for="result in results"
 			    	:key="result.id"
 			    	@click="setResult(result)"
 			    	style="cursor:pointer;">
-			     {{ result.orgUnitCode }}
+			     {{ result[name] }}
 			    </li>
 		   </ul>
 	</div>
@@ -23,7 +32,7 @@
 <script>
 	export default {
 
-		props: ['name', 'rusname','path'],
+		props: ['name', 'rusname','path', 'id', 'type', 'groupText', 'step'],
 
 		//после создания	
 	  	mounted() {
@@ -46,7 +55,7 @@
 		methods: {
 			setResult(result){
 				this.isOpen = false;
-				this.query = result.orgUnitCode;
+				this.query = result[this.name];
 			},
 
 			autoComplete(){

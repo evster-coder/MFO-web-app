@@ -20,8 +20,13 @@ class Client extends Model
     	'orgunit_id',
     ];
 
-    public function parentOrgUnit()
+    public function OrgUnit()
     {
     	return $this->belongsTo(OrgUnit::class, 'orgunit_id', 'id');
+    }
+
+    public function ClientForms()
+    {
+        return $this->hasMany(ClientForm::class, 'client_id', 'id');
     }
 }

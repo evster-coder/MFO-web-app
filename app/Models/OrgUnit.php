@@ -35,4 +35,20 @@ class OrgUnit extends Model
         return $this->belongsTo(OrgUnit::class, 'parent_id');
     }
 
+    public function getDictsOrgUnit()
+    {
+        $orgunits = OrgUnit::whereAncestorOrSelf($this->id)->get();
+
+        $i = $orgunits->count() - 1;
+        while ($i >= 0)
+            if($orgunits[$i]->hasDictionaries == true)
+                break;
+            else
+                $i -= 1;
+
+        if($i >= 0)
+            return $orgunits[$i];
+        else
+            return $orgunits[0];
+    }
 }

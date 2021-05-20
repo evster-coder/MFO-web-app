@@ -16,6 +16,9 @@ class DatabaseSeeder extends Seeder
         $this->call(OrgUnitTableSeeder::class);
         $this->command->info('Таблица подразделений успешно заполнена!');
 
+        $this->call(OrgUnitParamSeeder::class);
+        $this->command->info('Таблица параметров подразделений успешно заполнена!');
+
         $this->call(UserTableSeeder::class);
         $this->command->info('Таблица пользователей успешно заполнена!');
 

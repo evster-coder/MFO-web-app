@@ -28,11 +28,16 @@ class PermissionTableSeeder extends Seeder
             ['slug' => 'manage-perms', 'name' => 'Управление правами'],
 
 
-            ['slug' => 'view-dictionaries', 'name' => 'Просмотр справочников'],
-            ['slug' => 'manage-dictionaries', 'name' => 'Управление справочниками'],
-            ['slug' => 'create-clients', 'name' => 'Создание клиента'],
-            ['slug' => 'edit-clients', 'name' => 'Редактирование клиента'],
-            ['slug' => 'delete-clients', 'name' => 'Удаление клиента'],
+            ['slug' => 'view-clients', 'name' => 'Просмотр справочников'],
+            ['slug' => 'create-client', 'name' => 'Создание клиента'],
+            ['slug' => 'edit-client', 'name' => 'Редактирование клиента'],
+            ['slug' => 'delete-client', 'name' => 'Удаление клиента'],
+
+
+            ['slug' => 'view-clientforms', 'name' => 'Просмотр заявок'],
+            ['slug' => 'add-clientform', 'name' => 'Создание заявки'],
+            ['slug' => 'edit-clientform', 'name' => 'Редактирование заявки'],
+            ['slug' => 'delete-clientform', 'name' => 'Удаление заявки'],
 
             ['slug' => 'manage-datadicts', 'name' => 'Управление справочной информацией'],
 

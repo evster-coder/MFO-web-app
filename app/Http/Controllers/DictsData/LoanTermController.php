@@ -22,6 +22,15 @@ class LoanTermController extends Controller
         return view('dictfields.loanterm.index', ['terms' => $items]);
     }
 
+    public function axiosTerms(Request $req)
+    {
+        $query = $req->get('query');
+
+        $terms = LoanTerm::where('daysAmount', 'like', '%'.$query.'%') 
+                        ->orderBy('daysAmount')->get();
+        return Response::json($terms);
+    }
+
     //возврат данных по запросу
     public function getTerms(Request $req)
     {
@@ -36,7 +45,6 @@ class LoanTermController extends Controller
 
             return view('components.loanterms-tbody', compact('terms'))->render();
         }
-
     }
 
     /**

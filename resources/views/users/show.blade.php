@@ -55,9 +55,6 @@
 			<li class="nav-item">
 				<a class="nav-link" data-bs-toggle="tab" href="#tabs-2" role="tab">Роли пользователя</a>
 			</li>
-			<li class="nav-item">
-				<a class="nav-link" data-bs-toggle="tab" href="#tabs-3" role="tab">Обслуживаемые займы</a>
-			</li>
 		</ul><!-- Tab panes -->
 		<div class="tab-content">
 			<div class="tab-pane active" id="tabs-1" role="tabpanel">
@@ -95,9 +92,6 @@
 						<li>{{ $role->name }} ({{$role->slug}})</li>
 					@endforeach
 				</ol>
-			</div>
-			<div class="tab-pane" id="tabs-3" role="tabpanel">
-				<p>Обслуживаемые займы</p>
 			</div>
 		</div>
 

@@ -15,7 +15,7 @@
 
 			$(this.$el).select2({
 				theme: "bootstrap-5",
-			    placeholder: "Выберите подразделение",
+			    placeholder: "Выберите...",
 			    "language": {
 			        "noResults": function(){
 			            return "Ничего не найдено";

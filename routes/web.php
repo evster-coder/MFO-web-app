@@ -14,6 +14,12 @@ use App\Http\Controllers\DictsData\LoanTermController;
 use App\Http\Controllers\DictsData\MaritalStatusController;
 use App\Http\Controllers\DictsData\SeniorityController;
 
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ClientFormController;
+use App\Http\Controllers\LoanController;
+use App\Http\Controllers\PaymentController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,6 +32,80 @@ use App\Http\Controllers\DictsData\SeniorityController;
 */
 
 Route::group(['middleware' => 'auth'], function() {
+
+
+	Route::get('/loanterms/get-loanterms', [LoanTermController::class, 'getTerms'])
+										->name('loanterm.list');
+	Route::get('/loanterms/axios-loanterms', [LoanTermController::class, 'axiosTerms'])
+										->name('loanterm.axiosList');
+	Route::get('/interestrates/get-interestrates', [InterestRateController::class, 'getRates'])
+										->name('interestrate.list');
+	Route::get('/interestrates/axios-interestrates', [InterestRateController::class, 'axiosRates'])
+										->name('interestrate.axiosList');
+
+
+	//need to change
+	Route::get('/clientform', [ClientFormController::class, 'index'])
+															->name('clientform.index');
+	Route::get('/clientform/create', [ClientFormController::class, 'create'])
+															->name('clientform.create');
+	Route::get('/clientform/{id}/edit', [ClientFormController::class, 'edit'])
+															->name('clientform.edit');
+	Route::get('/clientform/{id}', [ClientFormController::class, 'show'])
+															->name('clientform.show');
+	Route::put('/clientform/{id}', [ClientFormController::class, 'update'])
+															->name('clientform.update');
+	Route::post('/clientform', [ClientFormController::class, 'store'])
+															->name('clientform.store');
+	Route::delete('/clientform/{id}', [ClientFormController::class, 'destroy'])
+															->name('clientform.destroy');
+	Route::get('/clientforms/get-clientforms', [ClientFormController::class, 'getForms'])
+															->name('clientform.list');
+
+	Route::get('/approval', [ClientFormController::class, 'pendingApproval'])
+															->name('clientform.approval-list');
+	Route::get('/approval/show', [ClientFormController::class, 'showApproval'])
+															->name('clientform.approval-show');
+
+	Route::get('/loan', [LoanController::class, 'index'])->name('loan.index');
+
+	Route::get('/loan/show', [LoanController::class, 'show'])->name('loan.show');
+
+
+
+	Route::get('/client', [ClientController::class, 'index'])
+														->name('client.index');
+	Route::get('/client/create', [ClientController::class, 'create'])
+														->name('client.create');
+	Route::post('/client', [ClientController::class, 'store'])
+														->name('client.store');
+	Route::put('/client/{id}', [ClientController::class, 'update'])
+														->name('client.update');
+	Route::get('/client/{id}', [ClientController::class, 'show'])
+														->name('client.show');
+	Route::get('/client/{id}/edit', [ClientController::class, 'edit'])
+														->name('client.edit');
+	Route::delete('/client/{id}', [ClientController::class, 'destroy'])
+														->name('client.destroy');
+	Route::get('/clients/get-clients', [ClientController::class, 'getClients'])
+														->name('client.list');
+	Route::post('clients/get-same-clients', [ClientController::class, 'sameClients'])
+														->name('client.sameclients');
+
+
+
+	Route::get('/clientform-data/{id}', [ClientFormController::class, 'getForm'])
+															->name('client.get-data');
+
+	//need to change
+	Route::get('/payment/create', [PaymentController::class, 'create'])
+															->name('payment.create');
+	Route::get('/payment/show', [PaymentController::class, 'show'])
+															->name('payment.show');
+
+
+
+
 	Route::get('/changepassword', [UserController::class, 'changePassword'])
 													->name('auth.change-password');
 	Route::put('/changepassword', [UserController::class, 'updatePassword'])
@@ -39,7 +119,12 @@ Route::group(['middleware' => 'auth'], function() {
 																->name('user.resetyourpassword');
 
 	Route::get('/', function () {
-	    return view('welcome');
+	    if(Auth::user()->hasRole('admin'))
+	    	return redirect()->route('user.index');
+	    elseif(Auth::user()->hasRole('cashier'))
+	    	return redirect()->route('clientform.index');
+	    elseif(Auth::user()->hasRole('director'))
+	    	return redirect()->route('clientform.approval-list');
 	})->name('welcome');
 
 	Route::group(['middleware' => 'perm:view-users'], function(){
@@ -100,8 +185,6 @@ Route::group(['middleware' => 'auth'], function() {
 		//interestRate routes
 		Route::get('/interestrate', [InterestRateController::class, 'index'])
 										->name('interestrate.index');
-		Route::get('/interestrates/get-interestrates', [InterestRateController::class, 'getRates'])
-										->name('interestrate.list');
 		Route::post('/interestrate', [InterestRateController::class, 'store'])
 										->name('interestrate.store');
 		Route::get('/interestrate/{id}/edit', [InterestRateController::class, 'edit'])
@@ -112,8 +195,6 @@ Route::group(['middleware' => 'auth'], function() {
 		//LoanTerm routes
 		Route::get('/loanterm', [LoanTermController::class, 'index'])
 										->name('loanterm.index');
-		Route::get('/loanterms/get-loanterms', [LoanTermController::class, 'getTerms'])
-										->name('loanterm.list');
 		Route::post('/loanterm', [LoanTermController::class, 'store'])
 										->name('loanterm.store');
 		Route::get('/loanterm/{id}/edit', [LoanTermController::class, 'edit'])
@@ -137,8 +218,6 @@ Route::group(['middleware' => 'auth'], function() {
 		//Seniority routes
 		Route::get('/seniority', [SeniorityController::class, 'index'])
 										->name('seniority.index');
-		Route::get('/senioritis/get-senioritis', [SeniorityController::class, 'getSenioritis'])
-										->name('seniority.list');								
 		Route::post('/seniority', [SeniorityController::class, 'store'])
 										->name('seniority.store');
 		Route::get('/seniority/{id}/edit', [SeniorityController::class, 'edit'])
