@@ -27,7 +27,7 @@ class RolePermissionTableSeeder extends Seeder
                     $role->permissions()->attach(Permission::where('slug','change-curr-orgunit')->first()->id);
                     $role->permissions()->attach(Permission::where('slug', 'view-users')->first()->id);
                     $role->permissions()->attach(Permission::where('slug', 'view-clientforms')->first()->id);
-                    $role->permissions()->attach(Permission::where('slug', 'add-clientform')->first()->id);
+                    $role->permissions()->attach(Permission::where('slug', 'create-clientform')->first()->id);
                 }
         }
     }

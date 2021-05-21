@@ -16,7 +16,7 @@
 		<x-auth-session-status class="mb-4" :status="session('status')" />
     	<x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-    	@perm('add-client')
+    	@perm('create-client')
 	      	<div class="add-client-btn">
 	        	<a class="btn btn-primary" href="{{ route('client.create') }}" role="button">Добавить</a>
 	      	</div>

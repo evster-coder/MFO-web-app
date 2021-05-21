@@ -35,7 +35,7 @@ class PermissionTableSeeder extends Seeder
 
 
             ['slug' => 'view-clientforms', 'name' => 'Просмотр заявок'],
-            ['slug' => 'add-clientform', 'name' => 'Создание заявки'],
+            ['slug' => 'create-clientform', 'name' => 'Создание заявки'],
             ['slug' => 'edit-clientform', 'name' => 'Редактирование заявки'],
             ['slug' => 'delete-clientform', 'name' => 'Удаление заявки'],
 

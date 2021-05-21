@@ -78,8 +78,11 @@ class ClientFormController extends Controller
     public function create()
     {
         $clientform = new ClientForm();
-        $clients = Client::select('id', 'name as text')
-                            ->get();
+
+        $orgunit = OrgUnit::find(session('OrgUnit'))->getDictsOrgUnit();
+
+        $clients = Client::where('orgunit_id', $orgunit->id)->get();
+
         $maritalstatuses = MaritalStatus::all();
         $seniorities = Seniority::all();
 
@@ -137,9 +140,18 @@ class ClientFormController extends Controller
     public function edit($id)
     {
         $editClientform = ClientForm::find($id);
+        $maritalstatuses = MaritalStatus::all();
+        $seniorities = Seniority::all();
+        $orgunit = OrgUnit::find(session('OrgUnit'))->getDictsOrgUnit();
+
+        $clients = Client::where('orgunit_id', $orgunit->id)->get();
 
         return view('clientforms.create',
-            ['clientform' => $editClientform,]
+            ['clientform' => $editClientform,
+            'clients' => $clients,
+            'maritalstatuses' => $maritalstatuses,
+            'seniorities' => $seniorities,
+        ]
         );
     }
 
@@ -152,7 +164,26 @@ class ClientFormController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $clientform = ClientForm::find($id);
+
+        if(empty($clientform))
+            return back()->withErrors(['msg' => "Обновляемый объект не найден"])->withInput();
+        $data = $request->all();
+
+        $result = $clientform->fill($data);
+        $result->hasCredits = $request->hasCredits;
+        $result->save();
+
+        if($result)
+        {
+            return redirect()->route('clientform.show', $result->id)
+                             ->with(['status' => 'Анкета успешно обновлена']);
+        }
+        else
+        {
+            return back()->withErrors(['msg' => "Ошибка обновления записи"])
+                         ->withInput();
+        }
     }
 
     /**

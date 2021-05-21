@@ -4980,8 +4980,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['name', 'rusname', 'path', 'id', 'type', 'groupText', 'step'],
+  props: ['name', 'rusname', 'path', 'id', 'type', 'groupText', 'step', 'required', 'givenValue'],
   //после создания	
   mounted: function mounted() {
     document.addEventListener('click', this.handleClickOutside);
@@ -4992,6 +4994,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      value: '1',
       query: '',
       isOpen: false,
       results: []
@@ -47562,6 +47565,7 @@ var render = function() {
             attrs: {
               id: _vm.id,
               name: _vm.id,
+              required: _vm.required,
               placeholder: _vm.rusname,
               step: _vm.step,
               type: "checkbox"
@@ -47606,6 +47610,7 @@ var render = function() {
             attrs: {
               id: _vm.id,
               name: _vm.id,
+              required: _vm.required,
               placeholder: _vm.rusname,
               step: _vm.step,
               type: "radio"
@@ -47632,6 +47637,7 @@ var render = function() {
             attrs: {
               id: _vm.id,
               name: _vm.id,
+              required: _vm.required,
               placeholder: _vm.rusname,
               step: _vm.step,
               type: _vm.type
@@ -47663,6 +47669,7 @@ var render = function() {
             attrs: {
               id: _vm.id,
               name: _vm.id,
+              required: _vm.required,
               placeholder: _vm.rusname,
               step: _vm.step,
               type: "checkbox"
@@ -47707,6 +47714,7 @@ var render = function() {
             attrs: {
               id: _vm.id,
               name: _vm.id,
+              required: _vm.required,
               placeholder: _vm.rusname,
               step: _vm.step,
               type: "radio"
@@ -47732,6 +47740,7 @@ var render = function() {
             attrs: {
               id: _vm.id,
               name: _vm.id,
+              required: _vm.required,
               placeholder: _vm.rusname,
               step: _vm.step,
               type: _vm.type

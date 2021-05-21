@@ -4,11 +4,13 @@
         <label :for="id"> {{rusname}} </label>
 		<div class="input-group">
 			<input :type="type" :id="id" :name="id"
+					:required="required"
 					:placeholder="rusname" class="form-control"
 					v-model="query" v-if="step" :step="step"
 					@input="autoComplete">
 
 			<input :type="type" :id="id" :name="id"
+					:required="required"
 					:placeholder="rusname" class="form-control"
 					v-model="query" v-else :step="step"
 					@input="autoComplete">
@@ -32,7 +34,15 @@
 <script>
 	export default {
 
-		props: ['name', 'rusname','path', 'id', 'type', 'groupText', 'step'],
+		props: ['name', 
+				'rusname',
+				'path', 
+				'id', 
+				'type', 
+				'groupText', 
+				'step',
+				'required',
+				'givenValue'],
 
 		//после создания	
 	  	mounted() {

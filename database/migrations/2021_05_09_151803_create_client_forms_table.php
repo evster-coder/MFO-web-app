@@ -45,6 +45,7 @@ class CreateClientFormsTable extends Migration
             $table->decimal('loanCost', 10, 2);
             $table->date('loanDate');
             $table->integer('loanTerm');
+            $table->decimal('monthlyPayment', 10, 2)->nullable();
 
             $table->boolean('isBankrupt');
             $table->boolean('hasCredits');

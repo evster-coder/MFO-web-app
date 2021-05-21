@@ -186,6 +186,15 @@
 						@endif
 					</td>
 				</tr>
+				<tr> 
+					<td>Ежемесячный платеж: </td>
+					<td>@if($clientform->monthlyPayment)
+							{{$clientform->monthlyPayment}} руб.
+						@else
+							-
+						@endif
+					</td>
+				</tr>
 			</tbody>
 		</table>
 	</div>

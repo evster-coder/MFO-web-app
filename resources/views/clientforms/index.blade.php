@@ -19,7 +19,7 @@
 	    	<x-auth-validation-errors class="mb-4" :errors="$errors" />
 
 
-	    	@perm('add-clientform')
+	    	@perm('create-clientform')
 	      	<div class="add-clientform-btn">
 	        	<a class="btn btn-primary" href="{{route('clientform.create')}}" role="button">Добавить</a>
 	        </div>
