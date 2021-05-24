@@ -1,3 +1,11 @@
+@if($clientforms->total() == 0)
+<tr>
+  <td colspan="5">
+    Ничего не найдено...
+  </td>
+</tr>
+@endif
+
 @foreach($clientforms as $clientform)
 <tr>
 	<td>{{$clientform->id}}</td>

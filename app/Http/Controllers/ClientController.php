@@ -113,7 +113,12 @@ class ClientController extends Controller
 
         if ($client)
         {
-            return redirect()->route('client.show', $client->id);
+            if($request->get('name') != null)
+            {
+                return back()->with(['status' => 'Клиент успешно добавлен'])->withInput();
+            }
+            else
+                return redirect()->route('client.show', $client->id);
         }
         else
             return back()->withErrors(['msg' => "Ошибка создания объекта"])->withInput();

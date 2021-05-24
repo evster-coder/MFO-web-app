@@ -46,7 +46,7 @@
             </tr>
             <tr>
               <td>Клиент</td>
-              <td><a href="{{route('client.show')}}"><p>Петров Иван Иванович <i class="fas fa-external-link-alt"></i></p></a>
+              <td><a href=""><p>Петров Иван Иванович <i class="fas fa-external-link-alt"></i></p></a>
               </td>
             </tr>
             <tr>

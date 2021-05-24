@@ -10,6 +10,7 @@
 @endsection
 
 @push('assets')
+    <script src="{{ asset('js/clientformsCRUD/create.js') }}" defer></script>
 @endpush
 
 
@@ -55,19 +56,21 @@
 		      		<select2 required
 		      				class="form-group" data-width="100%" 
 		      				:options="{{$clients}}" name="client_id" id="client_id"
-				      				value="{{old('client_id', $clientform->client_id)}}"	>
-		      				>
-		      			<option value="" disabled> Введите Клиента</option>
+				      		value="{{old('client_id', $clientform->client_id)}}">
+				      		<option value=""><a class="syka">НОВЫЙ</a></option>
 		      		</select2>
+	      		    <div class="wrapper" id="wrp" style="display: none;">
+				    <a href="#" id="addClient" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#crud-modal">+ Новый клиент</a>
+				    </div>
 	          	</div>
-	      	</div>
+      		</div>
 
 	    	<div class="block-section">
 	    		<h4>Основное</h4>
 	    		<div class="row">
 		  			<div class="col">
 			      	<label>Ф.И.О.</label>
-		    		<input disabled type="text" class="form-control" placeholder="ФИО">
+		    		<input disabled type="text" id="clientFIO"class="form-control" placeholder="ФИО">
 	      			</div>
 
 	      			<div class="col">
@@ -299,7 +302,8 @@
 				    		path="{{route('loanterm.axiosList')}}"
 				    		id="loanTerm"
 				    		group-text="дней"
-				    		value="{{old('loanTerm', $clientform->loanTerm)}}"
+				    		given-value="{{old('loanTerm', $clientform->loanTerm)}}"
+				    		selector="loanTerm"
 				    	></autocomplete-component>	    			
 				    </div>
 
@@ -313,7 +317,7 @@
 				    		id="interestRate"
 				    		group-text="%"
 				    		step="0.001"
-				    		value="{{old('interestRate', $clientform->interestRate)}}"
+				    		given-value="{{old('interestRate', $clientform->interestRate)}}"
 				    	></autocomplete-component>	    			
 
 	    			</div>
@@ -329,7 +333,7 @@
 	    			</div>
 					<div class="col">
 			            <label >Дата погашения</label>
-			            <input disabled type="text" class="form-control" 
+			            <input disabled type="date" class="form-control" 
 			            	id="loanMaturityDate" name="loanMaturityDate"
 	        				placeholder="Дата погашения">
 	    			</div>
@@ -354,6 +358,9 @@
 			            <label >Ежемесячный платеж</label>
 	    				<div class="input-group">	            
 							<input type="number" step="0.01" min="0"
+								@if(!$clientform->hasCredits)
+								readonly
+								@endif
 								class="form-control"
 								name="monthlyPayment" id="monthlyPayment" 
 	            				placeholder="Ежемесячный платеж"
@@ -371,13 +378,13 @@
 	      		<p align="center">Наличие производства по делу о несостоятельности (банкротстве) в течение 5 (пяти) лет на дату подачи заявки на получение микрозайма</p>
 	      		<div class="container">
 					<div class="form-check form-check-inline">
-						<input type="radio" name="isBankrupt" id=""
+						<input type="radio" name="isBankrupt"
 							class="form-check-input"  value="1" 
 							@if($clientform->isBankrupt) checked @endif>
 						<label class="form-check-label" for="inlineRadio1">Да</label>
 					</div>
 					<div class="form-check form-check-inline">
-						<input type="radio" name="isBankrupt" id="" 
+						<input type="radio" name="isBankrupt" 
 							class="form-check-input" value="0"
 							@if(!$clientform->isBankrupt) checked @endif>
 						<label class="form-check-label" for="inlineRadio2">Нет</label>
@@ -394,6 +401,41 @@
 
 			</div>
 		</form>
+
+    <div class="modal fade" id="crud-modal" aria-hidden="true" >
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title">Новый клиент</h4>
+				</div>
+			  	<div class="modal-body">
+				    <form name="addClientForm" id="addClientForm" action="{{route('client.store')}}" method="POST">
+				      @csrf
+				      <input id="isJSON" type="hidden" value="1">
+				        <div class="form-group edit-fields">
+				          <label for="surname">Фамилия</label>
+				          <input type="text" name="surname" id="surname" class="form-control" placeholder="Фамилия" oninput="validate()" >
+				        </div>
+				        <div class="form-group edit-fields">
+				            <label for="name" >Имя</label>
+				            <input type="text" name="name" id="name" class="form-control" placeholder="Имя" oninput="validate()">
+				        </div>
+				        <div class="form-group edit-fields">
+				            <label for="patronymic" >Отчество</label>
+				            <input type="text" name="patronymic" id="patronymic" class="form-control" placeholder="Отчество">
+				        </div>
+				        <div class="form-group edit-fields">
+				            <label for="birthDate" >Дата рождения</label>
+				            <input type="date" name="birthDate" id="birthDate" class="form-control" placeholder="Дата рождения" oninput="validate()">
+				        </div>
+				        <div class="btn-group block-padding">
+				          <button type="submit" id="btn-save" name="btnsave" class="btn btn-primary" disabled>Подтвердить</button>
+				        </div>
+				    </form>
+			  	</div>
+			</div>
+		</div>
+	</div>
   	</div>
 
 @endsection

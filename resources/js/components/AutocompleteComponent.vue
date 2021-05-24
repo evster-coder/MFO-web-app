@@ -42,11 +42,13 @@
 				'groupText', 
 				'step',
 				'required',
-				'givenValue'],
+				'givenValue',
+				'selector'],
 
 		//после создания	
 	  	mounted() {
     		document.addEventListener('click', this.handleClickOutside);
+    		this.query = this.givenValue;
  	 	},
 
  	 	//после удаления
@@ -66,6 +68,12 @@
 			setResult(result){
 				this.isOpen = false;
 				this.query = result[this.name];
+				if(this.selector)
+					this.$nextTick(()=> {
+					    var evt = document.createEvent("HTMLEvents");
+	    				evt.initEvent("change", false, true);
+						document.getElementById(this.selector).dispatchEvent(evt);
+					})
 			},
 
 			autoComplete(){

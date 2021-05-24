@@ -9,6 +9,10 @@ $(document).ready(function(){
 
   function loadData()
   {
+    clientformNumber = $('#searchClientFormNumber').val();
+    clientFIO = $('#searchClientFIO').val();
+    loanDate = $('#searchClientFormDate').val();
+
     $.ajax({
      url:"/clientforms/get-clientforms?page="+ page +
           "&id=" + clientformNumber +
@@ -27,9 +31,6 @@ $(document).ready(function(){
   $(document).on('keyup', '#searchClientFormNumber', function(e){
     if(e.key=="Enter")
     {
-      //параметры поиска
-      clientformNumber = $('#searchClientFormNumber').val();
-
       //получение данных
       loadData();
     }
@@ -40,9 +41,6 @@ $(document).ready(function(){
   $(document).on('keyup', '#searchClientFormDate', function(e){
     if(e.key=="Enter")
     {
-      //параметры поиска
-      loanDate = $('#searchClientFormDate').val();
-
       //получение данных
       loadData();
     }
@@ -52,9 +50,6 @@ $(document).ready(function(){
   $(document).on('keyup', '#searchClientFIO', function(e){
     if(e.key=="Enter")
     {
-      //параметры поиска
-      clientFIO = $('#searchClientFIO').val();
-
       //получение данных
       loadData();
     }

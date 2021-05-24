@@ -24,7 +24,7 @@ class OrgUnitTableSeeder extends Seeder
         $orgunit2 = new OrgUnit();
 
         $orgunit2->orgUnitCode = "OU-12";
-        $orgunit2->hasDictionaries = false;
+        $orgunit2->hasDictionaries = true;
 
         $orgunit2->appendToNode($orgunit1)->save();
 

@@ -4983,10 +4983,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ['name', 'rusname', 'path', 'id', 'type', 'groupText', 'step', 'required', 'givenValue'],
+  props: ['name', 'rusname', 'path', 'id', 'type', 'groupText', 'step', 'required', 'givenValue', 'selector'],
   //после создания	
   mounted: function mounted() {
     document.addEventListener('click', this.handleClickOutside);
+    this.query = this.givenValue;
   },
   //после удаления
   destroyed: function destroyed() {
@@ -4994,7 +4995,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      value: '1',
       query: '',
       isOpen: false,
       results: []
@@ -5002,11 +5002,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     setResult: function setResult(result) {
+      var _this = this;
+
       this.isOpen = false;
       this.query = result[this.name];
+      if (this.selector) this.$nextTick(function () {
+        var evt = document.createEvent("HTMLEvents");
+        evt.initEvent("change", false, true);
+        document.getElementById(_this.selector).dispatchEvent(evt);
+      });
     },
     autoComplete: function autoComplete() {
-      var _this = this;
+      var _this2 = this;
 
       this.results = [];
       axios.get(this.path, {
@@ -5014,8 +5021,8 @@ __webpack_require__.r(__webpack_exports__);
           query: this.query
         }
       }).then(function (response) {
-        _this.results = response.data;
-        _this.isOpen = true;
+        _this2.results = response.data;
+        _this2.isOpen = true;
       });
     },
     handleClickOutside: function handleClickOutside(e) {
@@ -5090,12 +5097,13 @@ __webpack_require__.r(__webpack_exports__);
       placeholder: "Выберите...",
       "language": {
         "noResults": function noResults() {
-          return "Ничего не найдено";
+          return 'Ничего не найдено';
         }
       },
       data: this.options
     }).val(this.value).trigger('change').on('change', function () {
       vm.$emit('input', this.value);
+      document.getElementById("clientFIO").value = this.options[this.value].text;
     });
   },
   watch: {

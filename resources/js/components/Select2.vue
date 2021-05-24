@@ -18,7 +18,7 @@
 			    placeholder: "Выберите...",
 			    "language": {
 			        "noResults": function(){
-			            return "Ничего не найдено";
+			            return 'Ничего не найдено';
 			        }
 			    },
 				data: this.options,
@@ -27,6 +27,7 @@
 			.trigger('change')
 			.on('change', function(){
 				vm.$emit('input', this.value);
+				document.getElementById("clientFIO").value = this.options[this.value].text
 			});
 		},
 
@@ -44,6 +45,7 @@
 			destroyed: function(){
 				($this.$el).off().select2('destroy');
 			}
+
 		}
 	}
 </script>
