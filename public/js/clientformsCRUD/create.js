@@ -8,7 +8,10 @@ document.addEventListener("DOMContentLoaded", function(){
 	var loanMaturityDate = document.getElementById('loanMaturityDate');
 	var loanTerm = document.getElementById('loanTerm');
 
+	//заполняем даты истечения, фио и дату рождения клиента
 	changeDate();
+	fillFioBirthDate();
+
 
 	if(selectClient)
 	{
@@ -22,15 +25,23 @@ document.addEventListener("DOMContentLoaded", function(){
 		        isShow = true;
 		      }
 		});
-		$('#client_id').on("change.select2", function() {
-			var selectedItem = $('#client_id').select2('data')[0];
-			var patronymic = selectedItem.patronymic ? selectedItem.patronymic : "";
-			document.getElementById('clientFIO').value = selectedItem.surname + " "
-			 + selectedItem.name + " " + patronymic;
 
-			document.getElementById('clientBirthDate').value = selectedItem.birthDate;
-		})
+		$('#client_id').on("change.select2", hui);
 	}
+
+		function fillFioBirthDate(e){
+			//получаем выбранный элемент в селект2
+			var selectedItem = $('#client_id').select2('data')[0];
+			//если что то было выбрано, то заполняем соответствующие поля
+			if(selectedItem)
+			{
+				var patronymic = selectedItem.patronymic ? selectedItem.patronymic : "";
+				document.getElementById('clientFIO').value = selectedItem.surname + " "
+				 + selectedItem.name + " " + patronymic;
+
+				document.getElementById('clientBirthDate').value = selectedItem.birthDate;
+			}
+		}
 
 	//установить текущую дату
 	if(loanDate != null && loanDate.valueAsDate == null)
