@@ -5103,7 +5103,6 @@ __webpack_require__.r(__webpack_exports__);
       data: this.options
     }).val(this.value).trigger('change').on('change', function () {
       vm.$emit('input', this.value);
-      document.getElementById("clientFIO").value = this.options[this.value].text;
     });
   },
   watch: {

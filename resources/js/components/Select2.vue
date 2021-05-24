@@ -19,7 +19,7 @@
 			    "language": {
 			        "noResults": function(){
 			            return 'Ничего не найдено';
-			        }
+			        },
 			    },
 				data: this.options,
 			})
@@ -27,7 +27,6 @@
 			.trigger('change')
 			.on('change', function(){
 				vm.$emit('input', this.value);
-				document.getElementById("clientFIO").value = this.options[this.value].text
 			});
 		},
 

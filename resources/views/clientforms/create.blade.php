@@ -57,7 +57,6 @@
 		      				class="form-group" data-width="100%" 
 		      				:options="{{$clients}}" name="client_id" id="client_id"
 				      		value="{{old('client_id', $clientform->client_id)}}">
-				      		<option value=""><a class="syka">НОВЫЙ</a></option>
 		      		</select2>
 	      		    <div class="wrapper" id="wrp" style="display: none;">
 				    <a href="#" id="addClient" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#crud-modal">+ Новый клиент</a>
@@ -75,7 +74,8 @@
 
 	      			<div class="col">
 			      	<label>Дата рождения</label>
-		    		<input disabled type="date" class="form-control" placeholder="Дата рождения">
+		    		<input disabled type="date" id="clientBirthDate" 
+		    		class="form-control" placeholder="Дата рождения">
 		    		</div>
 	          	</div>
 	          	<div class="row">

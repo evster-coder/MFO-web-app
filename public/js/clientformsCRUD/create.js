@@ -22,6 +22,14 @@ document.addEventListener("DOMContentLoaded", function(){
 		        isShow = true;
 		      }
 		});
+		$('#client_id').on("change.select2", function() {
+			var selectedItem = $('#client_id').select2('data')[0];
+			var patronymic = selectedItem.patronymic ? selectedItem.patronymic : "";
+			document.getElementById('clientFIO').value = selectedItem.surname + " "
+			 + selectedItem.name + " " + patronymic;
+
+			document.getElementById('clientBirthDate').value = selectedItem.birthDate;
+		})
 	}
 
 	//установить текущую дату
