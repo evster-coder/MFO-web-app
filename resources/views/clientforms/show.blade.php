@@ -15,7 +15,9 @@
 	<div class="block-content">
 		<div class="d-flex">
 			<p class="me-3">Статус: Одобрено</p>
-			<a href="{{route('loan.show')}}" class="btn btn-primary me-3">Сформировать договор</a>
+			@if($clientform->Loan)
+			<a href="{{route('loan.show', ['id' => $clientform->Loan->id])}}" class="btn btn-primary me-3">Перейти к договору</a>
+			@endif
 			@perm('delete-clientform')
 			<a href="" class="btn btn-danger">Удалить</a>
 			@endperm

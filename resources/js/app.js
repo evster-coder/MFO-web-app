@@ -6,6 +6,8 @@
 
 require('./bootstrap');
 
+require('inputmask');
+
 window.Vue = require('vue').default;
 
 /**

@@ -141,8 +141,7 @@
 		            <label>Место рождения</label>
 		            <textarea class="form-control" 
 		            	id="passportBirthplace" name="passportBirthplace" 
-		            	placeholder="Введите место рождения" >{{old('passportBirthplace', $clientform->passportBirthplace)}}
-		            	</textarea>
+		            	placeholder="Введите место рождения" >{{old('passportBirthplace', $clientform->passportBirthplace)}}</textarea>
 	          	</div>
 
 	    		<div class="row">
@@ -168,16 +167,14 @@
 		            <label>По паспорту</label>
 		            <textarea required class="form-control" 
 		            	name="passportResidenceAddress" id="passportResidenceAddress"
-		            	placeholder="Введите по паспорту" >{{old('passportResidenceAddress', $clientform->passportResidenceAddress)}}
-		            	</textarea>
+		            	placeholder="Введите по паспорту" >{{old('passportResidenceAddress', $clientform->passportResidenceAddress)}}</textarea>
 	          	</div>
 
 				<div class="form-group edit-fields">
 		            <label>Фактически</label>
 		            <textarea required class="form-control" 
 		            		id="actualResidenceAddress" name="actualResidenceAddress" 
-		            		placeholder="Введите фактически" >{{old('actualResidenceAddress', $clientform->actualResidenceAddress)}}
-		            		</textarea>
+		            		placeholder="Введите фактически" >{{old('actualResidenceAddress', $clientform->actualResidenceAddress)}}</textarea>
 	          	</div>
 	      	</div>
 
@@ -220,8 +217,7 @@
 		            <label >Адрес работы</label>
 		            <textarea required class="form-control" 
 		            	name="workPlaceAddress" id="workPlaceAddress"
-	    				placeholder="Введите адрес работы">{{old('workPlaceAddress', $clientform->workPlaceAddress)}}
-		            	</textarea>
+	    				placeholder="Введите адрес работы">{{old('workPlaceAddress', $clientform->workPlaceAddress)}}</textarea>
 	          	</div>
 				<div class="row">
 					<div class="col">
@@ -396,8 +392,7 @@
 	      	<div class="block-section">
 	      		<h4>Комментарий кассира</h4>
 				<textarea class="form-control" placeholder="Введите комментарий"
-					id="cashierComment" name="cashierComment">{{old('cashierComment', $clientform->cashierComment)}}
-					</textarea>
+					id="cashierComment" name="cashierComment">{{old('cashierComment', $clientform->cashierComment)}}</textarea>
 
 			</div>
 		</form>

@@ -10,6 +10,8 @@ use App\Models\DictsData\Seniority;
 use App\Models\Client;
 use App\Models\OrgUnit;
 
+use App\Http\Requests\ClientFormRequest;
+
 
 use Illuminate\Support\Facades\Auth;
 
@@ -101,7 +103,7 @@ class ClientFormController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ClientFormRequest $request)
     {
         $clientform = new ClientForm($request->all());
         $clientform->orgunit_id = session('OrgUnit');
@@ -162,7 +164,7 @@ class ClientFormController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ClientFormRequest $request, $id)
     {
         $clientform = ClientForm::find($id);
 

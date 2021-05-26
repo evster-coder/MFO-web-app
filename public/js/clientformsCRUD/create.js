@@ -13,7 +13,9 @@ document.addEventListener("DOMContentLoaded", function(){
 	fillFioBirthDate();
 
 
-	//$('#mobilePhone').inputmask("99-999999");
+	//навешиваем маски ввода
+	putMasks();
+
 
 	if(selectClient)
 	{
@@ -103,4 +105,25 @@ function changeDate(e)
 		loanMaturityDate.valueAsDate = date;
 
 	}
+}
+
+function putMasks()
+{
+	Inputmask({mask:"+9(999)-999-9999", "clearIncomplete": true})
+					.mask(document.getElementById('mobilePhone'));
+	Inputmask({mask:"+9(9999)-999999", "clearIncomplete": true})
+					.mask(document.getElementById('homePhone'));
+	Inputmask({mask:"99 99", "clearIncomplete": true})
+					.mask(document.getElementById('passportSeries'));
+	Inputmask({mask:"999999", "clearIncomplete": true})
+					.mask(document.getElementById('passportNumber'));
+	Inputmask({mask:"999-999", "clearIncomplete": true})
+					.mask(document.getElementById('passportDepartamentCode'));
+	Inputmask({mask:"99999999999", "clearIncomplete": true})
+					.mask(document.getElementById('snils'));
+	Inputmask({mask:"[9]{1,}", greedy: false})
+					.mask(document.getElementById('pensionerId'));
+	Inputmask({mask:"+9(999)-999-9999", "clearIncomplete": true})
+					.mask(document.getElementById('workPlacePhone'));
+
 }
