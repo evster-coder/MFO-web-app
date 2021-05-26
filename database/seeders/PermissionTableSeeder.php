@@ -39,6 +39,11 @@ class PermissionTableSeeder extends Seeder
             ['slug' => 'edit-clientform', 'name' => 'Редактирование заявки'],
             ['slug' => 'delete-clientform', 'name' => 'Удаление заявки'],
 
+            ['slug' => 'view-loans', 'name' => 'Просмотр займов'],
+            ['slug' => 'create-loan', 'name' => 'Создание займа'],
+            ['slug' => 'edit-loan', 'name' => 'Редактирование займа'],
+            ['slug' => 'delete-loan', 'name' => 'Удаление займа'],
+
             ['slug' => 'manage-datadicts', 'name' => 'Управление справочной информацией'],
 
             ['slug' => 'change-curr-orgunit', 'name' => 'Изменение текущего подразделения'],

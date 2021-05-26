@@ -99,7 +99,7 @@
 				    	@foreach($clientforms as $clientform)
 			    		<tr>
 				    		<td>
-				    			<a href="" class="btn btn-link"><strong>Анкета №{{$clientform->id}} от {{$clientform->loanDate}}</strong>
+				    			<a href="{{route('clientform.show', ['id' => $clientform->id])}}" class="btn btn-link"><strong>Анкета №{{$clientform->id}} от {{$clientform->loanDate}}</strong>
 				    			<i class="fas fa-external-link-alt"></i>
 			    				</a>
 			    			</td>

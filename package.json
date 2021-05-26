@@ -34,6 +34,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.3",
         "bootstrap": "^5.0.0-beta3",
+        "inputmask": "^5.0.5",
         "select2": "^4.1.0-rc.0",
         "select2-bootstrap-5-theme": "^1.1.1"
     }

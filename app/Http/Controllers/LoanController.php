@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\ClientForm;
+use App\Models\Loan;
+use App\Models\OrgUnit;
 
 class LoanController extends Controller
 {
@@ -15,7 +17,34 @@ class LoanController extends Controller
      */
     public function index()
     {
-        return view('loans.index');
+        $loans = Loan::whereIn('orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('id'))->paginate(20);
+
+        return view('loans.index', [
+            'loans' => $loans,
+        ]);
+    }
+
+
+    //получение списка займов
+    public function getLoans(Request $req)
+    {
+        //Получить параметры поиска   
+        $loanNumber = str_replace(" ", "%", $req->get('loanNumber'));
+        $loanConclusionDate = str_replace(" ", "%", $req->get('loanConclusionDate'));
+        $clientFio = str_replace(" ", "%", $req->get('clientFio'));
+        $statusOpen = str_replace(" ", "%", $req->get('statusOpen'));
+
+        $sortBy = $req->get('sortby');
+        $sortDesc = $req->get('sortdesc');
+
+        //сортировка фильтрация пагинация
+        $loans = Loan::where('loanNumber', 'like', '%'.$loanNumber.'%')
+                            ->where('loanConclusionDate', 'like', '%'.$loanConclusionDate.'%')
+                            ->where('statusOpen', 'like', '%'.$statusOpen.'%')
+                            ->orderBy($sortBy, $sortDesc)
+                            ->paginate(20); 
+
+        return view('components.loans-tbody', compact('loans'))->render();
     }
 
     /**
@@ -45,10 +74,10 @@ class LoanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show($id)
     {
-        $clientform = ClientForm::where('id', '>', 0)->first();
-        return view('loans.show', ['clientform' => $clientform]);
+        $loan = ClientForm::find($id);
+        return view('loans.show', ['loan' => $loan]);
     }
 
     /**

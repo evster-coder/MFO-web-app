@@ -22,7 +22,7 @@
 	      	</div>
 	    @endperm
 
-		<table class="table client-table mb-5">
+		<table class="table client-table table-bordered mb-5">
 			<thead>
 				<tr class="table-info">
 					<th scope="col" class="sorting" 

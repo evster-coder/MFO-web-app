@@ -20,7 +20,12 @@ class Client extends Model
     	'orgunit_id',
     ];
 
-    protected $appends = ['text'];
+    protected $appends = ['text', 'fullName'];
+
+    public function getFullNameAttribute()
+    {
+        return $this->surname . " " . $this->name . " " . $this->patronymic;
+    }
 
     public function OrgUnit()
     {

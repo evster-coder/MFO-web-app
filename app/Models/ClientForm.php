@@ -13,6 +13,8 @@ class ClientForm extends Model
 
     //отключение полей updated_at, created_at
     public $timestamps = false;
+
+    protected $appends = ['status'];
     
     protected $fillable = [
     	'client_id',
@@ -57,6 +59,40 @@ class ClientForm extends Model
     	'constainIncome',
     	'additionalIncome'
     ];
+
+    //атрибут для статуса заявки
+    public function getStatusAttribute()
+    {
+        $securityAppr = $this->SecurityApproval;
+        $directorAppr = $this->DirectorApproval;
+        $loan = $this->Loan;
+
+        if($loan)
+            return 'open';
+        elseif($securityAppr 
+        && $directorAppr)
+            return 'odobren';
+        elseif($securityAppr)
+            return 'odobren security';
+        elseif($directorAppr)
+            return 'odobren director';
+        else return 'ne odobren';
+    }
+
+    public function Loan()
+    {
+        return $this->hasOne(Loan::class, 'clientform_id', 'id');
+    }
+
+    public function SecurityApproval()
+    {
+        return $this->belongsTo(SecurityApproval::class, 'security_approval_id', 'id');
+    }
+
+    public function DirectorApproval()
+    {
+        return $this->belongsTo(DirectorApproval::class, 'director_approval_id', 'id');
+    }
 
     public function Client()
     {

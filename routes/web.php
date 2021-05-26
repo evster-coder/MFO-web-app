@@ -67,9 +67,12 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('/approval/show', [ClientFormController::class, 'showApproval'])
 															->name('clientform.approval-show');
 
-	Route::get('/loan', [LoanController::class, 'index'])->name('loan.index');
-
-	Route::get('/loan/show', [LoanController::class, 'show'])->name('loan.show');
+	Route::get('/loan', [LoanController::class, 'index'])
+													->name('loan.index');
+	Route::get('/loans/get-loans', [LoanController::class, 'getLoans'])
+													->name('loan.list');
+	Route::get('/loan/{id}', [LoanController::class, 'show'])
+													->name('loan.show');
 
 
 

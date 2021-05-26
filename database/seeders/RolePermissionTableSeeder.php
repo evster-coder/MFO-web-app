@@ -23,11 +23,13 @@ class RolePermissionTableSeeder extends Seeder
                     $role->permissions()->attach($perm->id);
                 }
             }
-            if ($role->slug == 'cashier') { // для обычного пользователя совсем чуть-чуть
+            if ($role->slug == 'cashier') { // для обычного кассира совсем чуть-чуть
                     $role->permissions()->attach(Permission::where('slug','change-curr-orgunit')->first()->id);
                     $role->permissions()->attach(Permission::where('slug', 'view-users')->first()->id);
                     $role->permissions()->attach(Permission::where('slug', 'view-clientforms')->first()->id);
                     $role->permissions()->attach(Permission::where('slug', 'create-clientform')->first()->id);
+                    $role->permissions()->attach(Permission::where('slug', 'view-loans')->first()->id);
+                    $role->permissions()->attach(Permission::where('slug', 'create-loan')->first()->id);
                 }
         }
     }
