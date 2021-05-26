@@ -128,6 +128,6 @@ nav{
 }
 
 .nav-link{
-    color: rgb(0, 47, 85);
+    color: rgb(0, 47, 85) !important;
     font-variant: small-caps;
 }

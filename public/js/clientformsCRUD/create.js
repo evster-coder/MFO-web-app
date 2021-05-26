@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	fillFioBirthDate();
 
 
-	$('#mobilePhone').inputmask("99-999999");
+	//$('#mobilePhone').inputmask("99-999999");
 
 	if(selectClient)
 	{

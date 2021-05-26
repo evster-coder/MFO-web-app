@@ -37,8 +37,7 @@ function setRandomPassword(e)
 	e.preventDefault();
 	var password = Math.random().toString(36).substring(2, 6) 
 					+ Math.random().toString(36).substring(2, 6);
-
-	var input = e.target.previousElementSibling.previousElementSibling;
+	var input = document.getElementById('password');
 
 	if(input != null)
 		input.value = password;
