@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function(){
 	var loanDate = document.getElementById('loanDate');
 	var loanMaturityDate = document.getElementById('loanMaturityDate');
 	var loanTerm = document.getElementById('loanTerm');
+	var btnCheckBankrupt = document.getElementById('checkBankrupt');
 
 	//заполняем даты истечения, фио и дату рождения клиента
 	changeDate();
@@ -15,6 +16,25 @@ document.addEventListener("DOMContentLoaded", function(){
 
 	//навешиваем маски ввода
 	putMasks();
+
+	if(btnCheckBankrupt != null)
+	{
+		document.getElementById('saveClientform')
+						.setAttribute('disabled', 'true');
+		document.getElementById('bankruptTrue')
+						.setAttribute('disabled', 'true');
+		document.getElementById('bankruptFalse')
+						.setAttribute('disabled', 'true');
+
+		btnCheckBankrupt.addEventListener("click", function(e){
+			document.getElementById('saveClientform')
+						.removeAttribute('disabled');
+			document.getElementById('bankruptTrue')
+						.removeAttribute('disabled');
+			document.getElementById('bankruptFalse')
+						.removeAttribute('disabled');
+		});
+	}
 
 
 	if(selectClient)

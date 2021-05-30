@@ -30,7 +30,6 @@ class ClientFormRequest extends FormRequest
             'passportDateIssue' => 'required|date',
             'passportIssuedBy' => 'required|string',
             'passportDepartamentCode' => 'present|string|regex:/[0-9]{3}-[0-9]{3}/|nullable',
-            'snils' => 'required|string|size:11',
             'actualResidenceAddress' => 'required|string',
             'passportResidenceAddress' => 'required|string',
             'numberOfDependents' => 'present|integer|min:0|nullable',

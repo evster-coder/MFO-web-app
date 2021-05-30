@@ -23,11 +23,13 @@
         	<i class="fas fa-eye"></i>
 		</a>
 
-        <form method="POST" action="{{route('loan.delete', ['id' => $loan->id])}}">
+        @perm('delete-loan')
+        <form method="POST" action="{{route('loan.destroy', ['id' => $loan->id])}}">
           @method('DELETE')
           @csrf
           <button type="submit" class="btn btn-danger" onclick="return confirm('Вы действительно хотите удалить запись?');"><i class="fas fa-trash-alt"></i></button>
         </form>
+        @endperm
 	</div>
 	</td>
 </tr>

@@ -18,19 +18,76 @@ class RolePermissionTableSeeder extends Seeder
     {
         // создать связи между ролями и правами
         foreach(Role::all() as $role) {
-            if ($role->slug == 'admin' || $role->slug == 'director') { // для роли супер-админа все права
+            if ($role->slug == 'admin') { // для роли супер-админа все права
                 foreach (Permission::all() as $perm) {
                     $role->permissions()->attach($perm->id);
                 }
             }
+            if($role->slug == 'director')
+            {
+                $perms = [
+                    'change-curr-orgunit',
+                    'view-users',
+                    'manage-users',
+
+                    'view-clientforms',
+                    'edit-clientform',
+
+                    'view-loans',
+
+                    'view-clients',
+                    'create-client',
+                    'edit-client',
+                    'delete-client',
+
+                    'view-orgunits',
+                    'edit-orgunit',
+
+                    'view-director-approvals',
+                    'manage-director-approval',
+                    'delete-director-approval'
+                ];
+
+                foreach($perms as $perm)
+                    $role->permissions()->attach(Permission::where('slug', $perm)->first()->id);
+            }
             if ($role->slug == 'cashier') { // для обычного кассира совсем чуть-чуть
-                    $role->permissions()->attach(Permission::where('slug','change-curr-orgunit')->first()->id);
-                    $role->permissions()->attach(Permission::where('slug', 'view-users')->first()->id);
-                    $role->permissions()->attach(Permission::where('slug', 'view-clientforms')->first()->id);
-                    $role->permissions()->attach(Permission::where('slug', 'create-clientform')->first()->id);
-                    $role->permissions()->attach(Permission::where('slug', 'view-loans')->first()->id);
-                    $role->permissions()->attach(Permission::where('slug', 'create-loan')->first()->id);
-                }
+                $perms = [
+                    'change-curr-orgunit',
+                    'view-users',
+
+                    'view-clients',
+                    'create-client',
+                    'edit-client',
+                    'delete-client',
+
+                    'view-clientforms',
+                    'create-clientform',
+                    'edit-clientform',
+
+                    'view-loans',
+                    'create-loan'
+                ];
+                foreach($perms as $perm)
+                    $role->permissions()->attach(Permission::where('slug', $perm)->first()->id);
+            }
+            if($role->slug == 'security') {
+                $perms = [
+                    'change-curr-orgunit',
+                    'view-users',
+
+                    'view-clients',
+
+                    'view-clientforms',
+                    'view-loans',
+
+                    'manage-security-approval',
+                    'view-security-approvals',
+                    'delete-security-approval',
+                ];
+                foreach($perms as $perm)
+                    $role->permissions()->attach(Permission::where('slug', $perm)->first()->id);
+            }
         }
     }
 }

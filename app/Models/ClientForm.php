@@ -40,17 +40,12 @@ class ClientForm extends Model
     	'snils',
         'pensionerId',
     	'actualResidenceAddress',
+        'passportResidenceAddress',
     	'numberOfDependents',
     	'maritalstatus_id',
     	'seniority_id',
 
-    	'passportSeries',
-    	'passportNumber',
-    	'passportDateIssue',
-    	'passportIssuedBy',
-    	'passportResidenceAddress',
-    	'passportDepartamentCode',
-    	'passportBirthplace',
+        'passport_id',
 
     	'workPlaceName',
     	'workPlaceAddress',
@@ -68,16 +63,22 @@ class ClientForm extends Model
         $loan = $this->Loan;
 
         if($loan)
-            return 'open';
-        elseif($securityAppr 
-        && $directorAppr)
-            return 'odobren';
-        elseif($securityAppr)
-            return 'odobren security';
-        elseif($directorAppr)
-            return 'odobren director';
-        else return 'ne odobren';
+            return 'Заключен договор';
+
+        if($securityAppr)
+            if(!$securityAppr->approval)
+                return 'Отклонена';
+        if($directorAppr)
+            if(!$directorAppr->approval)
+                return 'Отклонена';
+
+        if(!$directorAppr || !$securityAppr)
+            return 'В рассмотрении';
+
+        else
+            return 'Одобрена';
     }
+    
 
     public function Loan()
     {
@@ -102,6 +103,16 @@ class ClientForm extends Model
     public function MaritalStatus()
     {
         return $this->belongsTo(MaritalStatus::class, 'maritalstatus_id', 'id');
+    }
+
+    public function User()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function Passport()
+    {
+        return $this->belongsTo(Passport::class, 'passport_id', 'id');
     }
 
 }

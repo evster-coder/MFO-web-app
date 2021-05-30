@@ -15,7 +15,14 @@ class CreateSecurityApprovalsTable extends Migration
     {
         Schema::create('security_approvals', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('user_id')->nullable()
+                    ->references('id')->on('users')
+                    ->onUpdate('set null')
+                    ->onDelete('set null');
+                    
             $table->boolean('approval');
+            $table->text('comment')->default('');
             $table->datetime('approvalDate');
         });
     }

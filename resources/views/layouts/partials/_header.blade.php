@@ -20,19 +20,15 @@
                         <button type="submit" class="btn nav-item">Выход</button>
                     </div>
                 </form>
-
+            @if(!Auth::user()->blocked)
                 <x-select-orgunit :orgUnits=$orgUnits />
-
+            @endif
             @endauth
         </div>
 
         <!-- Вертикальная часть меню -->
         <div class="navbar-nav">
             <ul class="navbar-nav me-auto sidenav">
-                <li class="nav-item">
-                    <a href="{{url('/')}}" class="nav-link">Главная</a>
-                </li>
-
                 @role('admin')
                     <li class="nav-item has-sub">
                         <a class="nav-link" id="users" role="button" aria-expanded="false">
@@ -89,6 +85,60 @@
                             @endperm
                         </ul>
 
+                    </li>
+                @endperm
+
+
+
+                @perm('view-security-approvals')
+                    <li class="nav-item has-sub">
+
+                        <a class="nav-link" id="securityApprovals" role="button" aria-expanded="false">
+                            Одобрения службы безопасности
+                            <i class="fas fa-sort-down"></i>
+                        </a>
+
+                        <ul class="navbar-nav">
+                        @perm('manage-security-approval')
+                        <li class="nav-item">
+                            <a href="{{route('securityApproval.tasks')}}" class="nav-link">
+                            Ожидающие одобрения
+                            </a>
+                        </li>            
+                        @endperm
+
+                        <li class="nav-item">
+                            <a href="{{route('securityApproval.index')}}" class="nav-link">
+                            История одобрений
+                            </a>
+                        </li>   
+                        </ul>
+                    </li>
+                @endperm
+
+                @perm('view-director-approvals')
+                    <li class="nav-item has-sub">
+
+                        <a class="nav-link" id="directorApprovals" role="button" aria-expanded="false">
+                            Одобрения директора
+                            <i class="fas fa-sort-down"></i>
+                        </a>
+
+                        <ul class="navbar-nav">
+                        @perm('manage-director-approval')
+                        <li class="nav-item">
+                            <a href="{{route('directorApproval.tasks')}}" class="nav-link">
+                            Ожидающие одобрения
+                            </a>
+                        </li>            
+                        @endperm
+
+                        <li class="nav-item">
+                            <a href="{{route('directorApproval.index')}}" class="nav-link">
+                            История одобрений
+                            </a>
+                        </li>   
+                        </ul>
                     </li>
                 @endperm
 

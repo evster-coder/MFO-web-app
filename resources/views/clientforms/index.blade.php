@@ -56,11 +56,11 @@
 				        	<div class="form-group has-search">
 				        		<p align="center">Статус заявки</p>
 					        	<select name="searchState" id="searchState" class="form-select">
-					        		<option>Любой</option>
-					        		<option>В рассмотрении</option>
-					        		<option>Одобрена</option>
-					        		<option>Отклонена</option>
-					        		<option>Заключен договор</option>
+					        		<option value="any">Любой</option>
+					        		<option value="considered">В рассмотрении</option>
+					        		<option value="accepted">Одобрена</option>
+					        		<option value="rejected">Отклонена</option>
+					        		<option value="loanSigned">Заключен договор</option>
 					        	</select>
 						  	</div></th>
 						<th scope="col" ><p align="center">Действия</p></th>

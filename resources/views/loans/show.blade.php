@@ -10,21 +10,13 @@
 
 @section('content')
 	<a href="{{route('loan.index')}}" class="btn btn-default">< К списку</a>
-	<h1>Договор займа № 123321 от 29.05.2020</h1>
+	<h1>Договор займа № {{$loan->loanNumber}} от {{date('d-m-Y', strtotime($loan->loanConclusionDate))}}</h1>
 
 	<div class="block-content">
 
-		@role('cashier')
-		<a class="btn btn-warning">Закрыть договор</a>
-		<div class="block-padding d-flex">
-
-            <form method="POST" action="">
-              @method('DELETE')
-              @csrf
-              <button type="submit" class="btn btn-danger" onclick="return confirm('Вы действительно хотите удалить запись?');">Удалить</button>
-            </form>
-        </div>
-        @endrole
+		@if($loan->statusOpen)
+		<a class="btn btn-warning" href="#">Закрыть договор</a>
+		@endif
 
 		<x-auth-session-status class="mb-4" :status="session('status')" />
     	<x-auth-validation-errors class="mb-4" :errors="$errors" />
@@ -47,34 +39,39 @@
 		          <tbody>
 		            <tr>
 		              <td>Договор</td>
-		              <td><p>Договор займа № 123321 от 29.05.2020</p>
+		              <td><p>Договор займа № {{$loan->loanNumber}} от {{date('d-m-Y', strtotime($loan->loanConclusionDate))}}</p>
 		              </td>
 		            </tr>
 		            <tr>
 		              <td>Подразделение</td>
-		              <td>S-121</td>
+		              <td>{{$loan->OrgUnit->orgUnitCode}}</td>
 		            </tr>
 		            <tr>
 		              <td>Заемщик</td>
-		              <td><p>Петров Иван Иванович, 20.08.1999</p>
+		              <td>{{$loan->ClientForm->Client->text}}
 		              </td>
 		            </tr>
 		            <tr>
 		              <td>Сумма займа</td>
-		              <td>50000.00 руб.</td>
+		              <td>{{$loan->ClientForm->loanCost}} руб.</td>
 		            </tr>
 		            <tr>
 		              <td>Процентная ставка</td>
-		              <td>1 %</td>
+		              <td>{{$loan->ClientForm->interestRate}} %</td>
 		            </tr>
 		            </tr>
 		            <tr>
 		              <td>Задолженность</td>
-		              <td>45000.00 руб.</td>
+		              <td>[Пока не рассчитывается] руб.</td>
 		            </tr>            
 		            <tr>
 		              <td>Статус</td>
-		              <td>Действующий</td>
+		              <td>@if($loan->statusOpen)
+		              		Открыт
+		              	@else
+		              		Закрыт
+		              	@endif
+		              </td>
 		            </tr>
 		          </tbody>
 		        </table>
@@ -82,10 +79,10 @@
 			<div class="tab-pane" id="g-tabs-2" role="tabpanel">
 	    		<h4>Анкета</h4>
 	    		<div class="d-flex block-padding">
-	    			<a href="{{route('clientform.index')}}" class="btn btn-info">Страница анкеты</a>
+	    			<a target="_blank" href="{{route('clientform.show', $loan->ClientForm->id)}}" class="btn btn-info">Страница анкеты</a>
 	       	 	</div>
 
-	    			<x-clientform-info :clientform="$clientform"></x-clientform-info>
+	    			<x-clientform-info :clientform="$loan->ClientForm"></x-clientform-info>
 			</div>
 			<div class="tab-pane" id="g-tabs-3" role="tabpanel">
 				<h4>Платежи</h4>

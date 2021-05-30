@@ -12,12 +12,14 @@ $(document).ready(function(){
     clientformNumber = $('#searchClientFormNumber').val();
     clientFIO = $('#searchClientFIO').val();
     loanDate = $('#searchClientFormDate').val();
+    state = $('#searchState').val();
 
     $.ajax({
      url:"/clientforms/get-clientforms?page="+ page +
           "&id=" + clientformNumber +
           "&loanDate=" + loanDate +
-          "&clientFio=" + clientFIO,
+          "&clientFio=" + clientFIO + 
+          "&state=" + state,
        success:function(data)
        {
         //очищаем tbody и заполняем снова
@@ -45,6 +47,12 @@ $(document).ready(function(){
       loadData();
     }
   });
+
+  $(document).on('change', '#searchState', function(e){
+      //получение данных
+      loadData();
+  });
+
 
 
   $(document).on('keyup', '#searchClientFIO', function(e){

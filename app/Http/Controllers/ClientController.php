@@ -113,7 +113,7 @@ class ClientController extends Controller
 
         if ($client)
         {
-            if($request->get('name') != null)
+            if($request->get('isJSON') != null)
             {
                 return back()->with(['status' => 'Клиент успешно добавлен'])->withInput();
             }

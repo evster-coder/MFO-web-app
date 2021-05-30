@@ -25,15 +25,14 @@ $(document).ready(function(){
     sortColumn = $('#hiddenSortColumn').val();
     sortDesc = $('#hiddenSortDesc').val();
 
-
     $.ajax({
      url:"/loans/get-loans?page="+ page +
           "&sortby=" + sortColumn +
           "&sortdesc=" + sortDesc +
           "&loanNumber=" + loanNumber +
-          "&clientFIO" + clientFIO +
-          "&loanConclusionDate" + loanConclusionDate + 
-          "&statusOpen" + statusOpen,
+          "&clientFio=" + clientFIO +
+          "&loanConclusionDate=" + loanConclusionDate + 
+          "&statusOpen=" + statusOpen,
 
      success:function(data)
        {
@@ -69,18 +68,15 @@ $(document).ready(function(){
  }); 
 
  $(document).on('change', '#searchStatusOpen', function(e){
-    if(e.key=="Enter")
-    {
       //получение данных
       loadData();
-    }
  });
 
 
- $(document).on('click', '.sorting', function(){
+ $(document).on('click', '.sorting', function(e){
     var sortColumn = $(this).data('column-name');
     var orderDesc = $(this).data('sorting-type');
-
+    
     var newOrder = '';
     if(orderDesc == 'asc')
     {

@@ -36,6 +36,13 @@ class UserController extends Controller
         else abort(404);
     }
 
+    public function banned()
+    {
+        if(Auth::user()->blocked)
+            return view('banned');
+        else return redirect()->route('user.profile');
+    }
+
     public function updatePassword(Request $req)
     {
         //simple validation (no need to add Request class)

@@ -9,6 +9,8 @@ class Loan extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
     	'orgunit_id',
     	'clientform_id',

@@ -55,7 +55,17 @@ class UserTableSeeder extends Seeder
         $cashier->save();
 
 
+        $security = new User();
 
+        $security->username = 'security_user';
+        $security->password = Hash::make('security');
+        $security->FIO = 'Security D.Y';
+        $security->orgunit_id = $orgunit->children()->first()->children()->first()->id;
+        $security->blocked = false;
+        $security->needChangePassword = false;
+        $security->remember_token = Str::random(10);
+
+        $security->save();
 
     }
 }

@@ -19,6 +19,7 @@ class RoleTableSeeder extends Seeder
             ['slug' => 'admin', 'name' => 'Администратор'],
             ['slug' => 'director', 'name' => 'Директор'],
             ['slug' => 'cashier', 'name' => 'Кассир'],
+            ['slug' => 'security', 'name' => 'Сотрудник службы безопасности']
         ];
         foreach ($roles as $role) {
             Role::create([

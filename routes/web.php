@@ -18,6 +18,8 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientFormController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SecurityApprovalController;
+use App\Http\Controllers\DirectorApprovalController;
 
 
 /*
@@ -31,82 +33,158 @@ use App\Http\Controllers\PaymentController;
 |
 */
 
+//need to change
+Route::get('/payment/create', [PaymentController::class, 'create'])
+											->name('payment.create');
+Route::get('/payment/show', [PaymentController::class, 'show'])
+											->name('payment.show');
+
 Route::group(['middleware' => 'auth'], function() {
+	Route::get('/banned', [UserController::class, 'banned'])
+										->name('user.banned');
+});
 
 
-	Route::get('/loanterms/get-loanterms', [LoanTermController::class, 'getTerms'])
-										->name('loanterm.list');
-	Route::get('/loanterms/axios-loanterms', [LoanTermController::class, 'axiosTerms'])
-										->name('loanterm.axiosList');
-	Route::get('/interestrates/get-interestrates', [InterestRateController::class, 'getRates'])
-										->name('interestrate.list');
-	Route::get('/interestrates/axios-interestrates', [InterestRateController::class, 'axiosRates'])
-										->name('interestrate.axiosList');
+Route::group(['middleware' => ['auth', 'notBanned']], function() {
 
 
-	//need to change
-	Route::get('/clientform', [ClientFormController::class, 'index'])
-															->name('clientform.index');
-	Route::get('/clientform/create', [ClientFormController::class, 'create'])
-															->name('clientform.create');
-	Route::get('/clientform/{id}/edit', [ClientFormController::class, 'edit'])
-															->name('clientform.edit');
-	Route::get('/clientform/{id}', [ClientFormController::class, 'show'])
-															->name('clientform.show');
-	Route::put('/clientform/{id}', [ClientFormController::class, 'update'])
-															->name('clientform.update');
-	Route::post('/clientform', [ClientFormController::class, 'store'])
-															->name('clientform.store');
-	Route::delete('/clientform/{id}', [ClientFormController::class, 'destroy'])
-															->name('clientform.destroy');
-	Route::get('/clientforms/get-clientforms', [ClientFormController::class, 'getForms'])
-															->name('clientform.list');
-
-	Route::get('/approval', [ClientFormController::class, 'pendingApproval'])
-															->name('clientform.approval-list');
-	Route::get('/approval/show', [ClientFormController::class, 'showApproval'])
-															->name('clientform.approval-show');
-
-	Route::get('/loan', [LoanController::class, 'index'])
-													->name('loan.index');
-	Route::get('/loans/get-loans', [LoanController::class, 'getLoans'])
-													->name('loan.list');
-	Route::get('/loan/{id}', [LoanController::class, 'show'])
-													->name('loan.show');
+	//стартовый рут после авторизации для разных ролей пользователей
+	Route::get('/', function () {
+	    if(Auth::user()->hasRole('admin'))
+	    	return redirect()->route('user.index');
+	    elseif(Auth::user()->hasRole('cashier'))
+	    	return redirect()->route('clientform.index');
+	    elseif(Auth::user()->hasRole('security'))
+	    	return redirect()->route('securityApproval.tasks');
+	    elseif(Auth::user()->hasRole('director'))
+	    	return redirect()->route('directorApproval.tasks');
+	    else return redirect()->route('user.profile');
+	})->name('welcome');
 
 
+	Route::group(['middleware' => 'perm:view-clientforms'], function(){
 
-	Route::get('/client', [ClientController::class, 'index'])
-														->name('client.index');
-	Route::get('/client/create', [ClientController::class, 'create'])
-														->name('client.create');
-	Route::post('/client', [ClientController::class, 'store'])
-														->name('client.store');
-	Route::put('/client/{id}', [ClientController::class, 'update'])
-														->name('client.update');
-	Route::get('/client/{id}', [ClientController::class, 'show'])
-														->name('client.show');
-	Route::get('/client/{id}/edit', [ClientController::class, 'edit'])
-														->name('client.edit');
-	Route::delete('/client/{id}', [ClientController::class, 'destroy'])
-														->name('client.destroy');
-	Route::get('/clients/get-clients', [ClientController::class, 'getClients'])
-														->name('client.list');
-	Route::post('clients/get-same-clients', [ClientController::class, 'sameClients'])
-														->name('client.sameclients');
+		Route::group(['middleware' => 'perm:create-clientform'], function(){
+			Route::get('/clientform/create', [ClientFormController::class, 'create'])
+										->name('clientform.create');
+			Route::post('/clientform', [ClientFormController::class, 'store'])
+										->name('clientform.store');
+		});
 
+		Route::group(['middleware' => 'perm:edit-clientform'], function(){
+			Route::get('/clientform/{id}/edit', [ClientFormController::class, 'edit'])
+										->name('clientform.edit');
+			Route::put('/clientform/{id}', [ClientFormController::class, 'update'])
+										->name('clientform.update');
+		});
 
+		Route::group(['middleware' => 'perm:delete-clientform'], function(){
+			Route::delete('/clientform/{id}', [ClientFormController::class, 'destroy'])
+										->name('clientform.destroy');
+		});
+
+		Route::get('/clientform', [ClientFormController::class, 'index'])
+										->name('clientform.index');
+		Route::get('/clientform/{id}', [ClientFormController::class, 'show'])
+										->name('clientform.show');
+		Route::get('/clientforms/get-clientforms', [ClientFormController::class, 'getForms'])
+										->name('clientform.list');
+	});
 
 	Route::get('/clientform-data/{id}', [ClientFormController::class, 'getForm'])
-															->name('client.get-data');
+									->name('client.get-data');
 
-	//need to change
-	Route::get('/payment/create', [PaymentController::class, 'create'])
-															->name('payment.create');
-	Route::get('/payment/show', [PaymentController::class, 'show'])
-															->name('payment.show');
+	Route::group(['middleware' => 'perm:view-security-approvals'], function(){
+		Route::get('/sec-approval', [SecurityApprovalController::class, 'index'])
+									->name('securityApproval.index');
+		Route::get('/sec-approval/{id}', [SecurityApprovalController::class, 'show'])
+									->name('securityApproval.show');
+
+		Route::group(['middleware' => 'perm:manage-security-approval'], function() {
+			Route::get('/sec-approval-new', [SecurityApprovalController::class, 'taskList'])
+									->name('securityApproval.tasks');
+			Route::get('/sec-approval/create/{id}', [SecurityApprovalController::class, 'create'])
+									->name('securityApproval.create');
+			Route::post('/sec-approval/create-accept', [SecurityApprovalController::class, 'accept'])
+									->name('securityApproval.accept');
+			Route::post('/sec-approval/create-reject', [SecurityApprovalController::class, 'reject'])
+									->name('securityApproval.reject');
+		});	
+
+		Route::group(['middleware' => 'perm:delete-security-approval'], function(){
+			Route::delete('/sec-approval/{id}', [SecurityApprovalController::class, 'destroy'])
+									->name('securityApproval.destroy');
+		});
+	});
 
 
+	Route::group(['middleware' => 'perm:view-director-approvals'], function() {
+		Route::get('/director-approval', [DirectorApprovalController::class, 'index'])
+									->name('directorApproval.index');
+		Route::get('/director-approval/{id}', [DirectorApprovalController::class, 'show'])
+									->name('directorApproval.show');
+		Route::group(['middleware' => 'perm:manage-director-approval'], function() {
+			Route::get('/director-approval-new', [DirectorApprovalController::class, 'taskList'])
+									->name('directorApproval.tasks');
+			Route::get('/director-approval/create/{id}', [DirectorApprovalController::class, 'create'])
+									->name('directorApproval.create');
+			Route::post('/director-approval/create-accept', [DirectorApprovalController::class, 'accept'])
+									->name('directorApproval.accept');
+			Route::post('/director-approval/create-reject', [DirectorApprovalController::class, 'reject'])
+									->name('directorApproval.reject');
+		});
+		Route::group(['middleware' => 'perm:delete-director-approval'], function(){
+			Route::delete('/director-approval/{id}', [DirectorApprovalController::class, 'destroy'])
+									->name('directorApproval.destroy');
+		});
+	});
+
+
+	Route::group(['middleware' => 'perm:view-loans'], function(){
+		Route::get('/loan', [LoanController::class, 'index'])
+													->name('loan.index');
+		Route::get('/loans/get-loans', [LoanController::class, 'getLoans'])
+													->name('loan.list');
+		Route::get('/loan/{id}', [LoanController::class, 'show'])
+													->name('loan.show');
+		Route::group(['middleware' => 'perm:create-loan'], function(){
+			Route::post('/loan', [LoanController::class, 'store'])
+													->name('loan.store');
+		});
+		Route::group(['middleware' => 'perm:delete-loan'], function(){
+			Route::delete('/loan/{id}', [LoanController::class, 'destroy'])
+													->name('loan.destroy');
+		});
+	});
+
+
+	Route::group(['middleware' => 'perm:view-clients'], function(){
+		Route::get('/client', [ClientController::class, 'index'])
+											->name('client.index');
+		Route::group(['middleware' => 'perm:create-client'], function(){
+			Route::get('/client/create', [ClientController::class, 'create'])
+											->name('client.create');
+			Route::post('/client', [ClientController::class, 'store'])
+											->name('client.store');
+		});
+		Route::group(['middleware' => 'perm:edit-client'], function(){
+			Route::get('/client/{id}/edit', [ClientController::class, 'edit'])
+											->name('client.edit');
+			Route::put('/client/{id}', [ClientController::class, 'update'])
+											->name('client.update');
+		});
+		Route::get('/client/{id}', [ClientController::class, 'show'])
+											->name('client.show');
+		Route::get('/clients/get-clients', [ClientController::class, 'getClients'])
+											->name('client.list');
+		Route::post('clients/get-same-clients', [ClientController::class, 'sameClients'])
+											->name('client.sameclients');
+
+		Route::group(['middleware' => 'perm:delete-client'], function(){
+			Route::delete('/client/{id}', [ClientController::class, 'destroy'])
+											->name('client.destroy');
+		});
+	});
 
 
 	Route::get('/changepassword', [UserController::class, 'changePassword'])
@@ -121,14 +199,20 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('resetyourpassword', [UserController::class, 'resetYourselfPassword'])
 																->name('user.resetyourpassword');
 
-	Route::get('/', function () {
-	    if(Auth::user()->hasRole('admin'))
-	    	return redirect()->route('user.index');
-	    elseif(Auth::user()->hasRole('cashier'))
-	    	return redirect()->route('clientform.index');
-	    elseif(Auth::user()->hasRole('director'))
-	    	return redirect()->route('clientform.approval-list');
-	})->name('welcome');
+	
+	Route::get('/maritalstatuses/get-statuses', [MaritalStatusController::class, 'getStatuses'])
+										->name('maritalstatus.list');
+	Route::get('/senioritis/get-senioritis', [SeniorityController::class, 'getSenioritis'])
+										->name('seniority.list');
+	Route::get('/loanterms/get-loanterms', [LoanTermController::class, 'getTerms'])
+										->name('loanterm.list');
+	Route::get('/loanterms/axios-loanterms', [LoanTermController::class, 'axiosTerms'])
+										->name('loanterm.axiosList');
+	Route::get('/interestrates/get-interestrates', [InterestRateController::class, 'getRates'])
+										->name('interestrate.list');
+	Route::get('/interestrates/axios-interestrates', [InterestRateController::class, 'axiosRates'])
+										->name('interestrate.axiosList');
+
 
 	Route::group(['middleware' => 'perm:view-users'], function(){
 		//user routes
@@ -205,12 +289,10 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::delete('/loanterm/{id}', [LoanTermController::class, 'destroy'])
 										->name('loanterm.destroy');
 
+
 		//MartialStatus route
 		Route::get('/maritalstatus', [MaritalStatusController::class, 'index'])
 										->name('maritalstatus.index');
-		Route::get('/maritalstatuses/get-statuses', [MaritalStatusController::class, 'getStatuses'])
-										->name('maritalstatus.list');
-
 		Route::post('/maritalstatus', [MaritalStatusController::class, 'store'])
 										->name('maritalstatus.store');
 		Route::get('/maritalstatus/{id}/edit', [MaritalStatusController::class, 'edit'])

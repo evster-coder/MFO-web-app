@@ -11,7 +11,7 @@
 	<td>{{$clientform->id}}</td>
 	<td>{{date("d-m-Y", strtotime($clientform->loanDate))}}</td>
 	<td>{{$clientform->Client->surname}} {{$clientform->Client->name}} {{$clientform->client->patronymic}} ({{date("d-m-Y", strtotime($clientform->client->birthDate))}})</td>
-	<td>Действующий</td>
+	<td>{{$clientform->status}}</td>
 	<td>
 	<div class = "d-flex manage-btns">
         <!-- Админские кнопки редактирования и удаления -->
@@ -19,20 +19,20 @@
         	<i class="fas fa-eye"></i>
 		</a>
 
-		@perm('edit-clientform')
+	     @perm('edit-clientform')
       	<a class="btn btn-info" 
       		href="{{route('clientform.edit', $clientform->id)}}" role="button">
         	<i class="fas fa-edit"></i>
       	</a>
-      	@endperm
+  	   @endperm
 
-      	@perm('delete-clientform')
+      @perm('delete-clientform')
         <form method="POST" action="{{route('clientform.destroy', $clientform->id)}}">
           @method('DELETE')
           @csrf
           <button type="submit" class="btn btn-danger" onclick="return confirm('Вы действительно хотите удалить запись?');"><i class="fas fa-trash-alt"></i></button>
         </form>
-        @endperm
+      @endperm
 
 	</div>
 	</td>

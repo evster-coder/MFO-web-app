@@ -41,7 +41,6 @@ class PermissionTableSeeder extends Seeder
 
             ['slug' => 'view-loans', 'name' => 'Просмотр займов'],
             ['slug' => 'create-loan', 'name' => 'Создание займа'],
-            ['slug' => 'edit-loan', 'name' => 'Редактирование займа'],
             ['slug' => 'delete-loan', 'name' => 'Удаление займа'],
 
             ['slug' => 'manage-datadicts', 'name' => 'Управление справочной информацией'],
@@ -56,6 +55,14 @@ class PermissionTableSeeder extends Seeder
             ['slug' => 'create-orgunit-param', 'name' => 'Создание параметра подразделения'],
             ['slug' => 'edit-orgunit-param', 'name' => 'Редактирование параметра подразделений'],
             ['slug' => 'delete-orgunit-param', 'name' => 'Удаление параметра подразделений'],
+
+            ['slug' => 'manage-security-approval', 'name' => 'Одобрение заявок службой безопасности'],
+            ['slug' => 'view-security-approvals', 'name' => 'Просмотр одобрений службы безопасности'],
+            ['slug' => 'delete-security-approval', 'name' => 'Удаление одобрения службы безопасности'],
+
+            ['slug' => 'manage-director-approval', 'name' => 'Одобрение заявок директором'],
+            ['slug' => 'view-director-approvals', 'name' => 'Просмотр одобрений директора'],
+            ['slug' => 'delete-director-approval', 'name' => 'Удаление одобрения директора'],
 
 
         ];

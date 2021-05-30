@@ -8,6 +8,9 @@ use App\Models\ClientForm;
 use App\Models\Loan;
 use App\Models\OrgUnit;
 
+use DateTime;
+use DB;
+use DateTimeZone;
 class LoanController extends Controller
 {
     /**
@@ -40,9 +43,18 @@ class LoanController extends Controller
         //сортировка фильтрация пагинация
         $loans = Loan::where('loanNumber', 'like', '%'.$loanNumber.'%')
                             ->where('loanConclusionDate', 'like', '%'.$loanConclusionDate.'%')
-                            ->where('statusOpen', 'like', '%'.$statusOpen.'%')
-                            ->orderBy($sortBy, $sortDesc)
-                            ->paginate(20); 
+                            ->where('statusOpen', 'like', '%'.$statusOpen.'%');
+
+        if($clientFio != "")
+            $loans = $loans->join('client_forms', 'loans.clientform_id', 'client_forms.id')
+                            ->join('clients', 'client_forms.client_id', 'clients.id')
+                            ->where(DB::raw('CONCAT_WS(" ", `surname`, `name`, `patronymic`) '),
+                                                         'like', 
+                                                '%'.$clientFio.'%')
+                            ->select('loans.*');
+
+        $loans = $loans->orderBy($sortBy, $sortDesc)
+                        ->paginate(20); 
 
         return view('components.loans-tbody', compact('loans'))->render();
     }
@@ -65,7 +77,34 @@ class LoanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $clientform = ClientForm::find($request->get('clientform_id'));
+
+        if($clientform->SecurityApproval 
+            && $clientform->SecurityApproval ->approval)
+        {
+            $newLoan = new Loan();
+
+            $now = new DateTime('NOW');
+            $now->setTimeZone(new DateTimeZone('Asia/Novosibirsk'));
+
+            $newLoan->orgunit_id = session('OrgUnit');
+            $newLoan->clientform_id = $clientform->id;
+
+            $newLoan->loanNumber = OrgUnit::find(session('OrgUnit'))->orgUnitCode . '/' . date_format($now, 'ymdHi');
+
+            $newLoan->loanConclusionDate = $now;
+            $newLoan->statusOpen = true;
+
+            $newLoan->save();
+            if ($newLoan)
+                return redirect()->route('loan.show', $newLoan->id);
+            else
+                return back()->withErrors(['msg' => "Ошибка создания займа"])->withInput();
+        }
+        else
+            return back()->withErrors(['msg' => 'Договор не был одобрен!']);
+
+
     }
 
     /**
@@ -76,32 +115,10 @@ class LoanController extends Controller
      */
     public function show($id)
     {
-        $loan = ClientForm::find($id);
+        $loan = Loan::find($id);
         return view('loans.show', ['loan' => $loan]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -111,6 +128,23 @@ class LoanController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $loan = Loan::find($id);
+
+        if($loan)
+        {
+            try{
+                $loan->delete();
+                return redirect()->route('loan.index')
+                        ->with(['status' => 'Договор успешно удален']);
+            }
+            catch (\Illuminate\Database\QueryException $e){
+                return back()->withErrors(['msg' => 'Невозможно удалить Договор займа']);
+            }
+        }
+        else
+        {
+            return redirect()->route('clientform.index')
+                ->withErrors(['msg' => 'Ошибка удаления в ClientFormController::destroy']);
+        }
     }
 }

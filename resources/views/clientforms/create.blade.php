@@ -38,7 +38,7 @@
     	@csrf
 
 		<div class="btn-group">
-			<button type="submit" class="btn btn-success">
+			<button type="submit" class="btn btn-success" id="saveClientform">
 				@if($clientform->exists)
 				Обновить
 				@else
@@ -104,13 +104,13 @@
 			    		<input required type="text" class="form-control"
 			    			name="passportSeries" id="passportSeries" 
 			    			placeholder="Серия"
-			    			value="{{old('passportSeries', $clientform->passportSeries)}}">
+			    			value="{{old('passportSeries', $clientform->Passport ? $clientform->Passport->passportSeries : null )}}">
 			  		</div>
 			  		<div class="col">
 				      	<label>Номер</label>
 			    		<input required type="text" class="form-control"
 			    			name="passportNumber" id="passportNumber" 
-			    			value="{{old('passportNumber', $clientform->passportNumber)}}"
+			    			value="{{old('passportNumber', $clientform->Passport ? $clientform->Passport->passportNumber : null)}}"
 			    			placeholder="Номер">
 			  		</div>
 			  		<div class="col">
@@ -118,7 +118,8 @@
 			    		<input required type="date" class="form-control"
 			    			name="passportDateIssue" id="passportDateIssue" 
 			    			placeholder="Дата выдачи"
-			    			value="{{old('passportDateIssue', $clientform->passportDateIssue)}}">
+			    			value="{{old('passportDateIssue', $clientform->Passport ? 
+			    			$clientform->Passport->passportDateIssue : null)}}">
 			  		</div>
 				</div>
 
@@ -126,14 +127,18 @@
 		            <label>Кем выдан</label>
 		            <textarea required class="form-control" 
 		            	placeholder="Введите кем выдан"
-		            	id="passportIssuedBy" name="passportIssuedBy">{{old('passportIssuedBy', $clientform->passportIssuedBy)}}</textarea>
+		            	id="passportIssuedBy" name="passportIssuedBy">{{old('passportIssuedBy', 
+		            	$clientform->Passport ? 
+		            	$clientform->Passport->passportIssuedBy : null)}}</textarea>
 	          	</div>
 
 				<div class="form-group edit-fields">
 		            <label >Код подразделения</label>
 		            <input type="text" class="form-control" 
 		            			name="passportDepartamentCode" id="passportDepartamentCode"	
-		            			value="{{old('passportDepartamentCode', $clientform->passportDepartamentCode)}}"
+		            			value="{{old('passportDepartamentCode', 
+		            			$clientform->Passport ?
+		            			$clientform->Passport->passportDepartamentCode : null)}}"
 		            			placeholder="Введите код подразделения">
 	          	</div>
 
@@ -141,13 +146,14 @@
 		            <label>Место рождения</label>
 		            <textarea class="form-control" 
 		            	id="passportBirthplace" name="passportBirthplace" 
-		            	placeholder="Введите место рождения" >{{old('passportBirthplace', $clientform->passportBirthplace)}}</textarea>
+		            	placeholder="Введите место рождения" >{{old('passportBirthplace', $clientform->Passport ? 
+		            	$clientform->Passport->passportBirthplace : null)}}</textarea>
 	          	</div>
 
 	    		<div class="row">
 			  		<div class="col">
 				      	<label>СНИЛС</label>
-			    		<input required type="text" class="form-control"
+			    		<input type="text" class="form-control"
 			    			name="snils" id="snils" placeholder="Введите СНИЛС"
 			    			value="{{old('snils', $clientform->snils)}}">
 			  		</div>
@@ -215,7 +221,7 @@
 	          	</div>
 				<div class="form-group edit-fields">
 		            <label >Адрес работы</label>
-		            <textarea required class="form-control" 
+		            <textarea class="form-control" 
 		            	name="workPlaceAddress" id="workPlaceAddress"
 	    				placeholder="Введите адрес работы">{{old('workPlaceAddress', $clientform->workPlaceAddress)}}</textarea>
 	          	</div>
@@ -375,18 +381,24 @@
 	      		<div class="container">
 					<div class="form-check form-check-inline">
 						<input type="radio" name="isBankrupt"
-							class="form-check-input"  value="1" 
+							class="form-check-input" 
+							id="bankruptTrue" value="1" 
 							@if($clientform->isBankrupt) checked @endif>
 						<label class="form-check-label" for="inlineRadio1">Да</label>
 					</div>
 					<div class="form-check form-check-inline">
 						<input type="radio" name="isBankrupt" 
-							class="form-check-input" value="0"
+							class="form-check-input" 
+							id="bankruptFalse" value="0"
 							@if(!$clientform->isBankrupt) checked @endif>
 						<label class="form-check-label" for="inlineRadio2">Нет</label>
 					</div>
+	      			@if(!$clientform->exists)
+	      			<a target="_blank" href="https://r22.fssp.gov.ru/" id="checkBankrupt" class="btn btn-warning">
+	      				Проверить
+	      			</a>
+  					@endif
 				</div>
-
 			</div>
 
 	      	<div class="block-section">
@@ -406,7 +418,7 @@
 			  	<div class="modal-body">
 				    <form name="addClientForm" id="addClientForm" action="{{route('client.store')}}" method="POST">
 				      @csrf
-				      <input id="isJSON" type="hidden" value="1">
+				      <input type="hidden" id="isJSON" name="isJSON" value="1">
 				        <div class="form-group edit-fields">
 				          <label for="surname">Фамилия</label>
 				          <input type="text" name="surname" id="surname" class="form-control" placeholder="Фамилия" oninput="validate()" >

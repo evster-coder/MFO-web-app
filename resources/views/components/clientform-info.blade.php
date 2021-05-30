@@ -53,19 +53,19 @@
 			<tbody>
 				<tr> 
 					<td>Серия</td>
-					<td>{{$clientform->passportSeries}}</td>
+					<td>{{$clientform->Passport->passportSeries}}</td>
 				</tr>
 				<tr> 
 					<td>Номер</td>
-					<td>{{$clientform->passportNumber}}</td>
+					<td>{{$clientform->Passport->passportNumber}}</td>
 				</tr>
 				<tr> 
 					<td>Дата выдачи</td>
-					<td>{{date("d-m-Y", strtotime($clientform->passportDateIssue))}}</td>
+					<td>{{date("d-m-Y", strtotime($clientform->Passport->passportDateIssue))}}</td>
 				</tr>
 				<tr> 
 					<td>Кем выдан</td>
-					<td>{{$clientform->passportIssuedBy}}</td>
+					<td>{{$clientform->Passport->passportIssuedBy}}</td>
 				</tr>
 				<tr> 
 					<td>Код подразделения</td>
@@ -73,7 +73,7 @@
 				</tr>
 				<tr> 
 					<td>Место рождения</td>
-					<td>{{$clientform->passportBirthplace}}</td>
+					<td>{{$clientform->Passport->passportBirthplace}}</td>
 				</tr>
 				<tr> 
 					<td>СНИЛС</td>

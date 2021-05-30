@@ -66,5 +66,6 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\CheckUserRole::class,
         'perm' => \App\Http\Middleware\CheckUserPermission::class,
         'changepass' => \App\Http\Middleware\NeedChangePassword::class,
+        'notBanned' => \App\Http\Middleware\BannedUser::class,
     ];
 }

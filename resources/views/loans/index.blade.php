@@ -6,7 +6,7 @@
 @endsection
 
 @push('assets')
-    <link rel="stylesheet" href="{{ asset('css/clients.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/loans.css') }}">
     <script src="{{ asset('js/loansCRUD/table.js') }}" defer></script>
 @endpush
 
@@ -23,19 +23,21 @@
 				<thead>
 					<tr class="table-info">
 
-						<th scope="col" class="sorting" data-sorting-type="asc" 
-														data-column-name="loanNumber">
+						<th scope="col">
 				        	<div class="form-group has-search">
-				        		<p align="center">Номер</p>
+				        		<p align="center" class="sorting" data-sorting-type="asc" 
+								data-column-name="loanNumber">
+								Номер <span id="icon-loanNumber"></span></p>
 							    <span class="fa fa-search form-control-feedback"></span>
 				      			<input type="text" name="searchLoanNumber" id="searchLoanNumber" class="form-control" placeholder="Поиск..." />
 				      		</div>
 						</th>
-						<th scope="col" class="sorting" 
-											data-sorting-type="asc" 
-											data-column-name="loanConclusionDate">
+						<th scope="col">
 				        	<div class="form-group has-search">
-				        		<p align="center">Дата заключения</p>
+				        		<p align="center" class="sorting" 
+								data-sorting-type="asc" 
+								data-column-name="loanConclusionDate">
+								Дата заключения <span id="icon-loanConclusionDate"></span></p>
 							    <span class="fa fa-search form-control-feedback"></span>
 				      			<input type="date" name="searchLoanConclusionDate" id="searchLoanConclusionDate" class="form-control" placeholder="Поиск..." />
 				      		</div>

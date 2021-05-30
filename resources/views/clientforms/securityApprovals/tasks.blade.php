@@ -1,4 +1,3 @@
-  
 @extends('layouts.user')
 
 @section('title')
@@ -15,10 +14,11 @@
 		<x-auth-session-status class="mb-4" :status="session('status')" />
     	<x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-		<table class="table client-table mb-5">
+		<table class="table mb-5">
 			<thead>
 				<tr class="table-info">
-					<th scope="col">Анкета</th>
+					<th scope="col">№ заявки</th>
+					<th scope="col">Дата</th>
 					<th scope="col">Клиент</th>
 					<th scope="col">Сумма займа</th>
 					<th scope="col">Пользователь</th>
@@ -26,20 +26,23 @@
 				</tr>
 			</thead>
 			<tbody>
+				@foreach($clientforms as $clientform)
 				<tr>
-					<td>Анкета №123 от 29.05.2021</td>
-					<td>Петров Иван Иванович</td>
-					<td>550000</td>
-					<td>cashier_user</td>
+					<td>{{$clientform->id}}</td>
+					<td>{{date('d-m-Y', strtotime($clientform->loanDate))}}</td>
+					<td>{{$clientform->Client->fullName}}</td>
+					<td>{{$clientform->loanCost}}</td>
+					<td>{{$clientform->User->username}} ({{$clientform->User->FIO}})</td>
 					<td>			
 						<div class = "d-flex manage-btns">
 		                <!-- Админские кнопки редактирования и удаления -->
-		                <a class="btn btn-success" href="{{route('clientform.approval-show')}}" role="button">
+		                <a class="btn btn-success" href="{{route('securityApproval.create', ['id' => $clientform->id])}}" role="button">
 		                	<i class="fas fa-eye"></i> Рассмотреть
 		        		</a>
     					</div>
     				</td>
 				</tr>
+				@endforeach
 			</tbody>
 		</table>
 

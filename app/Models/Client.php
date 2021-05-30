@@ -45,7 +45,7 @@ class Client extends Model
         $result = $this->surname . " " . $this->name . " " . $this->patronymic . " ("
             . date("d-m-Y", strtotime($this->birthDate)) . ") Паспорт: ";
         if($lastClientForm)
-            $result = $result . $lastClientForm->passportSeries . " " . $lastClientForm->passportNumber . " от " . date('d-m-Y', strtotime($lastClientForm->passportDateIssue));
+            $result = $result . $lastClientForm->Passport->passportSeries . " " . $lastClientForm->Passport->passportNumber . " от " . date('d-m-Y', strtotime($lastClientForm->Passport->passportDateIssue));
         else
             $result = $result . "Не указан";
 

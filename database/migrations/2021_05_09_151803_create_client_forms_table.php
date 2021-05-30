@@ -57,22 +57,20 @@ class CreateClientFormsTable extends Migration
             $table->string('snils', 100)->nullable();
             $table->string('pensionerId', 50)->nullable();
             $table->string('actualResidenceAddress', 500);
+            $table->string('passportResidenceAddress', 500);
             $table->integer('numberOfDependents')->nullable();
 
             $table->foreignId('maritalstatus_id')->nullable()->references('id')->on('marital_statuses')
                     ->onUpdate('set null')
                     ->onDelete('set null');
+
             $table->foreignId('seniority_id')->nullable()->references('id')->on('seniorities')
                     ->onUpdate('set null')
                     ->onDelete('set null');
 
-            $table->string('passportSeries', 50);
-            $table->string('passportNumber', 100);
-            $table->string('passportDateIssue');
-            $table->string('passportIssuedBy', 250);
-            $table->string('passportResidenceAddress', 500);
-            $table->string('passportDepartamentCode', 50)->nullable();
-            $table->string('passportBirthplace', 500)->nullable();
+            $table->foreignId('passport_id')->references('id')->on('passports')
+                    ->onUpdate('restrict')
+                    ->onDelete('restrict');
 
             $table->string('workPlaceName', 200);
             $table->string('workPlaceAddress', 500)->nullable();
