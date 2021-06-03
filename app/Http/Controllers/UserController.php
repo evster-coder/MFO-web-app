@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
 use App\Models\OrgUnit;
@@ -10,8 +12,8 @@ use App\Models\Role;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
+use App\Exports\UsersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class UserController extends Controller
@@ -27,6 +29,12 @@ class UserController extends Controller
                             ->paginate(10);
 
         return view('users.index', ['users' => $users]);
+    }
+
+    public function exportUsers(Request $req)
+    {
+        $query = $req->get("query");
+        return (new UsersExport($query))->download('users.xlsx');
     }
 
     public function changePassword()

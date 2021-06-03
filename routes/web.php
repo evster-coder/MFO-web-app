@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\OrgunitController;
+use App\Http\Controllers\OrgUnitController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
@@ -219,6 +219,8 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 		Route::get('/user', [UserController::class, 'index'])->name('user.index');
 
 		Route::get('/users/get-users', [UserController::class, 'getUsers'])->name('user.list');
+
+		Route::get('/users/export-excel', [UserController::class, 'exportUsers'])->name('user.export');
 
 		Route::group(['middleware' => 'perm:create-user'], function(){
 			Route::get('/user/create', [UserController::class, 'create'])->name('user.create');

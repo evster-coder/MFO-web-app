@@ -22,7 +22,7 @@ class CreateSecurityApprovalsTable extends Migration
                     ->onDelete('set null');
                     
             $table->boolean('approval');
-            $table->text('comment')->default('');
+            $table->text('comment')->nullable();
             $table->datetime('approvalDate');
         });
     }

@@ -97,4 +97,12 @@ $(document).ready(function(){
     loadData(page, sortDesc, sortColumn, query);
  });
 
+ $(document).on('click', '#exportExcel', function(event){
+    event.preventDefault();
+
+    var url = $(this).data('export');
+    var query = $('#search').val();
+
+    window.location.href = url
+ });
 });

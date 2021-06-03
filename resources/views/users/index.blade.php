@@ -12,7 +12,20 @@
 
 @section('content')
 
-		<h1>Пользователи системы</h1>
+		<div class="d-flex justify-content-between">
+			<h1>Пользователи системы</h1>
+
+		<div class="dropdown" style="margin-top:auto; margin-bottom: auto;">
+		  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+		    Экспорт
+		  </a>
+
+		  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+		    <li><a class="dropdown-item" id="exportExcel" data-export="{{route('user.export')}}"><i class="fas fa-file-excel"></i> Excel</a></li>
+		  </ul>
+		</div>
+
+		</div>
 
 		<div class="content-block">
 
@@ -27,7 +40,7 @@
 		        	<div class="form-group has-search">
 					    <span class="fa fa-search form-control-feedback"></span>
 		      			<input type="text" name="search" id="search" class="form-control" placeholder="Выполните поиск..." />
-				  	</div>
+					</div>
 		      	</div>
 
 			<table class="table user-table table-bordered mb-5">
