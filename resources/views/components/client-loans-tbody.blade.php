@@ -1,6 +1,8 @@
 @if($loans->count() == 0)
 	<tr>
+		<td>
 		Отсутствуют займы
+		</td>
 	</tr>
 @endif
 @foreach($loans as $loan)
