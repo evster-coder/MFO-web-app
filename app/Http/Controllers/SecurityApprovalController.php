@@ -28,6 +28,13 @@ class SecurityApprovalController extends Controller
                 ]);
     }
 
+
+    //экспорт таблицы в эксель
+    public function export(Request $req)
+    {
+        
+    }
+    
     //ожидающие одобрения
     public function taskList()
     {

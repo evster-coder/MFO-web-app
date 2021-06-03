@@ -15,7 +15,9 @@
 	<div class="block-content">
 
 		@if($loan->statusOpen)
-		<a class="btn btn-warning" href="#">Закрыть договор</a>
+		<a class="btn btn-warning" href="{{route('loan.close', ['id' => $loan->id])}}">Закрыть договор</a>
+		@else
+			<span class="mb-3 badge bg-danger">ДОГОВОР ЗАЙМА ЗАКРЫТ</span>
 		@endif
 
 		<x-auth-session-status class="mb-4" :status="session('status')" />
@@ -85,12 +87,27 @@
 	    			<x-clientform-info :clientform="$loan->ClientForm"></x-clientform-info>
 			</div>
 			<div class="tab-pane" id="g-tabs-3" role="tabpanel">
-				<h4>Платежи</h4>
-				@role('cashier')
+				<div class="d-flex justify-content-between">
+					<h4>Платежи</h4>
+					<div class="dropdown" style="margin-top:auto; margin-bottom: auto;">
+					  <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+					    Экспорт
+					  </a>
+
+					  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+					    <li><a class="dropdown-item" id="exportExcel" data-export="{{route('user.export')}}"><i class="fas fa-file-excel"></i> Excel</a></li>
+					  </ul>
+					</div>
+				</div>
+
 	    		<div class="d-flex block-padding">
-	    			<a href="{{route('payment.create')}}" class="btn btn-primary">Внести платеж</a>
+	    			@if($loan->statusOpen)
+	    			<a 
+	    			href="{{route('payment.create', $loan->id)}}"
+	    			class="btn btn-primary">Внести платеж</a>
+	    			@endif
 	       	 	</div>
-	       	 	@endrole
+
 		    	<table class="table table-light table-hover">
 		    		<thead>
 						<tr class="table-primary">
@@ -100,34 +117,39 @@
 						</tr>
 		    		</thead>
 		    		<tbody>
+		    			@if($loan->Payments)
+		    				<tr><strong>
+		    					Платежи отсутствуют
+		    				</strong></tr>
+		    			@endif
+
+		    			@foreach($loan->Payments as $payment)
 			    		<tr>
 				    		<td>
-			    				<strong> 30.05.2020 </strong>
+			    				<strong> {{date('d.m.Y', strtotime($payment->paymentDate))}} </strong>
 			    			</td>
 			    			<td>
-			    				5000
+			    				{{$payment->paymentSum}} руб.
 			    			</td>
 			    			<td>
 							<div class = "d-flex manage-btns">
 			                <!-- Админские кнопки редактирования и удаления -->
-			                <a class="btn btn-success" href="{{route('payment.show')}}" role="button">
+			                <a class="btn btn-success" 
+			                href="{{route('payment.show', $payment->id)}}" 
+			                role="button">
 			                	<i class="fas fa-eye"></i>
 			        		</a>
 
-			              	<a class="btn btn-info" href="{{route('payment.create')}}" role="button">
-			                	<i class="fas fa-edit"></i>
-			              	</a>
-
-			                <form method="POST" action="">
+			                <form method="POST" action="{{route('payment.destroy', $payment->id)}}">
 			                  @method('DELETE')
 			                  @csrf
 			                  <button type="submit" class="btn btn-danger" onclick="return confirm('Вы действительно хотите удалить запись?');"><i class="fas fa-trash-alt"></i></button>
 			                </form>
 
-    					</div>
+    						</div>
 			    			</td>
 						</tr>
-						</a>
+						@endforeach
 			    	</tbody>
 				</table>
 			</div>

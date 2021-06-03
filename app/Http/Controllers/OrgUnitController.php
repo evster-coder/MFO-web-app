@@ -218,12 +218,7 @@ class OrgUnitController extends Controller
     public function show($id)
     {
         $orgunit = OrgUnit::find($id);
-        $orgunitparams = OrgUnitParam::orderBy('name')->get();
-
-        $paramsArr = [];
-        foreach($orgunitparams as $param)
-            $paramsArr[] = $param->getClosestValue($id);
-        $params = collect($paramsArr);
+        $params = $orgunit->params();
 
         $users = User::where('orgunit_id', $id)->get();
         //dd($params);

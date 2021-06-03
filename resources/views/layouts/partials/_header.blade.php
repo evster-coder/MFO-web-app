@@ -201,6 +201,11 @@
                     </li>
                 @endperm
 
+                <li class="nav-item">
+                    <a href="/otcheti" class="nav-link">
+                    Отчетность
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

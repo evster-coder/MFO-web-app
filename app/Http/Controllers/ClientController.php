@@ -26,6 +26,12 @@ class ClientController extends Controller
     	return view('clients.index', ['clients' => $clients]);
     }
 
+    //экспорт таблицы в эксель
+    public function export(Request $req)
+    {
+        
+    }
+
     //возвращает клиентов с такими же фио и датой рождения
     public function sameClients(Request $req)
     {

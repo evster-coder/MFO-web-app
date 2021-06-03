@@ -30,6 +30,12 @@ class ClientFormController extends Controller
         return view('clientforms.index', ['clientforms' => $clientforms]);
     }
 
+    //экспорт таблицы в эксель
+    public function export(Request $req)
+    {
+        
+    }
+
     public function getForms(Request $req)
     {
             //Получить параметры поиска   
@@ -294,7 +300,6 @@ class ClientFormController extends Controller
     public function destroy($id)
     {
         $deletingItem = ClientForm::find($id);
-
         if($deletingItem)
         {
             try{

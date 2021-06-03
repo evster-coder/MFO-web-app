@@ -16,12 +16,12 @@ class InterestRateSeeder extends Seeder
     public function run()
     {
     	$items = [
-    		['percentValue' => 146],
-    		['percentValue' => 182.5],
-    		['percentValue' => 237.25],
-    		['percentValue' => 365],
-    		['percentValue' => 109.5],
-    		['percentValue' => 730],
+    		['percentValue' => 0.4],
+    		['percentValue' => 0.5],
+    		['percentValue' => 0.65],
+    		['percentValue' => 1],
+    		['percentValue' => 0.3],
+    		['percentValue' => 2],
     	];
 
         foreach ($items as $item) {

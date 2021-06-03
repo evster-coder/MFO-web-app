@@ -23,6 +23,12 @@ class RoleController extends Controller
         return view('roles.index', ['roles' => $roles]);
     }
 
+    //экспорт таблицы в эксель
+    public function export(Request $req)
+    {
+        
+    }
+
     public function getRoles(Request $req)
     {
         if($req->ajax())

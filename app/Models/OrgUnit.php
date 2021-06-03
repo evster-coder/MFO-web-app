@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\OrgUnitParam;
+
 use Kalnoy\Nestedset\NodeTrait;
 
 class OrgUnit extends Model
@@ -33,6 +35,16 @@ class OrgUnit extends Model
     public function parentOrgUnit()
     {
         return $this->belongsTo(OrgUnit::class, 'parent_id');
+    }
+
+    public function params()
+    {
+        $orgunitparams = OrgUnitParam::orderBy('name')->get();
+
+        $paramsArr = [];
+        foreach($orgunitparams as $param)
+            $paramsArr[] = $param->getClosestValue($this->id);
+        return collect($paramsArr);
     }
 
     public function getDictsOrgUnit()

@@ -35,6 +35,7 @@ class OrgUnitParamSeeder extends Seeder
 			['slug' => 'site', 'name' => 'Сайт', 'dataType' => 'string'],
 			['slug' => 'phone-number', 'name' => 'Телефон', 'dataType' => 'string'],
 
+            ['slug' => 'slug-locality', 'name' => 'Сокращение населенного пункта', 'dataType' => 'string'],
 
         ];
 

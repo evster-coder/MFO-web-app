@@ -11,6 +11,8 @@
 @section('content')
 	<a href="{{route('clientform.index')}}" class="btn btn-default">< К списку</a>
 	<h1>Заявка на займ №{{$clientform->id}} от {{$clientform->loanDate}}</h1>
+	<x-auth-session-status class="mb-4" :status="session('status')" />
+	<x-auth-validation-errors class="mb-4" :errors="$errors" />
 
 	<div class="block-content">
 		<div class="d-flex block-padding">
@@ -21,8 +23,11 @@
 			<a href="{{route('loan.show', ['id' => $clientform->Loan->id])}}" class="btn btn-primary me-3">Перейти к договору</a>
 			@else
 				@perm('delete-clientform')
-				<a href="{{route('clientform.destroy', 
-				['id' => $clientform->id])}}" class="btn btn-danger">Удалить</a>
+		        <form method="POST" action="{{route('clientform.destroy', $clientform->id)}}">
+		          @method('DELETE')
+		          @csrf
+		          <button type="submit" class="btn btn-danger" onclick="return confirm('Вы действительно хотите удалить запись?');">Удалить</button>
+		        </form>
 				@endperm
 
 				@if($clientform->status == 'Одобрена')

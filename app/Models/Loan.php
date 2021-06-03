@@ -29,4 +29,9 @@ class Loan extends Model
     {
     	return $this->belongsTo(ClientForm::class, 'clientform_id', 'id');
     }
+
+    public function Payments()
+    {
+        return $this->hasMany(Payment::class, 'loan_id');
+    }
 }

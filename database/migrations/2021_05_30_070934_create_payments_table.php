@@ -21,6 +21,15 @@ class CreatePaymentsTable extends Migration
                     ->on('loans')
                     ->onUpdate('restrict')
                     ->onDelete('restrict');
+
+            $table->foreignId('user_id')->references('id')
+                    ->on('users')
+                    ->onUpdate('restrict')
+                    ->onDelete('restrict');
+            $table->foreignId('orgunit_id')->references('id')
+                    ->on('orgunits')
+                    ->onUpdate('restrict')
+                    ->onDelete('restrict');
         });
     }
 

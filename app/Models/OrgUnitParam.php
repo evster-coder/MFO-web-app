@@ -42,7 +42,7 @@ class OrgUnitParam extends Model
 		if($paramValue == null)
 			return $this;
 		else
-			return $paramValue;
+			return $paramValue->load('OrgUnitParam');
 	}
 
     public function ParamValues()

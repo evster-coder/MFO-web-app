@@ -49,5 +49,8 @@ class DatabaseSeeder extends Seeder
         $this->call(MaritalStatusSeeder::class);
         $this->command->info('Таблица семейные положения успешно заполнена!');
 
+        $this->call(MaxOverpaymentsSeeder::class);
+        $this->command->info('Таблица Максимальных переплат заполнена!');
+
     }
 }

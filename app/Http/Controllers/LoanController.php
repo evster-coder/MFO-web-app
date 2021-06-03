@@ -27,6 +27,12 @@ class LoanController extends Controller
         ]);
     }
 
+    //экспорт таблицы в эксель
+    public function export(Request $req)
+    {
+        
+    }
+
 
     //получение списка займов
     public function getLoans(Request $req)
@@ -60,16 +66,6 @@ class LoanController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -90,7 +86,18 @@ class LoanController extends Controller
             $newLoan->orgunit_id = session('OrgUnit');
             $newLoan->clientform_id = $clientform->id;
 
-            $newLoan->loanNumber = OrgUnit::find(session('OrgUnit'))->orgUnitCode . '/' . date_format($now, 'ymdHi');
+            //получаем имя населенного пункта для номера договора
+            $localityName = OrgUnit::find(session('OrgUnit'))
+                            ->params()
+                            ->where('OrgUnitParam.slug', 'slug-locality')
+                            ->first();
+
+            if($localityName != null && $localityName->dataAsString != null)
+                $loanNumberName = $localityName->dataAsString;
+            else
+                $loanNumberName = 'DOGO';
+
+            $newLoan->loanNumber = $loanNumberName . '/' . date_format($now, 'ymdHi');
 
             $newLoan->loanConclusionDate = $now;
             $newLoan->statusOpen = true;
@@ -104,6 +111,22 @@ class LoanController extends Controller
         else
             return back()->withErrors(['msg' => 'Договор не был одобрен!']);
 
+    }
+
+    public function closeLoan($id)
+    {
+        $now = new DateTime('NOW');
+        $now->setTimeZone(new DateTimeZone('Asia/Novosibirsk'));
+
+
+        $loan = Loan::find($id);
+        $loan->statusOpen = false;
+        $loan->loanClosingDate = $now;
+
+        $loan->save();
+
+        return redirect()->route('loan.show', ['id' => $id])
+                        ->with(['status' => 'Договор успешно закрыт']);
 
     }
 

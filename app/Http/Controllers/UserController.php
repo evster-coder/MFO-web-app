@@ -31,7 +31,7 @@ class UserController extends Controller
         return view('users.index', ['users' => $users]);
     }
 
-    public function exportUsers(Request $req)
+    public function export(Request $req)
     {
         $query = $req->get("query");
         return (new UsersExport($query))->download('users.xlsx');

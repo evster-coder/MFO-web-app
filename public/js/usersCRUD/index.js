@@ -103,6 +103,6 @@ $(document).ready(function(){
     var url = $(this).data('export');
     var query = $('#search').val();
 
-    window.location.href = url
+    window.location.href = url + "?query=" + query;
  });
 });

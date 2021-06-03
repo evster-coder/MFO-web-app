@@ -34,10 +34,14 @@ use App\Http\Controllers\DirectorApprovalController;
 */
 
 //need to change
-Route::get('/payment/create', [PaymentController::class, 'create'])
+Route::get('/payment/create/{id}', [PaymentController::class, 'create'])
 											->name('payment.create');
-Route::get('/payment/show', [PaymentController::class, 'show'])
+Route::get('/payment/{id}', [PaymentController::class, 'show'])
 											->name('payment.show');
+Route::post('/payment', [PaymentController::class, 'store'])
+											->name('payment.store');
+Route::delete('/payment/{id}', [PaymentController::class, 'destroy'])
+											->name('payment.destroy');
 
 Route::group(['middleware' => 'auth'], function() {
 	Route::get('/banned', [UserController::class, 'banned'])
@@ -147,6 +151,10 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 													->name('loan.list');
 		Route::get('/loan/{id}', [LoanController::class, 'show'])
 													->name('loan.show');
+
+		Route::get('/loans/close/{id}', [LoanController::class, 'closeLoan'])
+													->name('loan.close');
+
 		Route::group(['middleware' => 'perm:create-loan'], function(){
 			Route::post('/loan', [LoanController::class, 'store'])
 													->name('loan.store');
@@ -220,7 +228,7 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 
 		Route::get('/users/get-users', [UserController::class, 'getUsers'])->name('user.list');
 
-		Route::get('/users/export-excel', [UserController::class, 'exportUsers'])->name('user.export');
+		Route::get('/users/export-excel', [UserController::class, 'export'])->name('user.export');
 
 		Route::group(['middleware' => 'perm:create-user'], function(){
 			Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
