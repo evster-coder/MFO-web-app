@@ -5,12 +5,14 @@
 @endsection
 
 @push('assets')
+    <script src="{{ asset('js/clientsCRUD/show.js') }}" defer></script>
     <link rel="stylesheet" href="{{ asset('css/clients.css') }}">
 @endpush
 
 @section('content')
 	<a href="{{route('client.index')}}" class="btn btn-default">< К списку</a>
 	<h1>Клиент {{$client->surname}} {{$client->name}} {{$client->patronymic}}</h1>
+	<input type="hidden" id="clientId" value="{{$client->id}}">
 
 	<div class="block-content">
 
@@ -80,31 +82,26 @@
 		            <div class="form-group has-search px-3">
 	           			<strong>от</strong>
 		              <span class="fa fa-search form-control-feedback"></span>
-		                <input type="date" name="search" id="search" class="form-control" placeholder="От..." />
+		                <input type="date" id="searchFrom" class="form-control" placeholder="От..." />
 		            </div>
 	           		<div class="form-group has-search">
 	           			<strong>до</strong>
 		              <span class="fa fa-search form-control-feedback"></span>
-		                <input type="date" name="search" id="search" class="form-control" placeholder="До..." />
+		                <input type="date" id="searchTo" class="form-control" placeholder="До..." />
 		            </div>
 	       	 	</div>
 
-		    	<table class="table table-light table-hover">
+		    	<table class="table table-light table-hover" 
+		    	id="tableClientforms">
 		    		<thead>
 						<tr class="table-primary">
 							<th scope="col">Дата</th>
 						</tr>
 		    		</thead>
 		    		<tbody>
-				    	@foreach($clientforms as $clientform)
-			    		<tr>
-				    		<td>
-				    			<a href="{{route('clientform.show', ['id' => $clientform->id])}}" class="btn btn-link"><strong>Анкета №{{$clientform->id}} от {{$clientform->loanDate}}</strong>
-				    			<i class="fas fa-external-link-alt"></i>
-			    				</a>
-			    			</td>
-						</tr>
-				    	@endforeach
+		    			<x-client-clientforms-tbody
+		    			:clientforms="$client->ClientForms">
+		    			</x-client-clientforms-tbody>
 			    	</tbody>
 				</table>
 
@@ -117,31 +114,26 @@
 		            <div class="form-group has-search px-3">
 	           			<strong>№ договора</strong>
 		              <span class="fa fa-search form-control-feedback"></span>
-		                <input type="text" name="search" id="search" class="form-control" placeholder="№ договора..." />
+		                <input type="text" id="searchLoanNumber" class="form-control" placeholder="№ договора..." />
 		            </div>
 	           		<div class="form-group has-search">
 	           			<strong>от </strong>
 		              <span class="fa fa-search form-control-feedback"></span>
-		                <input type="date" name="search" id="search" class="form-control" placeholder="Дата..." />
+		                <input type="date" id="searchLoanConslusionDate" class="form-control" placeholder="Дата..." />
 		            </div>
 	       	 	</div>
-		    	<table class="table table-light table-hover">
+		    	<table class="table table-light table-hover"
+		    	id="tableLoans">
 		    		<thead>
 						<tr class="table-primary">
 							<th scope="col">Номер договора</th>
 						</tr>
 		    		</thead>
 		    		<tbody>
-			    		<tr>
-				    		<td>
-				    			<a href="" class="btn btn-link"><strong>
-					    			Договор № 382932712A от 29.05.2020
-				    			</strong>
-				    			<i class="fas fa-external-link-alt"></i>
-			    				</a>
-			    			</td>
-						</tr>
-						</a>
+		    			<x-client-loans-tbody
+		    			:loans="$client->Loans">
+		    				
+		    			</x-client-loans-tbody>
 			    	</tbody>
 				</table>
 			</div>

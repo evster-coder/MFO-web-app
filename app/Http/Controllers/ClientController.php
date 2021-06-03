@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\ClientRequest;
 
+
 use App\Models\ClientForm;
+use App\Models\Loan;
 use App\Models\Client;
 use App\Models\OrgUnit;
+use DateTime;
 
 class ClientController extends Controller
 {
@@ -30,6 +33,46 @@ class ClientController extends Controller
     public function export(Request $req)
     {
         
+    }
+
+    public function getClientForms($id, Request $req)
+    {
+        if($req->ajax())
+        {
+            if($req->get('dateFrom') == "")
+                $startDate = "1970-01-01";
+            else
+                $startDate = $req->get('dateFrom');
+
+            if($req->get('dateTo') == "")
+                $endDate = date("Y-m-d", strtotime(date("Y-m-d", strtotime(now())) . " + 365 day"));
+            else
+                $endDate = $req->get('dateTo');
+            $clientforms = ClientForm::where('client_id', $id)
+                                    ->whereBetween('loanDate', [$startDate, $endDate])
+                                    ->get();
+            return view('components.client-clientforms-tbody', compact('clientforms'))->render();
+        }
+    }
+
+    public function getLoans($id, Request $req)
+    {
+        if($req->ajax())
+        {
+            $loanNumber = str_replace(" ", "%", $req->get('loanNumber'));
+            $loanConclusionDate = str_replace(" ", "%",$req->get('loanConclusionDate'));
+
+            $loans = Loan::join('client_forms', 'loans.clientform_id', '=', 'client_forms.id')
+                                    ->where('client_forms.client_id', $id)
+                                    ->where('loanNumber', 'like', '%'.$loanNumber.'%')
+                                    ->where('loanConclusionDate', 'like', '%'.$loanConclusionDate.'%')
+                                    ->select('loans.*')
+                                    ->get();
+
+            return view('components.client-loans-tbody', compact('loans'))->render();
+        }
+
+
     }
 
     //возвращает клиентов с такими же фио и датой рождения
@@ -140,12 +183,9 @@ class ClientController extends Controller
     public function show($id)
     {
         $client = Client::find($id);
-    	$clientforms = ClientForm::where('client_id', $id)->get();
 
         return view('clients.show',
-         ['clientforms' => $clientforms,
-         'client' => $client
-     ]);
+         ['client' => $client]);
     }
 
     /**

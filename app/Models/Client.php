@@ -37,6 +37,18 @@ class Client extends Model
         return $this->hasMany(ClientForm::class, 'client_id', 'id');
     }
 
+    public function Loans()
+    {
+        return $this->hasManyThrough(
+            Loan::class, 
+            ClientForm::class,
+            'client_id',
+            'clientform_id',
+            'id',
+            'id'
+        );
+    }
+
     //аттрибут текста для select2
     public function getTextAttribute()
     {

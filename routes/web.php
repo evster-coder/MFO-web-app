@@ -98,6 +98,12 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 	Route::get('/clientform-data/{id}', [ClientFormController::class, 'getForm'])
 									->name('client.get-data');
 
+	Route::get('/client-clientforms/{id}', [ClientController::class, 'getClientForms'])
+									->name('client.get-clientforms');
+
+	Route::get('/client-loans/{id}', [ClientController::class, 'getLoans'])
+									->name('client.get-loans');
+
 	Route::group(['middleware' => 'perm:view-security-approvals'], function(){
 		Route::get('/sec-approval', [SecurityApprovalController::class, 'index'])
 									->name('securityApproval.index');
