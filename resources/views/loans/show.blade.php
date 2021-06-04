@@ -10,7 +10,14 @@
 
 @section('content')
 	<a href="{{route('loan.index')}}" class="btn btn-default">< К списку</a>
+  <div class="d-flex justify-content-between">
 	<h1>Договор займа № {{$loan->loanNumber}} от {{date('d-m-Y', strtotime($loan->loanConclusionDate))}}</h1>
+    <div style="margin-top:auto; margin-bottom: auto;">
+      <a class="btn btn-secondary" href="#">
+        Экспорт документов
+      </a>
+    </div>
+  </div>
 
 	<div class="block-content">
 

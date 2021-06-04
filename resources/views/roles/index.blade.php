@@ -11,18 +11,8 @@
 @endpush
 
 @section('content')
-    <div class="d-flex justify-content-between">
-      <h1>Управление ролями</h1>
-      <div class="dropdown" style="margin-top:auto; margin-bottom: auto;">
-        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-          Экспорт
-        </a>
+  <h1>Управление ролями</h1>
 
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <li><a class="dropdown-item" id="exportExcel" data-export="{{route('user.export')}}"><i class="fas fa-file-excel"></i> Excel</a></li>
-        </ul>
-      </div>
-    </div>
 
 	<div class="content-block">
 

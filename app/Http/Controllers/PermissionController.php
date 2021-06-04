@@ -24,11 +24,6 @@ class PermissionController extends Controller
         return view('perms.index', ['perms' => $perms]);
     }
 
-    //экспорт таблицы в эксель
-    public function export(Request $req)
-    {
-        
-    }
 
     public function getPerms(Request $req)
     {

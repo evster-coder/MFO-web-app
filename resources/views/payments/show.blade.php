@@ -10,10 +10,17 @@
 
 @section('content')
 	<a href="{{route('loan.show', $payment->Loan->id)}}" class="btn btn-default">< К договору займа</a>
-	<h1>Подробности платежа</h1>
+  <div class="d-flex justify-content-between">
+  <h1>Подробности платежа</h1>
+    <div style="margin-top:auto; margin-bottom: auto;">
+      <a class="btn btn-secondary" href="#">
+        Экспорт документов
+      </a>
+    </div>
+  </div>
+
 
 	<div class="block-content">
-
 		<div class="block-padding d-flex">
             <form method="POST" action="{{route('payment.destroy', $payment->id)}}">
               @method('DELETE')
