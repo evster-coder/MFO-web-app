@@ -87,4 +87,20 @@ $(document).ready(function(){
     loadData();
   });
 
+    $(document).on('click', '#exportExcel', function(event){
+    event.preventDefault();
+
+    var url = $(this).data('export');
+    surname = $('#searchSurname').val();
+    name = $('#searchName').val();
+    patronymic = $('#searchPatronymic').val();
+    birthDate = $('#searchBirthDate').val();
+    
+    window.location.href = url +           
+          "?surname=" + surname +
+          "&name=" + name +
+          "&patronymic=" + patronymic +
+          "&birth-date=" + birthDate;
+
+  });
 });

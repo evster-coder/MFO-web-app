@@ -10,8 +10,10 @@ use App\Models\ClientForm;
 use App\Models\Loan;
 use App\Models\Client;
 use App\Models\OrgUnit;
-use DateTime;
 
+use App\Exports\ClientsExport;
+
+use DateTime;
 class ClientController extends Controller
 {
     /**
@@ -32,7 +34,15 @@ class ClientController extends Controller
     //экспорт таблицы в эксель
     public function export(Request $req)
     {
-        
+        $now = new DateTime('NOW');
+        $filename = 'clients' . date_format($now, 'ymd') . '.xlsx';
+
+        $surname = str_replace(" ", "%", $req->get('surname'));
+        $name = str_replace(" ", "%", $req->get('name'));
+        $patronymic = str_replace(" ", "%", $req->get('patronymic'));
+        $birthDate = str_replace(" ", "%", $req->get('birth-date'));
+
+        return (new ClientsExport($surname, $name, $patronymic, $birthDate))->download($filename);
     }
 
     public function getClientForms($id, Request $req)

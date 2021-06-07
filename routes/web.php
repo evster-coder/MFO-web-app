@@ -177,6 +177,9 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 	Route::group(['middleware' => 'perm:view-clients'], function(){
 		Route::get('/client', [ClientController::class, 'index'])
 											->name('client.index');
+
+		Route::get('/clients/export-excel', [ClientController::class, 'export'])->name('client.export');
+
 		Route::group(['middleware' => 'perm:create-client'], function(){
 			Route::get('/client/create', [ClientController::class, 'create'])
 											->name('client.create');
