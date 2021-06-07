@@ -67,6 +67,7 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 
 
 	Route::group(['middleware' => 'perm:view-clientforms'], function(){
+		Route::get('/clientforms/export-excel', [ClientFormController::class, 'export'])->name('clientform.export');
 
 		Route::group(['middleware' => 'perm:create-clientform'], function(){
 			Route::get('/clientform/create', [ClientFormController::class, 'create'])
@@ -155,6 +156,7 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 													->name('loan.index');
 		Route::get('/loans/get-loans', [LoanController::class, 'getLoans'])
 													->name('loan.list');
+		Route::get('/loans/export-excel', [LoanController::class, 'export'])->name('loan.export');
 		Route::get('/loan/{id}', [LoanController::class, 'show'])
 													->name('loan.show');
 

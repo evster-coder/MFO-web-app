@@ -9,7 +9,6 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UsersExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSize

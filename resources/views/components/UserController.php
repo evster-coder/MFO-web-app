@@ -15,7 +15,6 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Exports\UsersExport;
 use Maatwebsite\Excel\Facades\Excel;
 
-use DateTime;
 
 class UserController extends Controller
 {
@@ -34,10 +33,8 @@ class UserController extends Controller
 
     public function export(Request $req)
     {
-        $now = new DateTime('NOW');
-        $filename = 'users' . date_format($now, 'ymd') . '.xlsx';
         $query = $req->get("query");
-        return (new UsersExport($query))->download($filename);
+        return (new UsersExport($query))->download('users.xlsx');
     }
 
     public function changePassword()

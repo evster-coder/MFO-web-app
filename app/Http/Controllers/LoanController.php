@@ -8,6 +8,9 @@ use App\Models\ClientForm;
 use App\Models\Loan;
 use App\Models\OrgUnit;
 
+use App\Exports\LoansExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 use DateTime;
 use DB;
 use DateTimeZone;
@@ -29,12 +32,21 @@ class LoanController extends Controller
 
     //экспорт таблицы в эксель
     public function export(Request $req)
-    {
-        
+    {        
+        $now = new DateTime('NOW');
+        $filename = 'loans' . date_format($now, 'ymd') . '.xlsx';
+
+        //Получить параметры поиска   
+        $loanNumber = str_replace(" ", "%", $req->get('loanNumber'));
+        $loanConclusionDate = str_replace(" ", "%", $req->get('loanConclusionDate'));
+        $clientFio = str_replace(" ", "%", $req->get('clientFio'));
+        $statusOpen = str_replace(" ", "%", $req->get('statusOpen'));
+
+        return (new LoansExport($loanNumber, $loanConclusionDate, $clientFio, $statusOpen))->download($filename);
     }
 
 
-    //получение списка займов
+    //получение списка займов  в виде компонента
     public function getLoans(Request $req)
     {
         //Получить параметры поиска   
@@ -47,7 +59,8 @@ class LoanController extends Controller
         $sortDesc = $req->get('sortdesc');
 
         //сортировка фильтрация пагинация
-        $loans = Loan::where('loanNumber', 'like', '%'.$loanNumber.'%')
+        $loans = Loan::whereIn('loans.orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('orgunits.id'))
+                            ->where('loanNumber', 'like', '%'.$loanNumber.'%')
                             ->where('loanConclusionDate', 'like', '%'.$loanConclusionDate.'%')
                             ->where('statusOpen', 'like', '%'.$statusOpen.'%');
 
@@ -113,6 +126,7 @@ class LoanController extends Controller
 
     }
 
+    //закрыть займ
     public function closeLoan($id)
     {
         $now = new DateTime('NOW');

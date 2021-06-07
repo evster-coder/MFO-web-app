@@ -13,10 +13,12 @@ use App\Models\Passport;
 
 use App\Http\Requests\ClientFormRequest;
 
-
+use App\Exports\ClientFormsExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 
 use DB;
+use DateTime;
 class ClientFormController extends Controller
 {
     /**
@@ -33,7 +35,17 @@ class ClientFormController extends Controller
     //экспорт таблицы в эксель
     public function export(Request $req)
     {
-        
+        $now = new DateTime('NOW');
+        $filename = 'clientforms' . date_format($now, 'ymd') . '.xlsx';
+
+        //Получить параметры поиска   
+        $id = str_replace(" ", "%", $req->get('id'));
+        $loanDate = str_replace(" ", "%", $req->get('loanDate'));
+        $clientFio = str_replace(" ", "%", $req->get('clientFio'));
+        $state = $req->get('state');
+
+        return (new ClientFormsExport($id, $loanDate, $clientFio, $state))->download($filename);
+
     }
 
     public function getForms(Request $req)
@@ -46,7 +58,8 @@ class ClientFormController extends Controller
 
 
             //фильтрация пагинация
-            $clientforms = ClientForm::where('client_forms.id', 'like', '%'.$id.'%')
+            $clientforms = ClientForm::whereIn('orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('id'))
+                        ->where('client_forms.id', 'like', '%'.$id.'%')
                                 ->where('loanDate', 'like', '%'.$loanDate.'%')
                                 ->whereIn('client_id', 
                                             Client::where(DB::raw('CONCAT_WS(" ", `surname`, `name`, `patronymic`) '),

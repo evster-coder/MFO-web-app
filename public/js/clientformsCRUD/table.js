@@ -77,4 +77,19 @@ $(document).ready(function(){
     loadData();
   });
 
+
+  $(document).on('click', '#exportExcel', function(event){
+    event.preventDefault();
+
+    var url = $(this).data('export');
+    clientformNumber = $('#searchClientFormNumber').val();
+    clientFIO = $('#searchClientFIO').val();
+    loanDate = $('#searchClientFormDate').val();
+    state = $('#searchState').val();
+
+    window.location.href = url + "?id=" + clientformNumber +
+          "&loanDate=" + loanDate +
+          "&clientFio=" + clientFIO + 
+          "&state=" + state;
+  });
 });

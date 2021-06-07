@@ -18,7 +18,7 @@
 			  </a>
 
 			  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-			    <li><a class="dropdown-item" id="exportExcel" data-export="{{route('user.export')}}"><i class="fas fa-file-excel"></i> Excel</a></li>
+			    <li><a class="dropdown-item" id="exportExcel" data-export="{{route('clientform.export')}}"><i class="fas fa-file-excel"></i> Excel</a></li>
 			  </ul>
 			</div>
 		</div>

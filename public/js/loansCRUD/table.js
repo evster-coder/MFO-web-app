@@ -115,4 +115,22 @@ $(document).ready(function(){
     loadData();
   });
 
+  $(document).on('click', '#exportExcel', function(event){
+    event.preventDefault();
+
+    var url = $(this).data('export');
+    loanNumber = $('#searchLoanNumber').val();
+    clientFIO = $('#searchClientFIO').val();
+    loanConclusionDate = $('#searchLoanConclusionDate').val();
+    statusOpen = $('#searchStatusOpen').val();
+    sortColumn = $('#hiddenSortColumn').val();
+    sortDesc = $('#hiddenSortDesc').val();
+
+
+    window.location.href = url +           
+          "?loanNumber=" + loanNumber +
+          "&clientFio=" + clientFIO +
+          "&loanConclusionDate=" + loanConclusionDate + 
+          "&statusOpen=" + statusOpen;
+  });
 });
