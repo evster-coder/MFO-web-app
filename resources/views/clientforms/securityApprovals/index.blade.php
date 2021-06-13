@@ -6,7 +6,8 @@
 @endsection
 
 @push('assets')
-    <!--<link rel="stylesheet" href="{{ asset('css/clients.css') }}">-->
+    <link rel="stylesheet" href="{{ asset('css/clients.css') }}">
+    <script src="{{ asset('js/clientformsCRUD/approvals/table.js') }}" defer></script>
 @endpush
 
 @section('content')
@@ -18,7 +19,7 @@
 		  </a>
 
 		  <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-		    <li><a class="dropdown-item" id="exportExcel" data-export="{{route('user.export')}}"><i class="fas fa-file-excel"></i> Excel</a></li>
+		    <li><a class="dropdown-item" id="exportExcelSec" data-export="{{route('securityApproval.export')}}"><i class="fas fa-file-excel"></i> Excel</a></li>
 		  </ul>
 		</div>
 	</div>
@@ -26,12 +27,26 @@
 	<div class="content-block">
 		<x-auth-session-status class="mb-4" :status="session('status')" />
     	<x-auth-validation-errors class="mb-4" :errors="$errors" />
+		
+		<div class="d-flex block-padding">
+            <div class="form-group has-search px-3">
+       			<strong>от</strong>
+              <span class="fa fa-search form-control-feedback"></span>
+                <input type="date" id="searchFrom" class="form-control" placeholder="От..." />
+            </div>
+       		<div class="form-group has-search">
+       			<strong>до</strong>
+              <span class="fa fa-search form-control-feedback"></span>
+                <input type="date" id="searchTo" class="form-control" placeholder="До..." />
+            </div>
+   	 	</div>
 
-		<table class="table mb-5">
+		<table class="table mb-5" id="securityTable" 
+				data-url="{{route('securityApproval.list')}}">
 			<thead>
 				<tr class="table-info">
 					<th scope="col">№ заявки</th>
-					<th scope="col">Дата</th>
+					<th scope="col">Дата одобрения</th>
 					<th scope="col">Клиент</th>
 					<th scope="col">Сумма займа</th>
 					<th scope="col">Пользователь</th>
@@ -40,36 +55,9 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($clientforms as $clientform)
-				<tr>
-					<td>{{$clientform->id}}</td>
-					<td>{{date('d-m-Y', strtotime($clientform->loanDate))}}</td>
-					<td>{{$clientform->Client->fullName}}</td>
-					<td>{{$clientform->loanCost}}</td>
-					<td>{{$clientform->User->username}} ({{$clientform->User->FIO}})</td>
-					<td>@if($clientform->SecurityApproval->approval)
-						Одобрена
-						@else
-						Отклонена
-						@endif
-					</td>
-					<td>			
-						<div class = "d-flex manage-btns">
-		                <!-- Админские кнопки редактирования и удаления -->
-		                <a class="btn btn-success" href="{{route('securityApproval.show', ['id' => $clientform->security_approval_id])}}" role="button">
-		                	<i class="fas fa-eye"></i>
-		        		</a>
-		        		@if(!$clientform->Loan)
-					        <form method="POST" action="{{route('securityApproval.destroy', [$clientform->SecurityApproval->id])}}">
-					          @method('DELETE')
-					          @csrf
-					          <button type="submit" class="btn btn-danger" onclick="return confirm('Вы действительно хотите удалить запись?');"><i class="fas fa-trash-alt"></i></button>
-					        </form>
-		        		@endif
-    					</div>
-    				</td>
-				</tr>
-				@endforeach
+				<x-security-approvals-tbody
+					:clientforms="$clientforms">
+				</x-approvals-tbody>
 			</tbody>
 		</table>
 	    <input type="hidden" name="hiddenPage" id="hiddenPage" value="1" />

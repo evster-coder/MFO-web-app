@@ -108,9 +108,12 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 	Route::group(['middleware' => 'perm:view-security-approvals'], function(){
 		Route::get('/sec-approval', [SecurityApprovalController::class, 'index'])
 									->name('securityApproval.index');
+		Route::get('/sec-approvals/export-excel', [SecurityApprovalController::class, 'export'])
+									->name('securityApproval.export');
+		Route::get('/sec-approvals/get-apprs', [SecurityApprovalController::class, 'getApprs'])
+									->name('securityApproval.list');
 		Route::get('/sec-approval/{id}', [SecurityApprovalController::class, 'show'])
 									->name('securityApproval.show');
-
 		Route::group(['middleware' => 'perm:manage-security-approval'], function() {
 			Route::get('/sec-approval-new', [SecurityApprovalController::class, 'taskList'])
 									->name('securityApproval.tasks');
@@ -132,6 +135,10 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 	Route::group(['middleware' => 'perm:view-director-approvals'], function() {
 		Route::get('/director-approval', [DirectorApprovalController::class, 'index'])
 									->name('directorApproval.index');
+		Route::get('/director-approvals/export-excel', [DirectorApprovalController::class, 'export'])
+									->name('directorApproval.export');
+		Route::get('/director-approvals/get-apprs', [DirectorApprovalController::class, 'getApprs'])
+									->name('directorApproval.list');
 		Route::get('/director-approval/{id}', [DirectorApprovalController::class, 'show'])
 									->name('directorApproval.show');
 		Route::group(['middleware' => 'perm:manage-director-approval'], function() {

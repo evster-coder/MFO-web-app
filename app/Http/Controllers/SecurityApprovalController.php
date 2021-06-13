@@ -10,6 +10,9 @@ use App\Models\ClientForm;
 use App\Models\OrgUnit;
 use App\Models\Loan;
 
+use App\Exports\SecurityApprovalsExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 use DateTime;
 class SecurityApprovalController extends Controller
 {
@@ -28,11 +31,48 @@ class SecurityApprovalController extends Controller
                 ]);
     }
 
+    public function getApprs(Request $req)
+    {
+        if($req->ajax())
+        {
+            if($req->get('dateFrom') == "")
+                $startDate = "1970-01-01";
+            else
+                $startDate = $req->get('dateFrom');
+
+            if($req->get('dateTo') == "")
+                $endDate = date("Y-m-d", strtotime(date("Y-m-d", strtotime(now())) . " + 365 day"));
+            else
+                $endDate = $req->get('dateTo');
+            $clientforms = ClientForm::whereIn('orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('id'))
+                        ->whereNotNull('security_approval_id')
+                        ->join('security_approvals', 'security_approvals.id', '=', 'client_forms.security_approval_id')
+                        ->whereBetween('security_approvals.approvalDate', [$startDate, $endDate])
+                        ->orderBy('security_approvals.approvalDate')
+                        ->paginate(20); 
+            return view('components.security-approvals-tbody', compact('clientforms'))->render();
+        }
+    }
+
 
     //экспорт таблицы в эксель
     public function export(Request $req)
     {
-        
+        $now = new DateTime('NOW');
+        $filename = 'sec-approvals' . date_format($now, 'ymd') . '.xlsx';
+
+        if($req->get('dateFrom') == "")
+            $startDate = "1970-01-01";
+        else
+            $startDate = $req->get('dateFrom');
+
+        if($req->get('dateTo') == "")
+            $endDate = date("Y-m-d", strtotime(date("Y-m-d", strtotime(now())) . " + 365 day"));
+        else
+            $endDate = $req->get('dateTo');
+
+        return (new SecurityApprovalsExport($startDate, $endDate))->download($filename);
+
     }
     
     //ожидающие одобрения
