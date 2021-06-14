@@ -44,6 +44,28 @@
 
 			@endif
 		</div>
+
+		<hr>
+		@if($clientform->SecurityApproval)
+			<p>Служба безопасности
+				@if($clientform->SecurityApproval->approval)
+				(Одобр.)
+				@else
+				(Откл.)
+				@endif
+				: {{$clientform->SecurityApproval->comment}}</p>
+		@endif
+		@if($clientform->DirectorApproval)
+			<p>Директор:
+				@if($clientform->DirectorApproval->approval)
+				(Одобр.)
+				@else
+				(Откл.)
+				@endif
+				: {{$clientform->DirectorApproval->comment}}</p>
+
+		@endif
+		<hr>
 		
 		<x-clientform-info :clientform="$clientform"></x-clientform-info>
 

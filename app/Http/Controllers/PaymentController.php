@@ -86,6 +86,21 @@ class PaymentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $payment = Payment::find($id);
+
+        $loan = $payment->loan_id;
+
+        if($payment)
+        {
+            $payment->delete();
+            return redirect()->route('loan.show', ['id' => $loan])->with(['status' => 'Платеж успешно удален']);
+        }
+        else
+        {
+            return redirect()->route('loan.show', ['id' => $loan])
+                ->withErrors(['msg' => 'Ошибка удаления в PaymentController::destroy']);
+
+        }
+
     }
 }

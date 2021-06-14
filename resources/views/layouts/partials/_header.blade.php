@@ -12,7 +12,7 @@
                 <form method="POST" class="row" action="{{ route('logout') }}">
                     @csrf
                     <div class="col">
-                        <a id="userLink" class="nav-link nav-item" href="{{route('user.profile')}}">
+                        <a id="userLink" class="nav-link nav-item pb-3" href="{{route('user.profile')}}">
                         {{ Auth::user()->username }}
                         </a>
                     </div>

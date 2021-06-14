@@ -124,7 +124,7 @@
 						</tr>
 		    		</thead>
 		    		<tbody>
-		    			@if($loan->Payments)
+		    			@if($loan->Payments->count() == 0)
 		    				<tr><strong>
 		    					Платежи отсутствуют
 		    				</strong></tr>

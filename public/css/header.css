@@ -120,6 +120,12 @@ nav{
     }
 }
 
+@media (max-width: 991px){
+    .orgunit-manage p{
+        display: inline;
+    }
+}
+
 .navbar-brand{
     color:black;
 }
