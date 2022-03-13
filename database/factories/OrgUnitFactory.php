@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 
 class OrgUnitFactory extends Factory
 {
+    const DEFAULT_PREFIX = 'OU-';
+
     /**
      * The name of the factory's corresponding model.
      *
@@ -20,12 +22,12 @@ class OrgUnitFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'orgUnitCode' => "OU-" . $this->faker->numberBetween(1, 100),
+            'orgUnitCode' => self::DEFAULT_PREFIX . $this->faker->numberBetween(1, 100),
             'hasDictionaries' => false,
-            'parent_id' => OrgUnit::where('hasDictionaries', true)->first()->id,
+            'parent_id' => OrgUnit::where(['hasDictionaries' => true])->first()->id,
         ];
     }
 }

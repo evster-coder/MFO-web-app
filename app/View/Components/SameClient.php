@@ -7,6 +7,7 @@ use Illuminate\View\Component;
 class SameClient extends Component
 {
     public $clients;
+
     /**
      * Create a new component instance.
      *

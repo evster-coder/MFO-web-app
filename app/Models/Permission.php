@@ -2,33 +2,44 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
-use App\Models\Role;
-use App\Models\User;
-
+/**
+ * Право
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ *
+ * @property-read Collection|Role[] $roles
+ * @property-read Collection|User[] $users
+ */
 class Permission extends Model
 {
     use HasFactory;
 
-
-    //заполняемые поля
-    protected $fillable = [
-        'name',
-        'slug',
-
+    /**
+     * @var string[]
+     */
+    protected $guarded = [
+        'id',
     ];
 
-
-
-    //все роли, содержащие это право
-    public function roles()
+    /**
+     * @return BelongsToMany
+     */
+    public function roles(): BelongsToMany
     {
     	return $this->belongsToMany(Role::class, 'role_permission')->withTimestamps();
     }
 
-    //все пользователи, содержащие это право
+
     public function users()
     {
     	return $this->roles->users();

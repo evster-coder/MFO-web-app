@@ -81,6 +81,8 @@ return [
     */
 
     'locale' => 'ru',
+    'date_format' => 'd-m-Y',
+    'datetime_format' => 'd-m-Y H:i:s',
 
     /*
     |--------------------------------------------------------------------------
@@ -173,7 +175,7 @@ return [
         App\Providers\RoleServiceProvider::class,
         App\Providers\PermissionServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
-        
+
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,

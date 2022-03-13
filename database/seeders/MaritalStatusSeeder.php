@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-
 use App\Models\DictsData\MaritalStatus;
 
 class MaritalStatusSeeder extends Seeder
@@ -15,18 +14,18 @@ class MaritalStatusSeeder extends Seeder
      */
     public function run()
     {
-    	$items = [
-    		['name' => 'Женат / замужем'],
-    		['name' => 'Гражданский брак'],
-    		['name' => 'Холост / не замужем'],
-    		['name' => 'Вдовец / вдова'],
+        $items = [
+            ['name' => 'Женат / замужем'],
+            ['name' => 'Гражданский брак'],
+            ['name' => 'Холост / не замужем'],
+            ['name' => 'Вдовец / вдова'],
 
-    	];
+        ];
 
         foreach ($items as $item) {
             MaritalStatus::create([
                 'name' => $item['name'],
-            ]);  
-        } 
+            ]);
+        }
     }
 }

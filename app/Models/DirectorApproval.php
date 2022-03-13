@@ -2,25 +2,43 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Одобрение директора
+ *
+ * @property int $id
+ * @property int|null $user_id
+ * @property bool $approval
+ * @property string|null $comment
+ * @property Carbon $approvalDate
+ *
+ * @property-read User $User
+ */
 class DirectorApproval extends Model
 {
     use HasFactory;
 
-    //отключение полей updated_at, created_at
+    /**
+     * @var bool
+     */
     public $timestamps = false;
-    protected $fillable = [
-    	'user_id',
-    	'approval',
-    	'comment',
-    	'approvalDate'
+
+    /**
+     * @var string[]
+     */
+    protected $guarded = [
+        'id',
     ];
 
-    public function User()
+    /**
+     * @return BelongsTo
+     */
+    public function User(): BelongsTo
     {
-    	return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
-
 }

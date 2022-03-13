@@ -51,7 +51,6 @@ Route::group(['middleware' => 'auth'], function() {
 
 Route::group(['middleware' => ['auth', 'notBanned']], function() {
 
-
 	//стартовый рут после авторизации для разных ролей пользователей
 	Route::get('/', function () {
 	    if(Auth::user()->hasRole('admin'))
@@ -123,7 +122,7 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 									->name('securityApproval.accept');
 			Route::post('/sec-approval/create-reject', [SecurityApprovalController::class, 'reject'])
 									->name('securityApproval.reject');
-		});	
+		});
 
 		Route::group(['middleware' => 'perm:delete-security-approval'], function(){
 			Route::delete('/sec-approval/{id}', [SecurityApprovalController::class, 'destroy'])
@@ -225,7 +224,7 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 		Route::get('resetyourpassword', [UserController::class, 'resetYourselfPassword'])
 																->name('user.resetyourpassword');
 
-	
+
 	Route::get('/maritalstatuses/get-statuses', [MaritalStatusController::class, 'getStatuses'])
 										->name('maritalstatus.list');
 	Route::get('/senioritis/get-senioritis', [SeniorityController::class, 'getSenioritis'])
@@ -343,13 +342,13 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 	Route::group(['middleware' => 'perm:change-curr-orgunit'], function(){
 
 		Route::put('changeorgunit', [OrgUnitController::class, 'changeorgunit'])
-															->name('orgunit.change');	
+															->name('orgunit.change');
 	});
 
 	Route::group(['middleware' => 'perm:view-orgunits'], function() {
-		Route::get('/orgunit', [OrgUnitController::class, 'index'])	
+		Route::get('/orgunit', [OrgUnitController::class, 'index'])
 																->name('orgunit.index');
-		Route::get('/orgunit/{id}', [OrgUnitController::class, 'show'])	
+		Route::get('/orgunit/{id}', [OrgUnitController::class, 'show'])
 																->name('orgunit.show');
 
 		Route::group(['middleware' => 'perm:create-orgunit'], function(){

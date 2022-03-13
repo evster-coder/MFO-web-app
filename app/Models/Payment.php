@@ -2,34 +2,65 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Платеж
+ *
+ * @property int $id
+ * @property Carbon $paymentDate
+ * @property float $paymentSum
+ * @property int $loan_id
+ * @property int $user_id
+ * @property int $orgunit_id
+ *
+ * @property-read Loan $Loan
+ * @property-read User $User
+ * @property-read OrgUnit $OrgUnit
+ */
 class Payment extends Model
 {
     use HasFactory;
 
+    /**
+     * @var bool
+     */
     public $timestamps = false;
-	    
-	//отключение полей updated_at, created_at
-    protected $fillable = [
-    	'paymentSum',
-    	'approval',
-    	'loan_id',
-    	'paymentDate',
-        'user_id',
-        'orgunit_id'
+
+    /**
+     * @var string[]
+     */
+    protected $guarded = [
+        'id',
     ];
 
-    public function Loan()
+    /**
+     * Займ
+     *
+     * @return BelongsTo
+     */
+    public function Loan(): BelongsTo
     {
-    	return $this->belongsTo(Loan::class, 'loan_id', 'id');
+        return $this->belongsTo(Loan::class, 'loan_id', 'id');
     }
-    public function User()
+
+    /**
+     * Оформитель
+     *
+     * @return BelongsTo
+     */
+    public function User(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
-    public function OrgUnit()
+
+    /**
+     * @return BelongsTo
+     */
+    public function OrgUnit(): BelongsTo
     {
         return $this->belongsTo(OrgUnit::class, 'orgunit_id', 'id');
     }

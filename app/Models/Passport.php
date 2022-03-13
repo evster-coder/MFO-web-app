@@ -5,22 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Паспорт
+ *
+ * @property int $id
+ * @property string $passportSeries
+ * @property string $passportNumber
+ * @property string $passportDateIssue
+ * @property string $passportIssuedBy
+ * @property string|null $passportDepartamentCode
+ * @property string|null $passportBirthplace
+ */
 class Passport extends Model
 {
     use HasFactory;
 
-    //отключение полей updated_at, created_at
+    /**
+     * @var bool
+     */
     public $timestamps = false;
 
-    //заполняемые поля
-    protected $fillable = [
-    	'passportSeries',
-    	'passportNumber',
-    	'passportDateIssue',
-    	'passportIssuedBy',
-    	'passportDepartamentCode',
-    	'passportBirthplace',
-
+    /**
+     * @var string[]
+     */
+    protected $guarded = [
+        'id',
     ];
-
 }

@@ -2,91 +2,135 @@
 
 namespace App\Traits;
 
-use App\Models\Role;
 use App\Models\Permission;
+use App\Models\Role;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Collection;
 
-trait HasRolesAndPermissions {
-
+/**
+ * @property-read Collection|Role[] $roles
+ * @property-read Collection|Permission[] $permissions
+ */
+trait HasRolesAndPermissions
+{
     /**
-    //все роли пользователя
-    */
-    public function roles() {
-        return $this
-            ->belongsToMany(Role::class, 'user_role')
-            ->withTimestamps();
+     * Все роли пользователя
+     *
+     * @return BelongsToMany
+     */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'user_role')->withTimestamps();
     }
 
-    public function permissions() {
+    /**
+     * Все права пользователя
+     *
+     * @return Collection
+     */
+    public function permissions(): Collection
+    {
         $permissions = [];
         foreach ($this->roles as $role) {
             $perms = $role->permissions;
             foreach ($perms as $perm) {
-                $permissions[] = $perm->slug;            
+                $permissions[] = $perm->slug;
             }
         }
+
         return collect(array_values(array_unique($permissions)));
     }
 
     /**
-    //проверка на наличие роли $role
-    */
-    public function hasRole($role) {
+     * Проверка на наличие роли $role
+     *
+     * @param string $role
+     * @return bool
+     */
+    public function hasRole(string $role): bool
+    {
         return $this->roles->contains('slug', $role);
     }
 
     /**
-    //проверка на наличие права $permission*
-    */
-    public function hasPermission($permission) {
+     * Проверка на наличие права $permission
+     *
+     * @param string $permission
+     * @return bool
+     */
+    public function hasPermission(string $permission): bool
+    {
         return $this->permissions()->contains($permission);
     }
 
     /**
-    //Имеет текущий пользователь все права из $permissions
-    */
-    public function hasAllPerms(...$permissions) {
+     * Имеет текущий пользователь все права из $permissions
+     *
+     * @param ...$permissions
+     * @return bool
+     */
+    public function hasAllPerms(...$permissions): bool
+    {
         foreach ($permissions as $permission) {
             $condition = $this->hasPermission($permission);
             if (!$condition) {
                 return false;
             }
         }
+
         return true;
     }
 
     /**
-    //Имеет текущий пользователь любое право из $permissions
-    */
-    public function hasAnyPerms(...$permissions) {
+     * Имеет текущий пользователь любое право из $permissions
+     *
+     * @param ...$permissions
+     * @return bool
+     */
+    public function hasAnyPerms(...$permissions): bool
+    {
         foreach ($permissions as $permission) {
             if ($this->hasPermission($permission)) {
                 return true;
             }
         }
+
         return false;
     }
 
     /**
-    //Добавить пользователю роли $roles
-    */
-    public function assignRoles(...$roles) {
+     * Назначить пользователю роли $roles
+     *
+     * @param ...$roles
+     * @return $this
+     */
+    public function assignRoles(...$roles): self
+    {
         $roles = Role::whereIn('slug', $roles)->get();
+
         if ($roles->count() === 0) {
             return $this;
         }
+
         $this->roles()->syncWithoutDetaching($roles);
+
         return $this;
     }
 
     /**
-    // Удалить у пользователя роли $roles
-    */
-    public function unassignRoles(...$roles) {
+     * Удалить у пользователя роли $roles
+     *
+     * @param ...$roles
+     * @return $this
+     */
+    public function unassignRoles(...$roles): self
+    {
         $roles = Role::whereIn('slug', $roles)->get();
         if ($roles->count() === 0) {
             return $this;
         }
         $this->roles()->detach($roles);
+
         return $this;
     }
 }

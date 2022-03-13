@@ -4,51 +4,80 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
-use App\Models\OrgUnit;
-use App\Models\ParamValue;
-
+/**
+ * Параметры подразделения
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property string $dataType
+ *
+ * @property-read Collection|ParamValue[] $ParamValues
+ */
 class OrgUnitParam extends Model
 {
     use HasFactory;
 
+    /**
+     * @var string
+     */
     protected $table = 'orgunit_params';
-    //отключение полей updated_at, created_at
+
+    /**
+     * @var bool
+     */
     public $timestamps = false;
 
-    //заполняемые поля
-	protected $fillable = [
-		'name',
-		'slug',
-		'dataType',
-	];
+    /**
+     * @var string[]
+     */
+    protected $guarded = [
+        'id',
+    ];
 
-
-	//получаем значение параметра для подразделения
-	public function getClosestValue($orgunit_id)
-	{
-		$orgunit = OrgUnit::find($orgunit_id);
-		$values = ParamValue::where('orgunit_param_id', $this->id)->get();
-		$paramValue = null;
-		while($orgunit != null)
-		{ 
-			$paramValue = $values->firstWhere('orgunit_id', $orgunit->id);
-
-			if($paramValue != null)
-				break;
-
-			$orgunit = $orgunit->parent()->first();
-		}
-		if($paramValue == null)
-			return $this;
-		else
-			return $paramValue->load('OrgUnitParam');
-	}
-
-    public function ParamValues()
+    /**
+     * Значение параметра для подразделения
+     *
+     * @param int $orgunit_id
+     * @return $this
+     */
+    public function getClosestValue(int $orgunit_id)
     {
-        return $this->hasMany(ParamValue::class, 'orgunit_params', 'orgunit_param_id', 'id');
+        /** @var OrgUnit $orgUnit */
+        $orgUnit = OrgUnit::find($orgunit_id);
+        $values = ParamValue::where('orgunit_param_id', $this->id)->get();
+        $paramValue = null;
+
+        while ($orgUnit != null) {
+            $paramValue = $values->firstWhere('orgunit_id', $orgUnit->id);
+
+            if ($paramValue != null) {
+                break;
+            }
+
+            $orgUnit = $orgUnit->parent()->first();
+        }
+
+        if ($paramValue == null) {
+            return $this;
+        } else {
+            return $paramValue->load('OrgUnitParam');
+        }
     }
 
-
+    /**
+     * Значения параметров
+     *
+     * @return HasMany
+     */
+    public function ParamValues(): HasMany
+    {
+        return $this->hasMany(ParamValue::class,
+            'orgunit_params',
+            'orgunit_param_id'
+        );
+    }
 }

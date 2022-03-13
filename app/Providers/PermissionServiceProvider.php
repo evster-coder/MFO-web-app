@@ -2,9 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
-
 
 class PermissionServiceProvider extends ServiceProvider
 {
@@ -26,7 +26,9 @@ class PermissionServiceProvider extends ServiceProvider
     public function boot()
     {
         Blade::if('perm', function ($perm) {
-            return auth()->check() && auth()->user()->hasPermission($perm);
+            /** @var User $user */
+            $user = auth()->user();
+            return $user && $user->hasPermission($perm);
         });
 
     }

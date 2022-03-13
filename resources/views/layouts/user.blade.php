@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>@yield('title')</title>
+    <title>@yield('title')</title>
 
-        <!-- Styles -->
-        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-        
-        <link rel="stylesheet" href="{{ asset('css/webapp.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/header.css') }}">
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 
-        <link rel="stylesheet" href="{{ asset('css/crudindex.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/webapp.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/footer.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
 
-        <script src="{{ asset('js/menu.js') }}" defer></script>
-        <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('css/crudindex.css') }}">
 
-        
-        <!-- Scripts -->
-        <script src="{{ asset('js/orgUnitList.js') }}" defer></script>
+    <script src="{{ asset('js/menu.js') }}" defer></script>
+    <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
 
-        @stack('assets')
-    </head>
-    <body>
 
-        <header>
-            @include ('layouts.partials._header')
-        </header>
+    <!-- Scripts -->
+    <script src="{{ asset('js/orgUnitList.js') }}" defer></script>
 
-        <main>
-            <div id="app" class="container wrap">
-                @yield('content')
-            </div>
-        </main>
+    @stack('assets')
+</head>
+<body>
 
-        @include ('layouts.partials._footer')
+<header>
+    @include ('layouts.partials._header')
+</header>
 
-    </body>
+<main>
+    <div id="app" class="container wrap">
+        @yield('content')
+    </div>
+</main>
 
-    <script src="{{ mix('js/app.js') }}"></script>
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+@include ('layouts.partials._footer')
+
+</body>
+
+<script src="{{ mix('js/app.js') }}"></script>
+<link rel="stylesheet" href="{{ mix('css/app.css') }}">
 
 </html>

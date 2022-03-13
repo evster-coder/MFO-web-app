@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-
 use App\Models\DictsData\LoanTerm;
 
 class LoanTermSeeder extends Seeder
@@ -15,16 +14,15 @@ class LoanTermSeeder extends Seeder
      */
     public function run()
     {
-    	$items = [
-    		['daysAmount' => 15],
-    		['daysAmount' => 30],
-    	];
+        $items = [
+            ['daysAmount' => 15],
+            ['daysAmount' => 30],
+        ];
 
         foreach ($items as $item) {
             LoanTerm::create([
                 'daysAmount' => $item['daysAmount'],
-            ]);        
+            ]);
         }
-
     }
 }

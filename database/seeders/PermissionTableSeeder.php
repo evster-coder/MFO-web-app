@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-
 use App\Models\Permission;
 
 class PermissionTableSeeder extends Seeder
@@ -63,15 +62,13 @@ class PermissionTableSeeder extends Seeder
             ['slug' => 'manage-director-approval', 'name' => 'Одобрение заявок директором'],
             ['slug' => 'view-director-approvals', 'name' => 'Просмотр одобрений директора'],
             ['slug' => 'delete-director-approval', 'name' => 'Удаление одобрения директора'],
-
-
         ];
 
         foreach ($permissions as $permission) {
             Permission::create([
                 'name' => $permission['name'],
                 'slug' => $permission['slug'],
-            ]);        
+            ]);
         }
     }
 }

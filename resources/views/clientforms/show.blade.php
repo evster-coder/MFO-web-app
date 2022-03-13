@@ -1,7 +1,7 @@
-  @extends('layouts.user')
+@extends('layouts.user')
 
 @section('title')
-	Заявка на займ №{{$clientform->id}} от {{$clientform->loanDate}}
+    Заявка на займ №{{$clientform->id}} от {{$clientform->loanDate}}
 @endsection
 
 @push('assets')
@@ -9,67 +9,63 @@
 @endpush
 
 @section('content')
-	<a href="{{route('clientform.index')}}" class="btn btn-default">< К списку</a>
-	<h1>Заявка на займ №{{$clientform->id}} от {{$clientform->loanDate}}</h1>
-	<x-auth-session-status class="mb-4" :status="session('status')" />
-	<x-auth-validation-errors class="mb-4" :errors="$errors" />
+    <a class="btn btn-default"
+       href="{{route('clientform.index')}}">
+        < К списку
+    </a>
+    <h1>Заявка на займ №{{$clientform->id}} от {{$clientform->loanDate}}</h1>
+    <x-auth-session-status class="mb-4" :status="session('status')"/>
+    <x-auth-validation-errors class="mb-4" :errors="$errors"/>
 
-	<div class="block-content">
-		<div class="d-flex block-padding">
-			<p class="me-3">Статус:
-				{{$clientform->status}}
-			</p>
-			@if($clientform->Loan)
-			<a href="{{route('loan.show', ['id' => $clientform->Loan->id])}}" class="btn btn-primary me-3">Перейти к договору</a>
-			@else
-				@perm('delete-clientform')
-		        <form method="POST" action="{{route('clientform.destroy', $clientform->id)}}">
-		          @method('DELETE')
-		          @csrf
-		          <button type="submit" class="btn btn-danger" onclick="return confirm('Вы действительно хотите удалить запись?');">Удалить</button>
-		        </form>
-				@endperm
+    <div class="block-content">
+        <div class="d-flex block-padding">
+            <p class="me-3">Статус:
+                {{$clientform->status}}
+            </p>
+            @if($clientform->Loan)
+                <a class="btn btn-primary me-3"
+                   href="{{route('loan.show', ['id' => $clientform->Loan->id])}}">
+                    Перейти к договору
+                </a>
+            @else
+                @perm('delete-clientform')
+                <form method="POST" action="{{route('clientform.destroy', $clientform->id)}}">
+                    @method('DELETE')
+                    @csrf
+                    <button class="btn btn-danger"
+                            type="submit"
+                            onclick="return confirm('Вы действительно хотите удалить запись?');">
+                        Удалить
+                    </button>
+                </form>
+                @endperm
 
-				@if($clientform->status == 'Одобрена')
-					@perm('create-loan')
-					<form method="POST" action="{{route('loan.store')}}">
-						@csrf
-						<input type="hidden" name="clientform_id" value="{{$clientform->id}}">
-						<button type="submit" class="btn btn-primary me-3">
-							Заключить договор
-						</button>
-					</form>
-					@endperm
-				@endif
+                @if($clientform->status == 'Одобрена')
+                    @perm('create-loan')
+                    <form method="POST" action="{{route('loan.store')}}">
+                        @csrf
+                        <input type="hidden" name="clientform_id" value="{{$clientform->id}}">
+                        <button class="btn btn-primary me-3" type="submit">
+                            Заключить договор
+                        </button>
+                    </form>
+                    @endperm
+                @endif
+            @endif
+        </div>
 
-			@endif
-		</div>
-
-		<hr>
-		@if($clientform->SecurityApproval)
-			<p>Служба безопасности
-				@if($clientform->SecurityApproval->approval)
-				(Одобр.)
-				@else
-				(Откл.)
-				@endif
-				: {{$clientform->SecurityApproval->comment}}</p>
-		@endif
-		@if($clientform->DirectorApproval)
-			<p>Директор:
-				@if($clientform->DirectorApproval->approval)
-				(Одобр.)
-				@else
-				(Откл.)
-				@endif
-				: {{$clientform->DirectorApproval->comment}}</p>
-
-		@endif
-		<hr>
-		
-		<x-clientform-info :clientform="$clientform"></x-clientform-info>
-
-
-	</div>
-	     
+        <hr>
+        @if($clientform->SecurityApproval)
+            <p>Служба безопасности
+                {{$clientform->SecurityApproval->approval ? "(Одобр.)" : "(Откл.)"}})
+                : {{$clientform->SecurityApproval->comment}}</p>
+        @endif
+        @if($clientform->DirectorApproval)
+            <p>Директор:
+                {{$clientform->DirectorApproval->approval ? "(Одобр.)" : "(Откл.)"}})
+                : {{$clientform->DirectorApproval->comment}}</p>
+        @endif
+        <hr>
+        <x-clientform-info :clientform="$clientform"/>
+    </div>
 @endsection

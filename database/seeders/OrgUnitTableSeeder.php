@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-
 use App\Models\OrgUnit;
 
 class OrgUnitTableSeeder extends Seeder
@@ -15,7 +14,7 @@ class OrgUnitTableSeeder extends Seeder
      */
     public function run()
     {
-		$orgunit1 = OrgUnit::create([
+        $orgunit1 = OrgUnit::create([
             'orgUnitCode' => "OU-10",
             'hasDictionaries' => true,
         ]);

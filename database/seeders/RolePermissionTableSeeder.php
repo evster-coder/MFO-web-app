@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-
 use App\Models\Role;
 use App\Models\Permission;
 
@@ -17,14 +16,14 @@ class RolePermissionTableSeeder extends Seeder
     public function run()
     {
         // создать связи между ролями и правами
-        foreach(Role::all() as $role) {
-            if ($role->slug == 'admin') { // для роли супер-админа все права
+        foreach (Role::all() as $role) {
+            if ($role->slug == Role::ADMIN_ROLE) { // для роли супер-админа все права
                 foreach (Permission::all() as $perm) {
                     $role->permissions()->attach($perm->id);
                 }
             }
-            if($role->slug == 'director')
-            {
+
+            if ($role->slug == Role::DIRECTOR_ROLE) {
                 $perms = [
                     'change-curr-orgunit',
                     'view-users',
@@ -45,13 +44,15 @@ class RolePermissionTableSeeder extends Seeder
 
                     'view-director-approvals',
                     'manage-director-approval',
-                    'delete-director-approval'
+                    'delete-director-approval',
                 ];
 
-                foreach($perms as $perm)
+                foreach ($perms as $perm) {
                     $role->permissions()->attach(Permission::where('slug', $perm)->first()->id);
+                }
             }
-            if ($role->slug == 'cashier') { // для обычного кассира совсем чуть-чуть
+
+            if ($role->slug == Role::CASHIER_ROLE) { // для обычного кассира совсем чуть-чуть
                 $perms = [
                     'change-curr-orgunit',
                     'view-users',
@@ -66,12 +67,14 @@ class RolePermissionTableSeeder extends Seeder
                     'edit-clientform',
 
                     'view-loans',
-                    'create-loan'
+                    'create-loan',
                 ];
-                foreach($perms as $perm)
+                foreach ($perms as $perm) {
                     $role->permissions()->attach(Permission::where('slug', $perm)->first()->id);
+                }
             }
-            if($role->slug == 'security') {
+
+            if ($role->slug == Role::SECURITY_ROLE) {
                 $perms = [
                     'change-curr-orgunit',
                     'view-users',
@@ -85,8 +88,10 @@ class RolePermissionTableSeeder extends Seeder
                     'view-security-approvals',
                     'delete-security-approval',
                 ];
-                foreach($perms as $perm)
+
+                foreach ($perms as $perm) {
                     $role->permissions()->attach(Permission::where('slug', $perm)->first()->id);
+                }
             }
         }
     }

@@ -4,31 +4,49 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-use App\Models\OrgUnitParam;
-use App\Models\OrgUnit;
-
+/**
+ * Значение параметра
+ *
+ * @property int $id
+ * @property int $orgunit_id
+ * @property int $orgunit_param_id
+ * @property string $dataAsString
+ * @property string $dataAsDate
+ * @property float $dataAsNumber
+ *
+ * @property-read OrgUnitParam $OrgUnitParam
+ * @property-read OrgUnit $OrgUnit
+ */
 class ParamValue extends Model
 {
     use HasFactory;
 
-    //отключение полей updated_at, created_at
+    /**
+     * @var bool
+     */
     public $timestamps = false;
 
-    protected $fillable = [
-    	'orgunit_id',
-    	'orgunit_param_id',
-    	'dataAsString',
-    	'dataAsDate',
-    	'dataAsNumber',
+    /**
+     * @var string[]
+     */
+    protected $guarded = [
+        'id',
     ];
 
-    public function OrgUnitParam()
+    /**
+     * @return BelongsTo
+     */
+    public function OrgUnitParam(): BelongsTo
     {
         return $this->belongsTo(OrgUnitParam::class, 'orgunit_param_id', 'id');
     }
 
-    public function OrgUnit()
+    /**
+     * @return BelongsTo
+     */
+    public function OrgUnit(): BelongsTo
     {
         return $this->belongsTo(OrgUnit::class, 'orgunit_id', 'id');
     }

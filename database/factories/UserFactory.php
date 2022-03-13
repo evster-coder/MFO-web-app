@@ -10,6 +10,8 @@ use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
+    const DEFAULT_PASSWORD = 'testuser';
+
     /**
      * The name of the factory's corresponding model.
      *
@@ -22,7 +24,7 @@ class UserFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'FIO' => $this->faker->name(),
@@ -30,7 +32,7 @@ class UserFactory extends Factory
             'blocked' => false,
             'needChangePassword' => false,
             'username' => $this->faker->name(),
-            'password' => Hash::make('testuser'),
+            'password' => Hash::make(self::DEFAULT_PASSWORD),
             'remember_token' => Str::random(10),
         ];
     }
