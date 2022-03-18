@@ -27,26 +27,26 @@ class DirectorApprovalsExport implements FromQuery, WithMapping, WithHeadings, S
     */
     public function query()
     {
-		return ClientForm::whereIn('orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('id'))
+		return ClientForm::whereIn('org_unit_id', OrgUnit::whereDescendantOrSelf(session('orgUnit'))->pluck('id'))
 		    ->whereNotNull('director_approval_id')
 		    ->join('director_approvals', 'director_approvals.id', '=', 'client_forms.director_approval_id')
-		    ->whereBetween('director_approvals.approvalDate', [$this->startDate, $this->endDate])
-		    ->orderBy('director_approvals.approvalDate');
+		    ->whereBetween('director_approvals.approval_date', [$this->startDate, $this->endDate])
+		    ->orderBy('director_approvals.approval_date');
     }
 
-    public function map($clientform): array
-    {    	
-    	if($clientform->DirectorApproval->approval)
+    public function map($clientForm): array
+    {
+    	if($clientForm->directorApproval->approval)
     		$state = 'Одобрена';
     	else
     		$state = 'Отклонена';
-    	$numDate = '№' . $clientform->id . ' от ' . date('d.m.Y', strtotime($clientform->loanDate));
+    	$numDate = '№' . $clientForm->id . ' от ' . date('d.m.Y', strtotime($clientForm->loan_date));
         return [
             $numDate,
-            date('d.m.Y', strtotime($clientform->DirectorApproval->approvalDate)),
-            $clientform->Client->fullName,
-            $clientform->loanCost . ' руб.',
-            $clientform->DirectorApproval->User->username . ' (' . $clientform->DirectorApproval->User->FIO  . ')',
+            date('d.m.Y', strtotime($clientForm->directorApproval->approval_date)),
+            $clientForm->client->fullName,
+            $clientForm->loan_cost . ' руб.',
+            $clientForm->directorApproval->user->username . ' (' . $clientForm->directorApproval->user->full_name  . ')',
             $state
         ];
     }

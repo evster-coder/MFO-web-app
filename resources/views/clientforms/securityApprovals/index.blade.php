@@ -69,7 +69,7 @@
             </tr>
             </thead>
             <tbody>
-            <x-security-approvals-tbody :clientforms="$clientforms"/>
+            <x-security-approvals-tbody :clientForms="$clientForms"/>
             </tbody>
         </table>
         <input type="hidden" name="hiddenPage" id="hiddenPage" value="1"/>

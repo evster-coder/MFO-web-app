@@ -86,12 +86,12 @@
                     </tr>
                     <tr>
                         <td>Дата рождения</td>
-                        <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($client->birthDate))}}</td>
+                        <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($client->birth_date))}}</td>
                     </tr>
 
                     <tr>
                         <td>Подразделение</td>
-                        <td>{{$client->OrgUnit->orgUnitCode}}</td>
+                        <td>{{$client->orgUnit->org_unit_code}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -124,7 +124,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <x-client-clientforms-tbody :clientforms="$client->ClientForms"/>
+                    <x-client-clientforms-tbody :clientForms="$client->clientForms"/>
                     </tbody>
                 </table>
                 <div>
@@ -158,7 +158,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <x-client-loans-tbody :loans="$client->Loans"/>
+                    <x-client-loans-tbody :loans="$client->loans"/>
                     </tbody>
                 </table>
             </div>

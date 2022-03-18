@@ -1,4 +1,4 @@
-@if($clientforms->count() == 0)
+@if($clientForms->count() == 0)
     <tr>
         <td>
             Отсутствуют заявки
@@ -6,13 +6,13 @@
     </tr>
 @endif
 
-@foreach($clientforms as $clientform)
+@foreach($clientForms as $clientForm)
     <tr>
         <td>
             <a class="btn btn-link"
-               href="{{route('clientform.show', ['id' => $clientform->id])}}">
-                <strong>Анкета №{{$clientform->id}}
-                    от {{date(config('app.date_format', 'd-m-Y'), strtotime($clientform->loanDate))}}</strong>
+               href="{{route('clientForm.show', ['id' => $clientForm->id])}}">
+                <strong>Анкета №{{$clientForm->id}}
+                    от {{date(config('app.date_format', 'd-m-Y'), strtotime($clientForm->loan_date))}}</strong>
                 <i class="fas fa-external-link-alt"></i>
             </a>
         </td>

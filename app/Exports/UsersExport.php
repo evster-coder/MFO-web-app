@@ -8,7 +8,6 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-
 use Illuminate\Support\Facades\Auth;
 
 class UsersExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSize
@@ -29,10 +28,10 @@ class UsersExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSiz
         return User::find(Auth::user()->id)
                     ->getDownUsers()
                     ->select('users.*')
-                    ->join('orgunits', 'orgunits.id', '=', 'users.orgunit_id')
+                    ->join('org_units', 'org_units.id', '=', 'users.org_unit_id')
                     ->where('username', 'like', '%'.$this->params.'%')
-                    ->OrWhere('orgunits.orgUnitCode', 'like', '%'.$this->params.'%')
-                    ->OrWhere('FIO', 'like', '%'.$this->params.'%')
+                    ->OrWhere('org_units.org_unit_code', 'like', '%'.$this->params.'%')
+                    ->OrWhere('full_name', 'like', '%'.$this->params.'%')
                     ->with(['roles', 'orgUnit']);
 
     }
@@ -42,12 +41,12 @@ class UsersExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSiz
     	$roles = "";
     	foreach($user->roles as $role)
     		$roles = $roles . $role->name . " ";
-    	$blocked = $user->blocked ? 'Да' : 'Нет'; 
-    	
+    	$blocked = $user->blocked ? 'Да' : 'Нет';
+
         return [
             $user->username,
-            $user->FIO,
-            $user->OrgUnit->orgUnitCode,
+            $user->full_name,
+            $user->orgUnit->org_unit_code,
             $blocked,
             $roles
         ];

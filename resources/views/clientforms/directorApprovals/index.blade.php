@@ -71,7 +71,7 @@
             </tr>
             </thead>
             <tbody>
-            <x-director-approvals-tbody :clientforms="$clientforms"/>
+            <x-director-approvals-tbody :clientForms="$clientForms"/>
             </tbody>
         </table>
         <input type="hidden" name="hiddenPage" id="hiddenPage" value="1"/>

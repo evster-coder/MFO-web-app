@@ -161,8 +161,8 @@ return [
         'username'              => 'Никнейм',
         'year'                  => 'Год',
         'roles'                 => 'Роли пользователя',
-        'daysAmount'            => 'Количество дней',
+        'days_amount'            => 'Количество дней',
         'new-password'          => 'Новый пароль',
         'new-password-confirm'  => 'Подтверждение пароля'
-    ],  
+    ],
 ];

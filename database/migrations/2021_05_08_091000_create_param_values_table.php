@@ -17,18 +17,18 @@ class CreateParamValuesTable extends Migration
             $table->id();
 
             //подразделение, к которому привязан справочник
-            $table->foreignId('orgunit_id')->references('id')->on('orgunits')
+            $table->foreignId('org_unit_id')->references('id')->on('org_units')
                             ->onUpdate('cascade')
                             ->onDelete('cascade');
 
             //подразделение, к которому привязан справочник
-            $table->foreignId('orgunit_param_id')->references('id')->on('orgunit_params')
+            $table->foreignId('org_unit_param_id')->references('id')->on('org_unit_params')
                             ->onUpdate('cascade')
                             ->onDelete('cascade');
 
-            $table->string('dataAsString', 250)->nullable();
-            $table->date('dataAsDate')->nullable();
-            $table->decimal('dataAsNumber', $precision = 10, $scale = 3)->nullable();
+            $table->string('data_as_string', 250)->nullable();
+            $table->date('data_as_date')->nullable();
+            $table->decimal('data_as_number', 10, 3)->nullable();
 
         });
     }

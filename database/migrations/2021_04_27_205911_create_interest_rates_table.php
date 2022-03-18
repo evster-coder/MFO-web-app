@@ -15,7 +15,7 @@ class CreateInterestRatesTable extends Migration
     {
         Schema::create('interest_rates', function (Blueprint $table) {
             $table->id();
-            $table->decimal('percentValue', 10, 3);
+            $table->decimal('percent_value', 10, 3);
         });
     }
 

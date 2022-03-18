@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -19,6 +20,18 @@ use Illuminate\Support\Collection;
  *
  * @property-read Collection|Role[] $roles
  * @property-read Collection|User[] $users
+ * @property-read int|null $roles_count
+ *
+ * @method static Builder|Permission newModelQuery()
+ * @method static Builder|Permission newQuery()
+ * @method static Builder|Permission query()
+ * @method static Builder|Permission whereCreatedAt($value)
+ * @method static Builder|Permission whereId($value)
+ * @method static Builder|Permission whereName($value)
+ * @method static Builder|Permission whereSlug($value)
+ * @method static Builder|Permission whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
  */
 class Permission extends Model
 {

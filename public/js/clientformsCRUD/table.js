@@ -17,8 +17,8 @@ $(document).ready(function(){
     $.ajax({
      url:"/clientforms/get-clientforms?page="+ page +
           "&id=" + clientformNumber +
-          "&loanDate=" + loanDate +
-          "&clientFio=" + clientFIO + 
+          "&loan_date=" + loanDate +
+          "&clientFio=" + clientFIO +
           "&state=" + state,
        success:function(data)
        {
@@ -88,8 +88,8 @@ $(document).ready(function(){
     state = $('#searchState').val();
 
     window.location.href = url + "?id=" + clientformNumber +
-          "&loanDate=" + loanDate +
-          "&clientFio=" + clientFIO + 
+          "&loan_date=" + loanDate +
+          "&clientFio=" + clientFIO +
           "&state=" + state;
   });
 });

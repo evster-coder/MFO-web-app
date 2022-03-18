@@ -25,11 +25,10 @@ class UpdateUserRequest extends FormRequest
     {
 
         return [
-            'FIO' => 'required|string',
-            'orgunit_id' => 'required',
+            'full_name' => 'required|string',
+            'org_unit_id' => 'required',
             'roles' => 'required',
             'username' => 'required|string|min:4|max:20|unique:users,username,' . $this->id,
-
         ];
     }
 }

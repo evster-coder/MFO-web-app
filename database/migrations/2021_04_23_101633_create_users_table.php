@@ -17,18 +17,15 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('username', 200);
             $table->string('password', 200);
-            $table->string('FIO', 200);
+            $table->string('full_name', 200);
 
-            $table->foreignId('orgunit_id')->nullable()->references('id')->on('orgunits')
+            $table->foreignId('org_unit_id')->nullable()->references('id')->on('org_units')
                             ->onUpdate('set null')
                             ->onDelete('set null');
-
             $table->string('position', 200)->nullable();
             $table->string('reason', 255)->nullable();
-
             $table->boolean('blocked')->nullable();
-            $table->boolean('needChangePassword')->nullable();
-
+            $table->boolean('need_change_password')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -11,7 +11,7 @@
         <td>{{$client->surname}}</td>
         <td>{{$client->name}}</td>
         <td>{{$client->patronymic}}</td>
-        <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($client->birthDate))}}</td>
+        <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($client->birth_date))}}</td>
         <td>
             <div class="d-flex manage-btns">
                 <!-- Админские кнопки редактирования и удаления -->

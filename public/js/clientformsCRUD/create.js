@@ -2,11 +2,11 @@
 
 document.addEventListener("DOMContentLoaded", function(){
 	var selectClient = document.getElementById('client_id');
-	var selectHasCredits = document.getElementById('hasCredits');
-	var textMonthlyPayment = document.getElementById('monthlyPayment');
-	var loanDate = document.getElementById('loanDate');
-	var loanMaturityDate = document.getElementById('loanMaturityDate');
-	var loanTerm = document.getElementById('loanTerm');
+	var selectHasCredits = document.getElementById('has_credits');
+	var textMonthlyPayment = document.getElementById('monthly_payment');
+	var loanDate = document.getElementById('loan_date');
+	var loanMaturityDate = document.getElementById('loan_maturity_date');
+	var loanTerm = document.getElementById('loan_term');
 	var btnCheckBankrupt = document.getElementById('checkBankrupt');
 
 	//заполняем даты истечения, фио и дату рождения клиента
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function(){
 		      if (isShow == false) {
 		        var htmlAddLink = document.getElementById('wrp').innerHTML;
 		        document.querySelector('.select2-results')
-		        		.insertAdjacentHTML('beforeend', "<div class='select2-results__option'>" + 
+		        		.insertAdjacentHTML('beforeend', "<div class='select2-results__option'>" +
 		      htmlAddLink + "</div>");
 		        isShow = true;
 		      }
@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 function validate()
 {
-	if(document.addClientForm.surname.value !='' 
+	if(document.addClientForm.surname.value !=''
 		&& document.addClientForm.name.value != ''
 		&& document.addClientForm.birthDate.valueAsDate != null)
 	{
@@ -113,14 +113,14 @@ function validate()
 
 function changeDate(e)
 {
-	if(loanTerm != null 
+	if(loanTerm != null
 		&& loanTerm.value != null
 		&& loanDate != null
 		&& loanDate.valueAsDate != null
 		&& loanMaturityDate != null)
 	{
 		var date = loanDate.valueAsDate;
-		date.setDate(parseInt(date.getDate()) 
+		date.setDate(parseInt(date.getDate())
 			+ parseInt(loanTerm.value));
 		loanMaturityDate.valueAsDate = date;
 
@@ -130,20 +130,20 @@ function changeDate(e)
 function putMasks()
 {
 	Inputmask({mask:"+9(999)-999-9999", "clearIncomplete": true})
-					.mask(document.getElementById('mobilePhone'));
+					.mask(document.getElementById('mobile_phone'));
 	Inputmask({mask:"+9(9999)-999999", "clearIncomplete": true})
-					.mask(document.getElementById('homePhone'));
+					.mask(document.getElementById('home_phone'));
 	Inputmask({mask:"99 99", "clearIncomplete": true})
-					.mask(document.getElementById('passportSeries'));
+					.mask(document.getElementById('passport_series'));
 	Inputmask({mask:"999999", "clearIncomplete": true})
-					.mask(document.getElementById('passportNumber'));
+					.mask(document.getElementById('passport_number'));
 	Inputmask({mask:"999-999", "clearIncomplete": true})
-					.mask(document.getElementById('passportDepartamentCode'));
+					.mask(document.getElementById('passport_department_code'));
 	Inputmask({mask:"99999999999", "clearIncomplete": true})
 					.mask(document.getElementById('snils'));
 	Inputmask({mask:"[9]{1,}", greedy: false})
-					.mask(document.getElementById('pensionerId'));
+					.mask(document.getElementById('pensioner_id'));
 	Inputmask({mask:"+9(999)-999-9999", "clearIncomplete": true})
-					.mask(document.getElementById('workPlacePhone'));
+					.mask(document.getElementById('work_place_phone'));
 
 }

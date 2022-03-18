@@ -1,7 +1,7 @@
 @extends('layouts.user')
 
 @section('title')
-    Заявка на займ №{{$clientform->id}} от {{$clientform->loanDate}}
+    Заявка на займ №{{$clientForm->id}} от {{$clientForm->loan_date}}
 @endsection
 
 @push('assets')
@@ -10,26 +10,26 @@
 
 @section('content')
     <a class="btn btn-default"
-       href="{{route('clientform.index')}}">
+       href="{{route('clientForm.index')}}">
         < К списку
     </a>
-    <h1>Заявка на займ №{{$clientform->id}} от {{$clientform->loanDate}}</h1>
+    <h1>Заявка на займ №{{$clientForm->id}} от {{$clientForm->loan_date}}</h1>
     <x-auth-session-status class="mb-4" :status="session('status')"/>
     <x-auth-validation-errors class="mb-4" :errors="$errors"/>
 
     <div class="block-content">
         <div class="d-flex block-padding">
             <p class="me-3">Статус:
-                {{$clientform->status}}
+                {{$clientForm->status}}
             </p>
-            @if($clientform->Loan)
+            @if($clientForm->loan)
                 <a class="btn btn-primary me-3"
-                   href="{{route('loan.show', ['id' => $clientform->Loan->id])}}">
+                   href="{{route('loan.show', ['id' => $clientForm->loan->id])}}">
                     Перейти к договору
                 </a>
             @else
                 @perm('delete-clientform')
-                <form method="POST" action="{{route('clientform.destroy', $clientform->id)}}">
+                <form method="POST" action="{{route('clientForm.destroy', $clientForm->id)}}">
                     @method('DELETE')
                     @csrf
                     <button class="btn btn-danger"
@@ -40,11 +40,11 @@
                 </form>
                 @endperm
 
-                @if($clientform->status == 'Одобрена')
+                @if($clientForm->status == 'Одобрена')
                     @perm('create-loan')
                     <form method="POST" action="{{route('loan.store')}}">
                         @csrf
-                        <input type="hidden" name="clientform_id" value="{{$clientform->id}}">
+                        <input type="hidden" name="client_form_id" value="{{$clientForm->id}}">
                         <button class="btn btn-primary me-3" type="submit">
                             Заключить договор
                         </button>
@@ -55,17 +55,17 @@
         </div>
 
         <hr>
-        @if($clientform->SecurityApproval)
+        @if($clientForm->securityApproval)
             <p>Служба безопасности
-                {{$clientform->SecurityApproval->approval ? "(Одобр.)" : "(Откл.)"}})
-                : {{$clientform->SecurityApproval->comment}}</p>
+                {{$clientForm->securityApproval->approval ? "(Одобр.)" : "(Откл.)"}})
+                : {{$clientForm->securityApproval->comment}}</p>
         @endif
-        @if($clientform->DirectorApproval)
+        @if($clientForm->directorApproval)
             <p>Директор:
-                {{$clientform->DirectorApproval->approval ? "(Одобр.)" : "(Откл.)"}})
-                : {{$clientform->DirectorApproval->comment}}</p>
+                {{$clientForm->directorApproval->approval ? "(Одобр.)" : "(Откл.)"}})
+                : {{$clientForm->directorApproval->comment}}</p>
         @endif
         <hr>
-        <x-clientform-info :clientform="$clientform"/>
+        <x-clientform-info :clientForm="$clientForm"/>
     </div>
 @endsection

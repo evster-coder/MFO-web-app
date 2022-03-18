@@ -26,8 +26,8 @@ class StoreUserRequest extends FormRequest
         return [
             'username' => 'required|string|unique:users|min:4|max:20',
             'password' => 'required|string|min:4|max:50',
-            'FIO' => 'required|string',
-            'orgunit_id' => 'required',
+            'full_name' => 'required|string',
+            'org_unit_id' => 'required',
             'roles' => 'required',
         ];
     }

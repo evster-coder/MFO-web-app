@@ -7,17 +7,18 @@ $(document).ready(function(){
   }
 
 
-  var clientformNumber = "";
-  var loanConclusionDate = "";
-  var clientFIO = "";
-  var statusOpen = "";
-  var page = $('#hiddenPage').val();
-  var sortColumn = $('#hiddenSortColumn').val();
-  var sortDesc = $('#hiddenSortDesc').val();
+  let clientformNumber = "";
+  let loanConclusionDate = "";
+  let clientFIO = "";
+  let statusOpen = "";
+  let page = $('#hiddenPage').val();
+  let sortColumn = $('#hiddenSortColumn').val();
+  let sortDesc = $('#hiddenSortDesc').val();
+  let tbody = $('tbody');
 
 
   function loadData()
-  {    
+  {
     loanNumber = $('#searchLoanNumber').val();
     clientFIO = $('#searchClientFIO').val();
     loanConclusionDate = $('#searchLoanConclusionDate').val();
@@ -29,16 +30,16 @@ $(document).ready(function(){
      url:"/loans/get-loans?page="+ page +
           "&sortby=" + sortColumn +
           "&sortdesc=" + sortDesc +
-          "&loanNumber=" + loanNumber +
+          "&loan_number=" + loanNumber +
           "&clientFio=" + clientFIO +
-          "&loanConclusionDate=" + loanConclusionDate + 
-          "&statusOpen=" + statusOpen,
+          "&loan_conclusion_date=" + loanConclusionDate +
+          "&status_open=" + statusOpen,
 
      success:function(data)
        {
         //очищаем tbody и заполняем снова
-        $('tbody').html('');
-        $('tbody').html(data);
+        tbody.html('');
+        tbody.html(data);
        }
     })
   }
@@ -57,7 +58,7 @@ $(document).ready(function(){
       //получение данных
       loadData();
     }
- }); 
+ });
 
  $(document).on('keyup', '#searchClientFIO', function(e){
     if(e.key=="Enter")
@@ -65,7 +66,7 @@ $(document).ready(function(){
       //получение данных
       loadData();
     }
- }); 
+ });
 
  $(document).on('change', '#searchStatusOpen', function(e){
       //получение данных
@@ -74,10 +75,10 @@ $(document).ready(function(){
 
 
  $(document).on('click', '.sorting', function(e){
-    var sortColumn = $(this).data('column-name');
-    var orderDesc = $(this).data('sorting-type');
-    
-    var newOrder = '';
+    let sortColumn = $(this).data('column-name');
+    let orderDesc = $(this).data('sorting-type');
+
+    let newOrder = '';
     if(orderDesc == 'asc')
     {
        $(this).data('sorting-type', 'desc');
@@ -118,7 +119,7 @@ $(document).ready(function(){
   $(document).on('click', '#exportExcel', function(event){
     event.preventDefault();
 
-    var url = $(this).data('export');
+    let url = $(this).data('export');
     loanNumber = $('#searchLoanNumber').val();
     clientFIO = $('#searchClientFIO').val();
     loanConclusionDate = $('#searchLoanConclusionDate').val();
@@ -127,10 +128,10 @@ $(document).ready(function(){
     sortDesc = $('#hiddenSortDesc').val();
 
 
-    window.location.href = url +           
-          "?loanNumber=" + loanNumber +
+    window.location.href = url +
+          "?loan_number=" + loanNumber +
           "&clientFio=" + clientFIO +
-          "&loanConclusionDate=" + loanConclusionDate + 
-          "&statusOpen=" + statusOpen;
+          "&loan_conclusion_date=" + loanConclusionDate +
+          "&status_open=" + statusOpen;
   });
 });

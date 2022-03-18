@@ -14,7 +14,7 @@ $(document).ready(function(){
           "&surname=" + surname +
           "&name=" + name +
           "&patronymic=" + patronymic +
-          "&birth-date=" + birthDate,
+          "&birth_date=" + birthDate,
      success:function(data)
        {
         //очищаем tbody и заполняем снова
@@ -95,12 +95,12 @@ $(document).ready(function(){
     name = $('#searchName').val();
     patronymic = $('#searchPatronymic').val();
     birthDate = $('#searchBirthDate').val();
-    
-    window.location.href = url +           
+
+    window.location.href = url +
           "?surname=" + surname +
           "&name=" + name +
           "&patronymic=" + patronymic +
-          "&birth-date=" + birthDate;
+          "&birth_date=" + birthDate;
 
   });
 });

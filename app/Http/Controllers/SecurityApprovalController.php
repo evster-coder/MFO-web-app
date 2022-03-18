@@ -23,11 +23,11 @@ class SecurityApprovalController extends Controller
      */
     public function index()
     {
-        $clientforms = ClientForm::whereIn('orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('id'))
+        $clientForms = ClientForm::whereIn('org_unit_id', OrgUnit::whereDescendantOrSelf(session('orgUnit'))->pluck('id'))
                         ->whereNotNull('security_approval_id')
                         ->paginate(20);
         return view('clientforms.securityApprovals.index', [
-                'clientforms' => $clientforms
+                'clientForms' => $clientForms
                 ]);
     }
 
@@ -44,13 +44,14 @@ class SecurityApprovalController extends Controller
                 $endDate = date("Y-m-d", strtotime(date("Y-m-d", strtotime(now())) . " + 365 day"));
             else
                 $endDate = $req->get('dateTo');
-            $clientforms = ClientForm::whereIn('orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('id'))
+
+            $clientForms = ClientForm::whereIn('org_unit_id', OrgUnit::whereDescendantOrSelf(session('orgUnit'))->pluck('id'))
                         ->whereNotNull('security_approval_id')
                         ->join('security_approvals', 'security_approvals.id', '=', 'client_forms.security_approval_id')
-                        ->whereBetween('security_approvals.approvalDate', [$startDate, $endDate])
-                        ->orderBy('security_approvals.approvalDate')
-                        ->paginate(20); 
-            return view('components.security-approvals-tbody', compact('clientforms'))->render();
+                        ->whereBetween('security_approvals.approval_date', [$startDate, $endDate])
+                        ->orderBy('security_approvals.approval_date')
+                        ->paginate(20);
+            return view('components.security-approvals-tbody', compact('clientForms'))->render();
         }
     }
 
@@ -74,15 +75,15 @@ class SecurityApprovalController extends Controller
         return (new SecurityApprovalsExport($startDate, $endDate))->download($filename);
 
     }
-    
+
     //ожидающие одобрения
     public function taskList()
     {
-        $clientforms = ClientForm::whereIn('orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('id'))
+        $clientForms = ClientForm::whereIn('org_unit_id', OrgUnit::whereDescendantOrSelf(session('orgUnit'))->pluck('id'))
                         ->whereNull('security_approval_id')
                         ->paginate(20);
         return view('clientforms.securityApprovals.tasks', [
-                'clientforms' => $clientforms
+                'clientForms' => $clientForms
                 ]);
     }
 
@@ -94,9 +95,8 @@ class SecurityApprovalController extends Controller
      */
     public function create($id)
     {
-        $clientform = ClientForm::find($id);
-        return view('clientforms.securityApprovals.create', 
-            ['clientform' => $clientform]
+        return view('clientforms.securityApprovals.create',
+            ['clientForm' => ClientForm::find($id)]
         );
     }
 
@@ -106,17 +106,15 @@ class SecurityApprovalController extends Controller
         $approval = new SecurityApproval();
         $approval->user_id = Auth::user()->id;
         $approval->approval= true;
-        $approval->approvalDate = new DateTime('NOW');
+        $approval->approval_date = new DateTime('NOW');
 
         if($req->get('comment') != null)
             $approval->comment = $req->get('comment');
 
-        $approval->save();
-
-        if(!$approval)
+        if(!$approval->save())
             return back()->withErrors(['msg' => 'Ошибка создания одобрения']);
 
-        $setApprovalForm = ClientForm::find($req->get('clientform_id'));
+        $setApprovalForm = ClientForm::find($req->get('client_form_id'));
         if(!$setApprovalForm)
             return back()->withErrors(['msg' => 'Ошибка, анкета не найдена!']);
         $setApprovalForm->security_approval_id = $approval->id;
@@ -126,14 +124,12 @@ class SecurityApprovalController extends Controller
                         ->with(['status' => 'Заявка на займ успешно одобрена']);
     }
 
-
-    //отказ
     public function reject(Request $req)
     {
         $approval = new SecurityApproval();
         $approval->user_id = Auth::user()->id;
         $approval->approval= false;
-        $approval->approvalDate = new DateTime('NOW');
+        $approval->approval_date = new DateTime('NOW');
 
         if($req->get('comment') != null)
             $approval->comment = $req->get('comment');
@@ -143,7 +139,7 @@ class SecurityApprovalController extends Controller
         if(!$approval)
             return back()->withErrors(['msg' => 'Ошибка создания одобрения']);
 
-        $setApprovalForm = ClientForm::find($req->get('clientform_id'));
+        $setApprovalForm = ClientForm::find($req->get('client_form_id'));
         if(!$setApprovalForm)
             return back()->withErrors(['msg' => 'Ошибка, анкета не найдена!']);
         $setApprovalForm->security_approval_id = $approval->id;
@@ -163,10 +159,10 @@ class SecurityApprovalController extends Controller
     public function show($id)
     {
         $approval = SecurityApproval::find($id);
-        $clientform = ClientForm::where('security_approval_id', $id)->first();
+        $clientForm = ClientForm::where('security_approval_id', $id)->first();
         return view('clientforms.securityApprovals.show',
             ['approval' => $approval,
-            'clientform' => $clientform]
+            'clientForm' => $clientForm]
         );
     }
 
@@ -179,10 +175,10 @@ class SecurityApprovalController extends Controller
     public function destroy($id)
     {
         $approval = SecurityApproval::find($id);
-        $clientform = ClientForm::where('security_approval_id', $approval->id)->first();
+        $clientForm = ClientForm::where('security_approval_id', $approval->id)->first();
 
-        if($approval != null 
-            && Loan::where('clientform_id', $clientform->id)->first() == null)
+        if($approval != null
+            && Loan::where('client_form_id', $clientForm->id)->first() == null)
         {
             $approval->delete();
             return redirect()->route('securityApproval.index')

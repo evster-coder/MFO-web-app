@@ -23,7 +23,7 @@ class ClientsExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoS
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function __construct($surname, $name, 
+    public function __construct($surname, $name,
 										$patronymic, $birthDate)
     {
     	$this->surname = $surname;
@@ -36,12 +36,12 @@ class ClientsExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoS
     */
     public function query()
     {
-        $orgunit = OrgUnit::find(session('OrgUnit'))->getDictsOrgUnit();
+        $orgUnit = OrgUnit::find(session('orgUnit'))->getDictsOrgUnit();
 
-        $clients = Client::where('orgunit_id', $orgunit->id)
+        $clients = Client::where('org_unit_id', $orgUnit->id)
                     ->where('surname', 'like', '%'.$this->surname.'%')
                     ->where('name', 'like', '%'.$this->name.'%')
-                    ->where('birthDate', 'like', '%'.$this->birthDate.'%');
+                    ->where('birth_date', 'like', '%'.$this->birthDate.'%');
 
         if($this->patronymic == "")
             $clients = $clients->where(function($query){
@@ -50,7 +50,6 @@ class ClientsExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoS
         else
             $clients = $clients->where('patronymic', 'like', '%'.$this->patronymic.'%');
 
-        //сортировка
         return $clients->orderBy('surname');
     }
 
@@ -60,7 +59,7 @@ class ClientsExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoS
             $client->surname,
             $client->name,
             $client->patronymic,
-            $client->birthDate,
+            $client->birth_date,
         ];
     }
 

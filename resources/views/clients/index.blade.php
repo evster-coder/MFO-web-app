@@ -93,7 +93,7 @@
                 </th>
                 <th scope="col"
                     align="center"
-                    data-column-name="birthDate">
+                    data-column-name="birth_date">
                     <div class=" has-search form-group" style="width:13vw;">
                         <p align="center">Дата рождения</p>
                         <span class="fa fa-search form-control-feedback"></span>

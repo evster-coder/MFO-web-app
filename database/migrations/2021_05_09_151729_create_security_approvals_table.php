@@ -20,10 +20,10 @@ class CreateSecurityApprovalsTable extends Migration
                     ->references('id')->on('users')
                     ->onUpdate('set null')
                     ->onDelete('set null');
-                    
+
             $table->boolean('approval');
             $table->text('comment')->nullable();
-            $table->datetime('approvalDate');
+            $table->datetime('approval_date');
         });
     }
 

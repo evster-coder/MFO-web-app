@@ -16,23 +16,18 @@ class CreateLoansTable extends Migration
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
 
-
-            $table->foreignId('orgunit_id')->references('id')->on('orgunits')
+            $table->foreignId('org_unit_id')->references('id')->on('org_units')
                         ->onUpdate('cascade')
                         ->onDelete('cascade');
 
-            $table->foreignId('clientform_id')->references('id')->on('client_forms')
+            $table->foreignId('client_form_id')->references('id')->on('client_forms')
                         ->onDelete('restrict')
                         ->onUpdate('restrict');
 
-            $table->string('loanNumber', 200);
-
-            //заключение и закрытие
-            $table->date('loanConclusionDate');
-            $table->date('loanClosingDate')->nullable();
-
-            //статус
-            $table->boolean('statusOpen')->default(1);
+            $table->string('loan_number', 200);
+            $table->date('loan_conclusion_date');
+            $table->date('loan_closing_date')->nullable();
+            $table->boolean('status_open')->default(1);
         });
     }
 

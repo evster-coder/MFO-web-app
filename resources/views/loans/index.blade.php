@@ -46,7 +46,7 @@
                         <p class="sorting"
                            align="center"
                            data-sorting-type="asc"
-                           data-column-name="loanNumber">
+                           data-column-name="loan_number">
                             Номер <span id="icon-loanNumber"></span>
                         </p>
                         <span class="fa fa-search form-control-feedback"></span>
@@ -62,7 +62,7 @@
                         <p class="sorting"
                            align="center"
                            data-sorting-type="asc"
-                           data-column-name="loanConclusionDate">
+                           data-column-name="loan_conclusion_date">
                             Дата заключения <span id="icon-loanConclusionDate"></span>
                         </p>
                         <span class="fa fa-search form-control-feedback"></span>
@@ -85,7 +85,7 @@
                                placeholder="Поиск..."/>
                     </div>
                 </th>
-                <th scope="col" data-column-name="statusOpen">
+                <th scope="col" data-column-name="status_open">
                     <div class="form-group has-search">
                         <p align="center">Статус</p>
                         <span class="fa fa-search form-control-feedback"></span>
@@ -107,7 +107,7 @@
         </table>
 
         <input type="hidden" name="hiddenPage" id="hiddenPage" value="1"/>
-        <input type="hidden" name="hiddenSortColumn" id="hiddenSortColumn" value="loanNumber"/>
+        <input type="hidden" name="hiddenSortColumn" id="hiddenSortColumn" value="loan_number"/>
         <input type="hidden" name="hiddenSortDesc" id="hiddenSortDesc" value="desc"/>
     </div>
 @endsection

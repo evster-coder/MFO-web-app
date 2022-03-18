@@ -1,9 +1,9 @@
 @extends('layouts.user')
 
 @section('title')
-    Платеж от {{date(config('app.date_format', 'd-m-Y'), strtotime($payment->paymentDate))}}
-    по договору займа №{{$payment->Loan->LoanNumber}}
-    от {{date(config('app.date_format', 'd-m-Y'), strtotime($payment->Loan->loanConclusionDate))}}
+    Платеж от {{date(config('app.date_format', 'd-m-Y'), strtotime($payment->payment_date))}}
+    по договору займа №{{$payment->loan->loan_number}}
+    от {{date(config('app.date_format', 'd-m-Y'), strtotime($payment->loan->loan_conclusion_date))}}
 @endsection
 
 @push('assets')
@@ -12,7 +12,7 @@
 
 @section('content')
     <a class="btn btn-default"
-       href="{{route('loan.show', $payment->Loan->id)}}">
+       href="{{route('loan.show', $payment->loan->id)}}">
         < К договору займа
     </a>
     <div class="d-flex justify-content-between">
@@ -46,9 +46,9 @@
                 <tbody>
                 <tr>
                     <td>Договор</td>
-                    <td><a href="{{route('loan.show', $payment->Loan->id)}}">
-                            <p>Договор №{{$payment->Loan->LoanNumber}}
-                                от {{date(config('app.date_format', 'd-m-Y'), strtotime($payment->Loan->loanConclusionDate))}}
+                    <td><a href="{{route('loan.show', $payment->loan->id)}}">
+                            <p>Договор №{{$payment->loan->loan_number}}
+                                от {{date(config('app.date_format', 'd-m-Y'), strtotime($payment->loan->loan_conclusion_date))}}
                                 <i class="fas fa-external-link-alt"></i>
                             </p>
                         </a>
@@ -56,26 +56,26 @@
                 </tr>
                 <tr>
                     <td>Подразделение</td>
-                    <td>{{$payment->OrgUnit->orgUnitCode}}</td>
+                    <td>{{$payment->orgUnit->org_unit_code}}</td>
                 </tr>
                 <tr>
                     <td>Клиент</td>
-                    <td><a href="{{route('client.show', $payment->Loan->ClientForm->Client->id)}}"><p>
-                                {{$payment->Loan->ClientForm->Client->fullName}}
+                    <td><a href="{{route('client.show', $payment->loan->clientForm->client->id)}}"><p>
+                                {{$payment->loan->clientForm->client->fullName}}
                                 <i class="fas fa-external-link-alt"></i></p></a>
                     </td>
                 </tr>
                 <tr>
                     <td>Сумма платежа</td>
-                    <td>{{$payment->paymentSum}} руб.</td>
+                    <td>{{$payment->payment_sum}} руб.</td>
                 </tr>
                 <tr>
                     <td>Дата поступления платежа</td>
-                    <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($payment->paymentDate))}}</td>
+                    <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($payment->payment_date))}}</td>
                 </tr>
                 <tr>
                     <td>Пользователь</td>
-                    <td>{{$payment->User->FIO}} ({{$payment->User->username}})</td>
+                    <td>{{$payment->user->full_name}} ({{$payment->user->username}})</td>
                 </tr>
                 </tbody>
             </table>

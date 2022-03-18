@@ -12,8 +12,8 @@
             <a class="btn btn-link"
                href="{{route('loan.show', $loan->id)}}">
                 <strong>
-                    Договор № {{$loan->loanNumber}}
-                    от {{date(config('app.date_format', 'd-m-Y'), strtotime($loan->loanConclusionDate))}}
+                    Договор № {{$loan->loan_number}}
+                    от {{date(config('app.date_format', 'd-m-Y'), strtotime($loan->loan_conclusion_date))}}
                 </strong>
                 <i class="fas fa-external-link-alt"></i>
             </a>

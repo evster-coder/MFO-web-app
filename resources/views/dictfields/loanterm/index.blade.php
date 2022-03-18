@@ -62,10 +62,10 @@
                             @csrf
                             <div class="row">
                                 <div class="form-group edit-fields">
-                                    <label for="daysAmount">Количество дней</label>
+                                    <label for="days_amount">Количество дней</label>
                                     <input class="form-control"
                                            type="number"
-                                           name="daysAmount"
+                                           name="days_amount"
                                            id="form-data"
                                            placeholder="Количество дней"
                                            oninput="validate()">

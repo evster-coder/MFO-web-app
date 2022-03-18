@@ -4,15 +4,15 @@ var btn_delete = document.getElementById('btn-delete');
 var btn_edit = document.getElementById('btn-edit');
 var btn_show = document.getElementById('btn-show');
 
-var id_field = document.getElementById('orgunit_id');
+var id_field = document.getElementById('org_unit_id');
 
 
 function ready() {
-    var orgUnits = document.querySelectorAll(".single-unit strong")
+    let orgUnits = document.querySelectorAll(".single-unit strong")
 
-    var icons = document.getElementsByClassName("can-expand");
+    let icons = document.getElementsByClassName("can-expand");
 
-    var i = icons.length;
+    let i = icons.length;
     while(i--)
     {
         icons[i].addEventListener("click", iconExpandClick);
@@ -45,7 +45,7 @@ function selectText(e)
             btn_edit.classList.remove('disabled');
         btn_show.classList.remove('disabled');
     }
-    var selected = document.querySelector('.active-unit');
+    let selected = document.querySelector('.active-unit');
     if(selected != null)
         selected.classList.remove('active-unit');
 
@@ -57,8 +57,8 @@ function selectText(e)
 
 function iconExpandClick(e)
 {
-    var liItem = e.target.parentNode.querySelector('li');
-    var childUl = e.target.parentNode.querySelector('li ul');
+    let liItem = e.target.parentNode.querySelector('li');
+    let childUl = e.target.parentNode.querySelector('li ul');
     if(childUl == null)
         return;
 
@@ -81,7 +81,7 @@ function iconExpandClick(e)
         e.target.classList.remove('fa-search-minus');
         e.target.classList.add('fa-search-plus');
 
-        childUl.style.display = "none"; 
+        childUl.style.display = "none";
     }
 }
 
@@ -92,8 +92,8 @@ function btnAddClick(e)
         return;
     e.preventDefault();
 
-    var url = e.target.dataset.url;
-    var parent = document.querySelector('.active-unit').dataset.value;
+    let url = e.target.dataset.url;
+    let parent = document.querySelector('.active-unit').dataset.value;
 
     document.location.href = url + '/' + parent;
 }
@@ -105,8 +105,8 @@ function btnEditClick(e)
         return;
     e.preventDefault();
 
-    var url = e.target.dataset.url;
-    var value = document.querySelector('.active-unit').dataset.value;
+    let url = e.target.dataset.url;
+    let value = document.querySelector('.active-unit').dataset.value;
 
     document.location.href = url + '/' + value + '/edit';
 }
@@ -118,8 +118,8 @@ function btnShowClick(e)
         return;
     e.preventDefault();
 
-    var url = e.target.dataset.url;
-    var parent = document.querySelector('.active-unit').dataset.value;
+    let url = e.target.dataset.url;
+    let parent = document.querySelector('.active-unit').dataset.value;
 
     document.location.href = url + '/' + parent;
 

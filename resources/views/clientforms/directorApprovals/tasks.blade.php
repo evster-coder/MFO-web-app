@@ -22,17 +22,17 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($clientforms as $clientform)
+            @foreach($clientForms as $clientForm)
                 <tr>
-                    <td>{{$clientform->id}}</td>
-                    <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientform->loanDate))}}</td>
-                    <td>{{$clientform->Client->fullName}}</td>
-                    <td>{{$clientform->loanCost}}</td>
-                    <td>{{$clientform->User->username}} ({{$clientform->User->FIO}})</td>
+                    <td>{{$clientForm->id}}</td>
+                    <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientForm->loan_date))}}</td>
+                    <td>{{$clientForm->client->fullName}}</td>
+                    <td>{{$clientForm->loan_cost}}</td>
+                    <td>{{$clientForm->user->username}} ({{$clientForm->user->full_name}})</td>
                     <td>
                         <div class="d-flex manage-btns">
                             <a class="btn btn-success"
-                               href="{{route('directorApproval.create', ['id' => $clientform->id])}}"
+                               href="{{route('directorApproval.create', ['id' => $clientForm->id])}}"
                                role="button">
                                 <i class="fas fa-eye"></i> Рассмотреть
                             </a>

@@ -59,15 +59,17 @@ class OrgUnitParamController extends Controller
         //Если добавление
         if(empty($request->dataId))
         {
-            $dataType = "";
-            if($request->dataType == 'number')
-                $dataType = 'number';
-            else if ($request->dataType == 'date')
-                $dataType = 'date';
-            else $dataType = 'string';
-            OrgUnitParam::create([  'name' => $request->name, 
-                                    'slug' => $request->slug, 
-                                    'dataType' => $dataType ]);
+            $dataTypeValue = "";
+            if($request->data_type == 'number')
+                $dataTypeValue = 'number';
+            else if ($request->data_type == 'date')
+                $dataTypeValue = 'date';
+            else $dataTypeValue = 'string';
+            OrgUnitParam::create([
+                'name' => $request->name,
+                'slug' => $request->slug,
+                'data_type' => $dataTypeValue,
+                ]);
             $msg = 'Элемент успешно создан.';
         }
         else

@@ -27,10 +27,10 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'FIO' => $this->faker->name(),
-            'orgunit_id' => OrgUnit::where('hasDictionaries', false)->first()->id,
+            'full_name' => $this->faker->name(),
+            'org_unit_id' => OrgUnit::where(['has_dictionaries' => false])->first()->id,
             'blocked' => false,
-            'needChangePassword' => false,
+            'need_change_password' => false,
             'username' => $this->faker->name(),
             'password' => Hash::make(self::DEFAULT_PASSWORD),
             'remember_token' => Str::random(10),

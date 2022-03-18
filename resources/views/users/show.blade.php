@@ -78,7 +78,7 @@
             <div class="tab-pane active" id="tabs-1" role="tabpanel">
                 <h5>Сведения: </h5><br>
                 <p>Логин: {{$user->username}}</p>
-                <p>ФИО сотрудника: {{$user->FIO}}</p>
+                <p>ФИО сотрудника: {{$user->full_name}}</p>
                 <p>Статус:
                     @if ($user->blocked)
                         <span class="badge bg-danger">ЗАБЛОКИРОВАН</span>
@@ -86,11 +86,11 @@
                         <span class="badge bg-success">Активен</span>
                     @endif
                 </p>
-                <p>Подразделение: {{$user->OrgUnit->orgUnitCode}}</p>
+                <p>Подразделение: {{$user->orgUnit->org_unit_code}}</p>
 
                 @perm('manage-users')
                 <p>Необходимость смены пароля:
-                    @if($user->needChangePassword)
+                    @if($user->need_change_password)
                         Да
                     @else
                         Нет

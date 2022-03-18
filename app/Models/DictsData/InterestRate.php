@@ -2,6 +2,7 @@
 
 namespace App\Models\DictsData;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +10,15 @@ use Illuminate\Database\Eloquent\Model;
  * Процентная ставка
  *
  * @property int $id
- * @property float $percentValue
+ * @property float $percent_value
+ *
+ * @method static Builder|InterestRate newModelQuery()
+ * @method static Builder|InterestRate newQuery()
+ * @method static Builder|InterestRate query()
+ * @method static Builder|InterestRate whereId($value)
+ * @method static Builder|InterestRate wherePercentValue($value)
+ *
+ * @mixin \Eloquent
  */
 class InterestRate extends Model
 {
@@ -25,6 +34,6 @@ class InterestRate extends Model
      * @var string[]
      */
     protected $guarded = [
-        'percentValue',
+        'percent_value',
     ];
 }

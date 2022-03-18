@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,14 +16,28 @@ use Illuminate\Support\Collection;
  * @property string $surname
  * @property string $name
  * @property string|null $patronymic
- * @property string $birthDate
- * @property int|null $orgunit_id
+ * @property string $birth_date
+ * @property int|null $org_unit_id
  *
  * @property-read string $fullName
  * @property-read string $text
+ * @property-read Collection|Loan[] $loans
+ * @property-read Collection|ClientForm[] $clientForms
+ * @property-read int|null $client_forms_count
+ * @property-read int|null $loans_count
+ * @property-read OrgUnit|null $orgUnit
  *
- * @property-read Collection|Loan[] $Loans
- * @property-read Collection|ClientForm[] $ClientForms
+ * @method static Builder|Client newModelQuery()
+ * @method static Builder|Client newQuery()
+ * @method static Builder|Client query()
+ * @method static Builder|Client whereBirthDate($value)
+ * @method static Builder|Client whereId($value)
+ * @method static Builder|Client whereName($value)
+ * @method static Builder|Client whereOrgUnitId($value)
+ * @method static Builder|Client wherePatronymic($value)
+ * @method static Builder|Client whereSurname($value)
+ *
+ * @mixin \Eloquent
  */
 class Client extends Model
 {
@@ -56,9 +71,9 @@ class Client extends Model
      *
      * @return BelongsTo
      */
-    public function OrgUnit(): BelongsTo
+    public function orgUnit(): BelongsTo
     {
-        return $this->belongsTo(OrgUnit::class, 'orgunit_id', 'id');
+        return $this->belongsTo(OrgUnit::class, 'org_unit_id', 'id');
     }
 
     /**
@@ -66,7 +81,7 @@ class Client extends Model
      *
      * @return HasMany
      */
-    public function ClientForms(): HasMany
+    public function clientForms(): HasMany
     {
         return $this->hasMany(ClientForm::class, 'client_id', 'id');
     }
@@ -76,13 +91,13 @@ class Client extends Model
      *
      * @return HasManyThrough
      */
-    public function Loans(): HasManyThrough
+    public function loans(): HasManyThrough
     {
         return $this->hasManyThrough(
             Loan::class,
             ClientForm::class,
             'client_id',
-            'clientform_id',
+            'client_form_id',
             'id',
             'id'
         );
@@ -95,18 +110,19 @@ class Client extends Model
      */
     public function getTextAttribute(): string
     {
-        $lastClientForm = $this->ClientForms->last();
+        /** @var ClientForm $lastClientForm */
+        $lastClientForm = $this->clientForms->last();
 
         $result = $this->surname . " " . $this->name . " " . $this->patronymic . " ("
-            . date(config('app.date_format', 'd-m-Y'), strtotime($this->birthDate))
+            . date(config('app.date_format', 'd-m-Y'), strtotime($this->birth_date))
             . ") Паспорт: ";
 
         if ($lastClientForm) {
-            $result = $result . $lastClientForm->Passport->passportSeries . " "
-                . $lastClientForm->Passport->passportNumber . " от "
+            $result = $result . $lastClientForm->passport->passport_series . " "
+                . $lastClientForm->passport->passport_number . " от "
                 . date(
                     config('app.date_format', 'd-m-Y'),
-                    strtotime($lastClientForm->Passport->passportDateIssue)
+                    strtotime($lastClientForm->passport->passport_date_issue)
                 );
         } else {
             $result = $result . "Не указан";

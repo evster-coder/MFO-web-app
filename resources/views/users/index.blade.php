@@ -69,13 +69,13 @@
                 <th class="sorting"
                     scope="col"
                     data-sorting-type="asc"
-                    data-column-name="FIO">
+                    data-column-name="full_name">
                     ФИО <span id="icon-FIO"></span>
                 </th>
                 <th class="sorting"
                     scope="col"
                     data-sorting-type="asc"
-                    data-column-name="orgunits.orgUnitCode">
+                    data-column-name="org_units.org_unit_code">
                     Подразделение <span id="icon-orgunit"></span>
                 </th>
                 <th class="sorting"

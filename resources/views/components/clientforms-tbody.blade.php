@@ -1,4 +1,4 @@
-@if($clientforms->total() == 0)
+@if($clientForms->total() == 0)
     <tr>
         <td colspan="5">
             Ничего не найдено...
@@ -6,32 +6,32 @@
     </tr>
 @endif
 
-@foreach($clientforms as $clientform)
+@foreach($clientForms as $clientForm)
     <tr>
-        <td>{{$clientform->id}}</td>
-        <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientform->loanDate))}}</td>
-        <td>{{$clientform->Client->surname}} {{$clientform->Client->name}} {{$clientform->client->patronymic}}
-            ({{date(config('app.date_format', 'd-m-Y'), strtotime($clientform->client->birthDate))}})
+        <td>{{$clientForm->id}}</td>
+        <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientForm->loan_date))}}</td>
+        <td>{{$clientForm->client->surname}} {{$clientForm->client->name}} {{$clientForm->client->patronymic}}
+            ({{date(config('app.date_format', 'd-m-Y'), strtotime($clientForm->client->birth_date))}})
         </td>
-        <td>{{$clientform->status}}</td>
+        <td>{{$clientForm->status}}</td>
         <td>
             <div class="d-flex manage-btns">
                 <a class="btn btn-success"
-                   href="{{route('clientform.show', $clientform->id)}}"
+                   href="{{route('clientForm.show', $clientForm->id)}}"
                    role="button">
                     <i class="fas fa-eye"></i>
                 </a>
 
                 @perm('edit-clientform')
                 <a class="btn btn-info"
-                   href="{{route('clientform.edit', $clientform->id)}}"
+                   href="{{route('clientForm.edit', $clientForm->id)}}"
                    role="button">
                     <i class="fas fa-edit"></i>
                 </a>
                 @endperm
 
                 @perm('delete-clientform')
-                <form method="POST" action="{{route('clientform.destroy', $clientform->id)}}">
+                <form method="POST" action="{{route('clientForm.destroy', $clientForm->id)}}">
                     @method('DELETE')
                     @csrf
                     <button class="btn btn-danger"
@@ -50,8 +50,8 @@
 <tr class="pagination-tr">
     <td colspan="6" align="center">
         <p class="pagination-p">
-            Текущая страница {{$clientforms->currentPage()}} из {{$clientforms->lastPage()}}
+            Текущая страница {{$clientForms->currentPage()}} из {{$clientForms->lastPage()}}
         </p>
-        {{ $clientforms->links('pagination::bootstrap-4') }}
+        {{ $clientForms->links('pagination::bootstrap-4') }}
     </td>
 </tr>

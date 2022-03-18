@@ -82,10 +82,10 @@
                                 </div>
 
                                 <div class="form-group edit-fields">
-                                    <label for="dataType">Тип данных</label>
+                                    <label for="data_type">Тип данных</label>
                                     <select class="form-select"
-                                            name="dataType"
-                                            id="dataType"
+                                            name="data_type"
+                                            id="data_type"
                                             type="text">
                                         <option selected value="string">String</option>
                                         <option value="number">Number</option>

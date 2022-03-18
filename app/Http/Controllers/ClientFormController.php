@@ -28,8 +28,8 @@ class ClientFormController extends Controller
      */
     public function index()
     {
-        $clientforms = ClientForm::whereIn('orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('id'))->paginate(20);
-        return view('clientforms.index', ['clientforms' => $clientforms]);
+        $clientForms = ClientForm::whereIn('org_unit_id', OrgUnit::whereDescendantOrSelf(session('orgUnit'))->pluck('id'))->paginate(20);
+        return view('clientforms.index', ['clientForms' => $clientForms]);
     }
 
     //экспорт таблицы в эксель
@@ -38,9 +38,9 @@ class ClientFormController extends Controller
         $now = new DateTime('NOW');
         $filename = 'clientforms' . date_format($now, 'ymd') . '.xlsx';
 
-        //Получить параметры поиска   
+        //Получить параметры поиска
         $id = str_replace(" ", "%", $req->get('id'));
-        $loanDate = str_replace(" ", "%", $req->get('loanDate'));
+        $loanDate = str_replace(" ", "%", $req->get('loan_date'));
         $clientFio = str_replace(" ", "%", $req->get('clientFio'));
         $state = $req->get('state');
 
@@ -50,27 +50,27 @@ class ClientFormController extends Controller
 
     public function getForms(Request $req)
     {
-            //Получить параметры поиска   
+            //Получить параметры поиска
             $id = str_replace(" ", "%", $req->get('id'));
-            $loanDate = str_replace(" ", "%", $req->get('loanDate'));
+            $loanDate = str_replace(" ", "%", $req->get('loan_date'));
             $clientFio = str_replace(" ", "%", $req->get('clientFio'));
             $state = $req->get('state');
 
 
             //фильтрация пагинация
-            $clientforms = ClientForm::whereIn('orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('id'))
+            $clientForms = ClientForm::whereIn('org_unit_id', OrgUnit::whereDescendantOrSelf(session('orgUnit'))->pluck('id'))
                         ->where('client_forms.id', 'like', '%'.$id.'%')
-                                ->where('loanDate', 'like', '%'.$loanDate.'%')
-                                ->whereIn('client_id', 
+                                ->where('loan_date', 'like', '%'.$loanDate.'%')
+                                ->whereIn('client_id',
                                             Client::where(DB::raw('CONCAT_WS(" ", `surname`, `name`, `patronymic`) '),
-                                                         'like', 
+                                                         'like',
                                                 '%'.$clientFio.'%')->pluck('id'));
 
             //фильтрация по статусу
             if($state == 'considered')
             {
                 //получить заявки в рассмотрении
-                $clientforms = $clientforms
+                $clientForms = $clientForms
                         ->leftJoin('director_approvals', 'client_forms.director_approval_id', '=', 'director_approvals.id')
                         ->leftJoin('security_approvals', 'client_forms.security_approval_id', '=', 'security_approvals.id')
                         ->where(function($query){
@@ -90,7 +90,7 @@ class ClientFormController extends Controller
             }
             elseif($state == 'accepted')
             {
-                $clientforms = $clientforms
+                $clientForms = $clientForms
                         ->leftJoin('director_approvals', 'client_forms.director_approval_id', '=', 'director_approvals.id')
                         ->leftJoin('security_approvals', 'client_forms.security_approval_id', '=', 'security_approvals.id')
                         ->where('director_approvals.approval', true)
@@ -100,7 +100,7 @@ class ClientFormController extends Controller
             }
             elseif($state == 'rejected')
             {
-                $clientforms = $clientforms
+                $clientForms = $clientForms
                         ->leftJoin('director_approvals', 'client_forms.director_approval_id', '=', 'director_approvals.id')
                         ->leftJoin('security_approvals', 'client_forms.security_approval_id', '=', 'security_approvals.id')
                         ->where('director_approvals.approval', false)
@@ -110,13 +110,13 @@ class ClientFormController extends Controller
             }
             elseif($state == 'loanSigned')
             {
-                $clientforms = $clientforms->join('loans', 'client_forms.id', 'loans.clientform_id')
+                $clientForms = $clientForms->join('loans', 'client_forms.id', 'loans.client_form_id')
                         ->select('client_forms.*');
             }
 
-            $clientforms = $clientforms->orderBy('loanDate')
+            $clientForms = $clientForms->orderBy('loan_date')
                                        ->paginate(20);
-            return view('components.clientforms-tbody', compact('clientforms'))->render();
+            return view('components.clientforms-tbody', compact('clientForms'))->render();
 
     }
 
@@ -124,9 +124,7 @@ class ClientFormController extends Controller
     {
         if($req->ajax())
         {
-            $clientform = ClientForm::find($id);
-
-            return view('components.clientform-info', compact('clientform'))->render();
+            return view('components.clientform-info', ['clientForm' => ClientForm::find($id)])->render();
         }
     }
 
@@ -137,20 +135,19 @@ class ClientFormController extends Controller
      */
     public function create()
     {
-        $clientform = new ClientForm();
+        $clientForm = new ClientForm();
 
-        $orgunit = OrgUnit::find(session('OrgUnit'))->getDictsOrgUnit();
+        $orgUnit = OrgUnit::find(session('orgUnit'))->getDictsOrgUnit();
 
-        $clients = Client::where('orgunit_id', $orgunit->id)->get();
+        $clients = Client::where('org_unit_id', $orgUnit->id)->get();
 
-        $maritalstatuses = MaritalStatus::all();
+        $maritalStatuses = MaritalStatus::all();
         $seniorities = Seniority::all();
 
-
         return view('clientforms.create',
-            ['clientform' => $clientform,
+            ['clientForm' => $clientForm,
             'clients' => $clients,
-            'maritalstatuses' => $maritalstatuses,
+            'maritalStatuses' => $maritalStatuses,
             'seniorities' => $seniorities,
         ]);
     }
@@ -158,35 +155,36 @@ class ClientFormController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param ClientFormRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(ClientFormRequest $request)
     {
-        $clientform = new ClientForm($request->all());
-        $clientform->orgunit_id = session('OrgUnit');
-        $clientform->user_id = Auth::user()->id;
-        $clientform->hasCredits = $request->hasCredits;
+        $clientForm = new ClientForm($request->all());
+        $clientForm->org_unit_id = session('orgUnit');
+        $clientForm->user_id = Auth::user()->id;
+        $clientForm->has_credits = $request->get('has_credits');
 
         $curClient = Client::find($request->get('client_id'));
 
         $passport = new Passport();
-        $passport->passportSeries = $request->passportSeries;
-        $passport->passportNumber = $request->passportNumber;
-        $passport->passportIssuedBy = $request->passportIssuedBy;
-        $passport->passportDepartamentCode = $request->passportDepartamentCode;
-        $passport->passportDateIssue = $request->passportDateIssue;
-        $passport->passportBirthplace = $request->passportBirthplace;
+        $passport->passport_series = $request->get('passport_series');
+        $passport->passport_number = $request->get('passport_number');
+        $passport->passport_issued_by = $request->get('passport_issued_by');
+        $passport->passport_department_code = $request->get('passport_department_code');
+        $passport->passport_date_issue = $request->get('passport_date_issue');
+        $passport->passport_birthplace = $request->get('passport_birthplace');
 
-        if($curClient->ClientForms->count())
+        if($curClient->clientForms->count())
         {
-            $oldPassport = $curClient->ClientForms->last()->Passport;
-            if($oldPassport->passportSeries == $passport->passportSeries
-                && $oldPassport->passportNumber == $passport->passportNumber
-                && $oldPassport->passportDateIssue == $passport->passportDateIssue 
-                && $oldPassport->passportIssuedBy == $passport->passportIssuedBy 
-                && $oldPassport->passportDepartamentCode == $passport->passportDepartamentCode
-                && $oldPassport->passportBirthplace == $passport->passportBirthplace)
+            /** @var Passport $oldPassport */
+            $oldPassport = $curClient->clientForms->last()->passport;
+            if($oldPassport->passport_series == $passport->passport_series
+                && $oldPassport->passport_number == $passport->passport_number
+                && $oldPassport->passport_date_issue == $passport->passport_date_issue
+                && $oldPassport->passport_issued_by == $passport->passport_issued_by
+                && $oldPassport->passport_department_code == $passport->passport_department_code
+                && $oldPassport->passport_birthplace == $passport->passport_birthplace)
                 $passport = $oldPassport;
             else
                 $passport->save();
@@ -199,13 +197,11 @@ class ClientFormController extends Controller
         if(!$passport)
             return back()->withErrors(['msg' => 'Ошибка создания паспорта'])->withInput();
 
-        $clientform->passport_id = $passport->id;
+        $clientForm->passport_id = $passport->id;
 
-        $clientform->save();
-
-        if ($clientform)
+        if ($clientForm->save())
         {
-            return redirect()->route('clientform.show', $clientform->id);
+            return redirect()->route('clientForm.show', $clientForm->id);
         }
         else
             return back()->withErrors(['msg' => "Ошибка создания объекта"])->withInput();
@@ -219,9 +215,8 @@ class ClientFormController extends Controller
      */
     public function show($id)
     {
-        $clientform = ClientForm::find($id);
         return view('clientforms.show',
-            ['clientform' => $clientform]);
+            ['clientForm' => ClientForm::find($id)]);
     }
 
     /**
@@ -232,17 +227,17 @@ class ClientFormController extends Controller
      */
     public function edit($id)
     {
-        $editClientform = ClientForm::find($id);
-        $maritalstatuses = MaritalStatus::all();
+        $editClientForm = ClientForm::find($id);
+        $maritalStatuses = MaritalStatus::all();
         $seniorities = Seniority::all();
-        $orgunit = OrgUnit::find(session('OrgUnit'))->getDictsOrgUnit();
+        $orgUnit = OrgUnit::find(session('orgUnit'))->getDictsOrgUnit();
 
-        $clients = Client::where('orgunit_id', $orgunit->id)->get();
+        $clients = Client::where('org_unit_id', $orgUnit->id)->get();
 
         return view('clientforms.create',
-            ['clientform' => $editClientform,
+            ['clientForm' => $editClientForm,
             'clients' => $clients,
-            'maritalstatuses' => $maritalstatuses,
+            'maritalStatuses' => $maritalStatuses,
             'seniorities' => $seniorities,
         ]
         );
@@ -251,36 +246,36 @@ class ClientFormController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param ClientFormRequest $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(ClientFormRequest $request, $id)
     {
-        $clientform = ClientForm::find($id);
+        $clientForm = ClientForm::find($id);
 
-        if(empty($clientform))
+        if(empty($clientForm))
             return back()->withErrors(['msg' => "Обновляемый объект не найден"])->withInput();
         $data = $request->all();
 
-        $result = $clientform->fill($data);
-        $result->hasCredits = $request->hasCredits;
+        $result = $clientForm->fill($data);
+        $result->has_credits = $request->get('has_credits');
 
         $passport = new Passport();
-        $passport->passportSeries = $request->passportSeries;
-        $passport->passportNumber = $request->passportNumber;
-        $passport->passportIssuedBy = $request->passportIssuedBy;
-        $passport->passportDepartamentCode = $request->passportDepartamentCode;
-        $passport->passportDateIssue = $request->passportDateIssue;
-        $passport->passportBirthplace = $request->passportBirthplace;
+        $passport->passport_series = $request->passport_series;
+        $passport->passport_number = $request->passport_number;
+        $passport->passport_issued_by = $request->passport_issued_by;
+        $passport->passport_department_code = $request->passport_department_code;
+        $passport->passport_date_issue = $request->passport_date_issue;
+        $passport->passport_birthplace = $request->passport_birthplace;
 
-        $oldPassport = $clientform->Passport;
-        if($oldPassport->passportSeries == $passport->passportSeries
-            && $oldPassport->passportNumber == $passport->passportNumber
-            && $oldPassport->passportDateIssue == $passport->passportDateIssue 
-            && $oldPassport->passportIssuedBy == $passport->passportIssuedBy 
-            && $oldPassport->passportDepartamentCode == $passport->passportDepartamentCode
-            && $oldPassport->passportBirthplace == $passport->passportBirthplace)
+        $oldPassport = $clientForm->passport;
+        if($oldPassport->passport_series == $passport->passport_series
+            && $oldPassport->passport_number == $passport->passport_number
+            && $oldPassport->passport_date_issue == $passport->passport_date_issue
+            && $oldPassport->passport_issued_by == $passport->passport_issued_by
+            && $oldPassport->passport_department_code == $passport->passport_department_code
+            && $oldPassport->passport_birthplace == $passport->passport_birthplace)
             $passport = $oldPassport;
         else
             $passport->save();
@@ -288,13 +283,11 @@ class ClientFormController extends Controller
         if(!$passport)
             return back()->withErrors(['msg' => 'Ошибка обновления паспорта'])->withInput();
 
-        $clientform->passport_id = $passport->id;
+        $clientForm->passport_id = $passport->id;
 
-        $result->save();
-
-        if($result)
+        if($result->save())
         {
-            return redirect()->route('clientform.show', $result->id)
+            return redirect()->route('clientForm.show', $result->id)
                              ->with(['status' => 'Анкета успешно обновлена']);
         }
         else
@@ -317,19 +310,17 @@ class ClientFormController extends Controller
         {
             try{
                 $deletingItem->delete();
-                return redirect()->route('clientform.index')
+                return redirect()->route('clientForm.index')
                         ->with(['status' => 'Заявка успешно удалена']);
             }
             catch (\Illuminate\Database\QueryException $e){
-                return redirect()->route('clientform.show', ['id' => $id])->withErrors(['msg' => 'Невозможно удалить заявку, т.к ней привязан договор займа']);
+                return redirect()->route('clientForm.show', ['id' => $id])->withErrors(['msg' => 'Невозможно удалить заявку, т.к ней привязан договор займа']);
             }
         }
         else
         {
-            return redirect()->route('clientform.index')
+            return redirect()->route('clientForm.index')
                 ->withErrors(['msg' => 'Ошибка удаления в ClientFormController::destroy']);
         }
-
-
     }
 }

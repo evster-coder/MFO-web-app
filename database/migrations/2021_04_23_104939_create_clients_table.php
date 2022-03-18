@@ -18,10 +18,10 @@ class CreateClientsTable extends Migration
             $table->string('surname', 200);
             $table->string('name', 200);
             $table->string('patronymic', 200)->nullable();
-            $table->date('birthDate');
+            $table->date('birth_date');
 
             //подразделение, к которому привязан справочник
-            $table->foreignId('orgunit_id')->nullable()->references('id')->on('orgunits')
+            $table->foreignId('org_unit_id')->nullable()->references('id')->on('org_units')
                             ->onUpdate('set null')
                             ->onDelete('set null');
 

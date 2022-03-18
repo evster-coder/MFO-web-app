@@ -65,22 +65,22 @@
                 <td>Клиент</td>
                 <td>
                     <a target="_blank"
-                       href="{{route('client.show', ['id' => $clientform->client_id])}}">
-                        {{$clientform->Client->surname}}  {{$clientform->Client->name}}  {{$clientform->Client->patronymic}}
+                       href="{{route('client.show', ['id' => $clientForm->client_id])}}">
+                        {{$clientForm->client->surname}}  {{$clientForm->client->name}}  {{$clientForm->client->patronymic}}
                     </a>
                 </td>
             </tr>
             <tr>
                 <td>Дата рождения</td>
-                <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientform->Client->birthDate))}}</td>
+                <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientForm->client->birth_date))}}</td>
             </tr>
             <tr>
                 <td>Мобильный телефон</td>
-                <td>{{$clientform->mobilePhone}}</td>
+                <td>{{$clientForm->mobile_phone}}</td>
             </tr>
             <tr>
                 <td>Домашний телефон</td>
-                <td>{{$clientform->homePhone}}</td>
+                <td>{{$clientForm->home_phone}}</td>
             </tr>
             </tbody>
         </table>
@@ -91,35 +91,35 @@
             <tbody>
             <tr>
                 <td>Серия</td>
-                <td>{{$clientform->Passport->passportSeries}}</td>
+                <td>{{$clientForm->passport->passport_series}}</td>
             </tr>
             <tr>
                 <td>Номер</td>
-                <td>{{$clientform->Passport->passportNumber}}</td>
+                <td>{{$clientForm->passport->passport_number}}</td>
             </tr>
             <tr>
                 <td>Дата выдачи</td>
-                <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientform->Passport->passportDateIssue))}}</td>
+                <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientForm->passport->passport_date_issue))}}</td>
             </tr>
             <tr>
                 <td>Кем выдан</td>
-                <td>{{$clientform->Passport->passportIssuedBy}}</td>
+                <td>{{$clientForm->passport->passport_issued_by}}</td>
             </tr>
             <tr>
                 <td>Код подразделения</td>
-                <td>{{$clientform->passportDepartamentCode}}</td>
+                <td>{{$clientForm->passport_department_code}}</td>
             </tr>
             <tr>
                 <td>Место рождения</td>
-                <td>{{$clientform->Passport->passportBirthplace}}</td>
+                <td>{{$clientForm->passport->passport_birthplace}}</td>
             </tr>
             <tr>
                 <td>СНИЛС</td>
-                <td>{{$clientform->snils}}</td>
+                <td>{{$clientForm->snils}}</td>
             </tr>
             <tr>
                 <td>Пенсионное удостоверение №</td>
-                <td>{{$clientform->pensionerId}}</td>
+                <td>{{$clientForm->pensioner_id}}</td>
             </tr>
             </tbody>
         </table>
@@ -131,11 +131,11 @@
             <tbody>
             <tr>
                 <td>По паспорту</td>
-                <td>{{$clientform->passportResidenceAddress}}</td>
+                <td>{{$clientForm->passport_residence_address}}</td>
             </tr>
             <tr>
                 <td>Фактически</td>
-                <td>{{$clientform->actualResidenceAddress}}</td>
+                <td>{{$clientForm->actual_residence_address}}</td>
             </tr>
             </tbody>
         </table>
@@ -147,11 +147,11 @@
             <tbody>
             <tr>
                 <td>Семейное положение</td>
-                <td>{{$clientform->MaritalStatus->name}}</td>
+                <td>{{$clientForm->maritalStatus->name}}</td>
             </tr>
             <tr>
                 <td>Количество детей</td>
-                <td>{{$clientform->numberOfDependents}}</td>
+                <td>{{$clientForm->number_of_dependents}}</td>
             </tr>
             </tbody>
         </table>
@@ -163,29 +163,29 @@
             <tbody>
             <tr>
                 <td>Наименование организации</td>
-                <td>{{$clientform->workPlaceName}}</td>
+                <td>{{$clientForm->work_place_name}}</td>
             </tr>
             <tr>
                 <td>Адрес работы</td>
-                <td>{{$clientform->workPlaceAddress}}</td>
+                <td>{{$clientForm->work_place_address}}</td>
             </tr>
             <tr>
                 <td>Должность</td>
-                <td>{{$clientform->workPlacePosition}}</td>
+                <td>{{$clientForm->work_place_position}}</td>
             </tr>
             <tr>
                 <td>Рабочий телефон</td>
-                <td> {{$clientform->workPlacePhone}}</td>
+                <td> {{$clientForm->work_place_phone}}</td>
             </tr>
 
             <tr>
                 <td>Постоянный доход</td>
-                <td>{{$clientform->constainIncome}} руб.</td>
+                <td>{{$clientForm->constain_income}} руб.</td>
             </tr>
 
             <tr>
                 <td>Дополнительный доход</td>
-                <td>{{$clientform->additionalIncome}} руб.</td>
+                <td>{{$clientForm->additional_income}} руб.</td>
             </tr>
             </tbody>
         </table>
@@ -197,34 +197,35 @@
             <tbody>
             <tr>
                 <td>Сумма займа</td>
-                <td>{{$clientform->loanCost}} руб.</td>
+                <td>{{$clientForm->loan_cost}} руб.</td>
             </tr>
             <tr>
                 <td>Процентная ставка</td>
-                <td>{{$clientform->interestRate}} %</td>
+                <td>{{$clientForm->interest_rate}} %</td>
             </tr>
             <tr>
                 <td>Срок займа</td>
-                <td>{{$clientform->loanTerm}} дней</td>
+                <td>{{$clientForm->loan_term}} дней</td>
             </tr>
             <tr>
                 <td>Дата оформления</td>
-                <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientform->loanDate))}}</td>
+                <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientForm->loan_date))}}</td>
             </tr>
             <tr>
                 <td>Предполагаемая дата погашения</td>
-                <td>{{date(config('app.date_format', 'd-m-Y'), strtotime("+". $clientform->loanTerm ."days", strtotime($clientform->loanDate)))}}</td>
+                <td>{{date(config('app.date_format', 'd-m-Y'),
+                    strtotime("+". $clientForm->loan_term ."days", strtotime($clientForm->loan_date)))}}</td>
             </tr>
             <tr>
                 <td>Имеются ли действующие кредиты, займы:</td>
                 <td>
-                    {{$clientform->hasCredits ? 'Да' : 'Нет'}}
+                    {{$clientForm->has_credits ? 'Да' : 'Нет'}}
                 </td>
             </tr>
             <tr>
                 <td>Ежемесячный платеж:</td>
-                <td>@if($clientform->monthlyPayment)
-                        {{$clientform->monthlyPayment}} руб.
+                <td>@if($clientForm->monthly_payment)
+                        {{$clientForm->monthly_payment}} руб.
                     @else
                         -
                     @endif
@@ -241,7 +242,7 @@
             <tr>
                 <td>Наличие банкротства</td>
                 <td>
-                    @if($clientform->isBankrupt)
+                    @if($clientForm->is_bankrupt)
                         да
                     @else
                         нет
@@ -250,7 +251,7 @@
             </tr>
             <tr>
                 <td>Комментарий кассира</td>
-                <td>{{$clientform->cashierComment}}</td>
+                <td>{{$clientForm->cashier_comment}}</td>
             </tr>
             </tbody>
         </table>

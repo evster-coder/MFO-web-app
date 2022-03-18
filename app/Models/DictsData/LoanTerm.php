@@ -2,6 +2,8 @@
 
 namespace App\Models\DictsData;
 
+use Barryvdh\LaravelIdeHelper\Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +11,15 @@ use Illuminate\Database\Eloquent\Model;
  * Срок займа
  *
  * @property int $id
- * @property int $daysAmount
+ * @property int $days_amount
+ *
+ * @method static Builder|LoanTerm newModelQuery()
+ * @method static Builder|LoanTerm newQuery()
+ * @method static Builder|LoanTerm query()
+ * @method static Builder|LoanTerm whereDaysAmount($value)
+ * @method static Builder|LoanTerm whereId($value)
+ *
+ * @mixin \Eloquent
  */
 class LoanTerm extends Model
 {
@@ -25,6 +35,6 @@ class LoanTerm extends Model
      * @var string[]
      */
     protected $fillable = [
-        'daysAmount',
+        'days_amount',
     ];
 }

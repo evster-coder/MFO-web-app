@@ -14,41 +14,40 @@ class OrgUnitTableSeeder extends Seeder
      */
     public function run()
     {
-        $orgunit1 = OrgUnit::create([
-            'orgUnitCode' => "OU-10",
-            'hasDictionaries' => true,
+        $orgUnitRoot = OrgUnit::create([
+            'org_unit_code' => "OU-10",
+            'has_dictionaries' => true,
         ]);
 
 
-        $orgunit2 = new OrgUnit();
+        $orgUnit2 = new OrgUnit();
 
-        $orgunit2->orgUnitCode = "OU-12";
-        $orgunit2->hasDictionaries = true;
+        $orgUnit2->org_unit_code = "OU-12";
+        $orgUnit2->has_dictionaries = true;
 
-        $orgunit2->appendToNode($orgunit1)->save();
-
-
-        $orgunit3 = new OrgUnit();
-
-        $orgunit3->orgUnitCode = "OU-14";
-        $orgunit3->hasDictionaries = true;
-
-        $orgunit3->appendToNode($orgunit1)->save();
+        $orgUnit2->appendToNode($orgUnitRoot)->save();
 
 
-        $orgunit4 = new OrgUnit();
+        $orgUnit3 = new OrgUnit();
 
-        $orgunit4->orgUnitCode = "S-121";
-        $orgunit4->hasDictionaries = true;
+        $orgUnit3->org_unit_code = "OU-14";
+        $orgUnit3->has_dictionaries = true;
 
-        $orgunit4->appendToNode($orgunit2)->save();
+        $orgUnit3->appendToNode($orgUnitRoot)->save();
 
 
-        $orgunit5 = new OrgUnit();
+        $orgUnit4 = new OrgUnit();
 
-        $orgunit5->orgUnitCode = "G-1";
-        $orgunit5->hasDictionaries = false;
-        $orgunit4->appendNode($orgunit5);
+        $orgUnit4->org_unit_code = "S-121";
+        $orgUnit4->has_dictionaries = true;
 
+        $orgUnit4->appendToNode($orgUnit2)->save();
+
+
+        $orgUnit5 = new OrgUnit();
+
+        $orgUnit5->org_unit_code = "G-1";
+        $orgUnit5->has_dictionaries = false;
+        $orgUnit4->appendNode($orgUnit5);
     }
 }

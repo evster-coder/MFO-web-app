@@ -17,46 +17,46 @@ class MaxOverpaymentsSeeder extends Seeder
     {
         $items = [
             [
-                'dateFrom' => null,
-                'dateTo' => Carbon::parse('2016-03-28'),
+                'date_from' => null,
+                'date_to' => Carbon::parse('2016-03-28'),
                 'multiplicity' => '999',
             ],
 
             [
-                'dateFrom' => Carbon::parse('2016-03-29'),
-                'dateTo' => Carbon::parse('2016-12-31'),
+                'date_from' => Carbon::parse('2016-03-29'),
+                'date_to' => Carbon::parse('2016-12-31'),
                 'multiplicity' => '4',
             ],
 
             [
-                'dateFrom' => Carbon::parse('2017-01-01'),
-                'dateTo' => Carbon::parse('2019-01-27'),
+                'date_from' => Carbon::parse('2017-01-01'),
+                'date_to' => Carbon::parse('2019-01-27'),
                 'multiplicity' => '3',
             ],
 
             [
-                'dateFrom' => Carbon::parse('2019-01-28'),
-                'dateTo' => Carbon::parse('2019-06-30'),
+                'date_from' => Carbon::parse('2019-01-28'),
+                'date_to' => Carbon::parse('2019-06-30'),
                 'multiplicity' => '2.5',
             ],
 
             [
-                'dateFrom' => Carbon::parse('2019-07-01'),
-                'dateTo' => Carbon::parse('2019-12-31'),
+                'date_from' => Carbon::parse('2019-07-01'),
+                'date_to' => Carbon::parse('2019-12-31'),
                 'multiplicity' => '2',
             ],
 
             [
-                'dateFrom' => Carbon::parse('2020-01-01'),
-                'dateTo' => null,
+                'date_from' => Carbon::parse('2020-01-01'),
+                'date_to' => null,
                 'multiplicity' => '1.5',
             ],
         ];
 
         foreach ($items as $item) {
             MaxOverpayment::create([
-                'dateFrom' => $item['dateFrom'],
-                'dateTo' => $item['dateTo'],
+                'date_from' => $item['date_from'],
+                'date_to' => $item['date_to'],
                 'multiplicity' => $item['multiplicity'],
             ]);
         }

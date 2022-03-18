@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\OrgUnit;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class OrgUnitFactory extends Factory
 {
@@ -25,9 +24,9 @@ class OrgUnitFactory extends Factory
     public function definition(): array
     {
         return [
-            'orgUnitCode' => self::DEFAULT_PREFIX . $this->faker->numberBetween(1, 100),
-            'hasDictionaries' => false,
-            'parent_id' => OrgUnit::where(['hasDictionaries' => true])->first()->id,
+            'org_unit_code' => self::DEFAULT_PREFIX . $this->faker->numberBetween(1, 100),
+            'has_dictionaries' => false,
+            'parent_id' => OrgUnit::where(['has_dictionaries' => true])->first()->id,
         ];
     }
 }

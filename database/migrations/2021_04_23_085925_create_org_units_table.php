@@ -13,13 +13,10 @@ class CreateOrgUnitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('orgunits', function (Blueprint $table) {
+        Schema::create('org_units', function (Blueprint $table) {
             $table->id();
-
-            $table->string('orgUnitCode', 250);
-
-            $table->boolean('hasDictionaries');
-
+            $table->string('org_unit_code', 250);
+            $table->boolean('has_dictionaries');
             $table->nestedSet();
         });
     }
@@ -31,6 +28,6 @@ class CreateOrgUnitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orgunits');
+        Schema::dropIfExists('org_units');
     }
 }

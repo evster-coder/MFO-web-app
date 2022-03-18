@@ -9,7 +9,7 @@
 @foreach($rates as $rate)
     <tr>
         <td>
-            {{$rate->percentValue}}
+            {{$rate->percent_value}}
         </td>
         <td>
             <div class="d-flex manage-btns">

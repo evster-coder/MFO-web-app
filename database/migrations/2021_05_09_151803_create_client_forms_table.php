@@ -20,7 +20,7 @@ class CreateClientFormsTable extends Migration
                     ->onUpdate('restrict')
                     ->onDelete('restrict');
 
-            $table->foreignId('orgunit_id')->references('id')->on('orgunits')
+            $table->foreignId('org_unit_id')->references('id')->on('org_units')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
 
@@ -41,26 +41,26 @@ class CreateClientFormsTable extends Migration
                     ->onUpdate('set null')
                     ->onDelete('set null');
 
-            $table->decimal('interestRate', 10, 2);
-            $table->decimal('loanCost', 10, 2);
-            $table->date('loanDate');
-            $table->integer('loanTerm');
-            $table->decimal('monthlyPayment', 10, 2)->nullable();
+            $table->decimal('interest_rate', 10, 2);
+            $table->decimal('loan_cost', 10, 2);
+            $table->date('loan_date');
+            $table->integer('loan_term');
+            $table->decimal('monthly_payment', 10, 2)->nullable();
 
-            $table->boolean('isBankrupt');
-            $table->boolean('hasCredits');
+            $table->boolean('is_bankrupt');
+            $table->boolean('has_credits');
 
-            $table->text('cashierComment')->nullable();
+            $table->text('cashier_comment')->nullable();
 
-            $table->string('mobilePhone', 100)->nullable();
-            $table->string('homePhone', 100)->nullable();
+            $table->string('mobile_phone', 100)->nullable();
+            $table->string('home_phone', 100)->nullable();
             $table->string('snils', 100)->nullable();
-            $table->string('pensionerId', 50)->nullable();
-            $table->string('actualResidenceAddress', 500);
-            $table->string('passportResidenceAddress', 500);
-            $table->integer('numberOfDependents')->nullable();
+            $table->string('pensioner_id', 50)->nullable();
+            $table->string('actual_residence_address', 500);
+            $table->string('passport_residence_address', 500);
+            $table->integer('number_of_dependents')->nullable();
 
-            $table->foreignId('maritalstatus_id')->nullable()->references('id')->on('marital_statuses')
+            $table->foreignId('marital_status_id')->nullable()->references('id')->on('marital_statuses')
                     ->onUpdate('set null')
                     ->onDelete('set null');
 
@@ -72,13 +72,13 @@ class CreateClientFormsTable extends Migration
                     ->onUpdate('restrict')
                     ->onDelete('restrict');
 
-            $table->string('workPlaceName', 200);
-            $table->string('workPlaceAddress', 500)->nullable();
-            $table->string('workPlacePosition', 100)->nullable();
-            $table->string('workPlacePhone', 100)->nullable();
+            $table->string('work_place_name', 200);
+            $table->string('work_place_address', 500)->nullable();
+            $table->string('work_place_position', 100)->nullable();
+            $table->string('work_place_phone', 100)->nullable();
 
-            $table->decimal('constainIncome', 15, 2);
-            $table->decimal('additionalIncome', 15, 2);
+            $table->decimal('constain_income', 15);
+            $table->decimal('additional_income', 15);
 
         });
     }

@@ -8,10 +8,10 @@
 
 @foreach($loans as $loan)
     <tr>
-        <td>{{$loan->loanNumber}}</td>
-        <td>{{$loan->loanConclusionDate}}</td>
-        <td>{{$loan->ClientForm->Client->fullName}}</td>
-        <td>{{$loan->statusOpen ? 'Открыт' : 'Закрыт'}}</td>
+        <td>{{$loan->loan_number}}</td>
+        <td>{{$loan->loan_conclusion_date}}</td>
+        <td>{{$loan->clientForm->client->fullName}}</td>
+        <td>{{$loan->status_open ? 'Открыт' : 'Закрыт'}}</td>
         <td>
             <div class="d-flex manage-btns">
                 <a class="btn btn-success"

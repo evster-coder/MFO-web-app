@@ -6,7 +6,7 @@
         Сменить подразделение
     </button>
     <p>
-        Текущее : {{ session('OrgUnitCode') }}
+        Текущее : {{ session('orgUnitCode') }}
     </p>
 </div>
 
@@ -50,8 +50,8 @@
                                             <input type="radio"
                                                    name="orgUnit"
                                                    value="{{ $item->id }}"
-                                                   @if (session('OrgUnit') == $item->id) checked @endif >
-                                                {{ $item->orgUnitCode }}
+                                                   @if (session('orgUnit') == $item->id) checked @endif >
+                                                {{ $item->org_unit_code }}
                                             </span>
                                 </label>
 

@@ -15,8 +15,8 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->datetime('paymentDate');
-            $table->decimal('paymentSum', 10, 2);
+            $table->datetime('payment_date');
+            $table->decimal('payment_sum', 10, 2);
             $table->foreignId('loan_id')->references('id')
                     ->on('loans')
                     ->onUpdate('restrict')
@@ -26,8 +26,8 @@ class CreatePaymentsTable extends Migration
                     ->on('users')
                     ->onUpdate('restrict')
                     ->onDelete('restrict');
-            $table->foreignId('orgunit_id')->references('id')
-                    ->on('orgunits')
+            $table->foreignId('org_unit_id')->references('id')
+                    ->on('org_units')
                     ->onUpdate('restrict')
                     ->onDelete('restrict');
         });

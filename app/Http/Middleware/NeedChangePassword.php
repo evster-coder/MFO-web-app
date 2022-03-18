@@ -16,7 +16,7 @@ class NeedChangePassword
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user()->needChangePassword)
+        if(auth()->user()->need_change_password)
         {
             return redirect()->route('auth.change-password');
         }

@@ -56,7 +56,7 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 	    if(Auth::user()->hasRole('admin'))
 	    	return redirect()->route('user.index');
 	    elseif(Auth::user()->hasRole('cashier'))
-	    	return redirect()->route('clientform.index');
+	    	return redirect()->route('clientForm.index');
 	    elseif(Auth::user()->hasRole('security'))
 	    	return redirect()->route('securityApproval.tasks');
 	    elseif(Auth::user()->hasRole('director'))
@@ -66,40 +66,40 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 
 
 	Route::group(['middleware' => 'perm:view-clientforms'], function(){
-		Route::get('/clientforms/export-excel', [ClientFormController::class, 'export'])->name('clientform.export');
+		Route::get('/client-forms/export-excel', [ClientFormController::class, 'export'])->name('clientForm.export');
 
-		Route::group(['middleware' => 'perm:create-clientform'], function(){
-			Route::get('/clientform/create', [ClientFormController::class, 'create'])
-										->name('clientform.create');
-			Route::post('/clientform', [ClientFormController::class, 'store'])
-										->name('clientform.store');
+		Route::group(['middleware' => 'perm:create-client-form'], function(){
+			Route::get('/client-form/create', [ClientFormController::class, 'create'])
+										->name('clientForm.create');
+			Route::post('/client-form', [ClientFormController::class, 'store'])
+										->name('clientForm.store');
 		});
 
 		Route::group(['middleware' => 'perm:edit-clientform'], function(){
-			Route::get('/clientform/{id}/edit', [ClientFormController::class, 'edit'])
-										->name('clientform.edit');
-			Route::put('/clientform/{id}', [ClientFormController::class, 'update'])
-										->name('clientform.update');
+			Route::get('/client-form/{id}/edit', [ClientFormController::class, 'edit'])
+										->name('clientForm.edit');
+			Route::put('/client-form/{id}', [ClientFormController::class, 'update'])
+										->name('clientForm.update');
 		});
 
 		Route::group(['middleware' => 'perm:delete-clientform'], function(){
-			Route::delete('/clientform/{id}', [ClientFormController::class, 'destroy'])
-										->name('clientform.destroy');
+			Route::delete('/client-form/{id}', [ClientFormController::class, 'destroy'])
+										->name('clientForm.destroy');
 		});
 
-		Route::get('/clientform', [ClientFormController::class, 'index'])
-										->name('clientform.index');
-		Route::get('/clientform/{id}', [ClientFormController::class, 'show'])
-										->name('clientform.show');
-		Route::get('/clientforms/get-clientforms', [ClientFormController::class, 'getForms'])
-										->name('clientform.list');
+		Route::get('/client-form', [ClientFormController::class, 'index'])
+										->name('clientForm.index');
+		Route::get('/client-form/{id}', [ClientFormController::class, 'show'])
+										->name('clientForm.show');
+		Route::get('/client-forms/get-client-forms', [ClientFormController::class, 'getForms'])
+										->name('clientForm.list');
 	});
 
-	Route::get('/clientform-data/{id}', [ClientFormController::class, 'getForm'])
+	Route::get('/client-form-data/{id}', [ClientFormController::class, 'getForm'])
 									->name('client.get-data');
 
-	Route::get('/client-clientforms/{id}', [ClientController::class, 'getClientForms'])
-									->name('client.get-clientforms');
+	Route::get('/client-client-forms/{id}', [ClientController::class, 'getClientForms'])
+									->name('client.get-clientForms');
 
 	Route::get('/client-loans/{id}', [ClientController::class, 'getLoans'])
 									->name('client.get-loans');
@@ -296,7 +296,7 @@ Route::group(['middleware' => ['auth', 'notBanned']], function() {
 	});
 
 	Route::group(['middleware' => 'perm:manage-datadicts'], function(){
-		//interestRate routes
+		//interest_rate routes
 		Route::get('/interestrate', [InterestRateController::class, 'index'])
 										->name('interestrate.index');
 		Route::post('/interestrate', [InterestRateController::class, 'store'])

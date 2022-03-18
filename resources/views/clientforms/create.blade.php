@@ -1,7 +1,7 @@
 @extends('layouts.user')
 
 @section('title')
-    @if($clientform->exists)
+    @if($clientForm->exists)
         Редактирование заявки на выдачу займа
     @else
         Создание заявки на выдачу займа
@@ -15,7 +15,7 @@
 
 @section('content')
     <h1>
-        @if($clientform->exists)
+        @if($clientForm->exists)
             Редактирование заявки на выдачу займа
         @else
             Создание заявки на выдачу займа
@@ -26,10 +26,10 @@
         <x-auth-session-status class="mb-4" :status="session('status')"/>
         <x-auth-validation-errors class="mb-4" :errors="$errors"/>
 
-        <form action="{{$clientform->exists ?
-                            route('clientform.update', ['id' => $clientform->id]) : route('clientform.store')}}"
+        <form action="{{$clientForm->exists ?
+                            route('clientForm.update', ['id' => $clientForm->id]) : route('clientForm.store')}}"
               method="POST">
-            @if($clientform->exists)
+            @if($clientForm->exists)
                 @method('PUT')
             @else
                 @method('POST')
@@ -39,7 +39,7 @@
                 <button class="btn btn-success"
                         type="submit"
                         id="saveClientform">
-                    @if($clientform->exists)
+                    @if($clientForm->exists)
                         Обновить
                     @else
                         Создать
@@ -54,14 +54,14 @@
             <div class="block-section">
                 <h4>Клиент</h4>
                 <div class="form-group edit-fields">
-                    <label for="orgunit_id">Клиент</label>
+                    <label for="client_id">Клиент</label>
                     <select2 class="form-group"
                              required
                              data-width="100%"
                              :options="{{$clients}}"
                              name="client_id"
                              id="client_id"
-                             value="{{old('client_id', $clientform->client_id)}}">
+                             value="{{old('client_id', $clientForm->client_id)}}">
                     </select2>
                     <div class="wrapper" id="wrp" style="display: none;">
                         <a class="btn btn-link"
@@ -92,7 +92,7 @@
                         <input class="form-control"
                                disabled
                                type="date"
-                               id="clientBirthDate"
+                               id="clientBirth_date"
                                placeholder="Дата рождения">
                     </div>
                 </div>
@@ -101,19 +101,19 @@
                         <label>Мобильный телефон</label>
                         <input class="form-control"
                                type="text"
-                               name="mobilePhone"
-                               id="mobilePhone"
+                               name="mobile_phone"
+                               id="mobile_phone"
                                placeholder="Введите мобильный телефон"
-                               value="{{old('mobilePhone', $clientform->mobilePhone)}}">
+                               value="{{old('mobile_phone', $clientForm->mobile_phone)}}">
                     </div>
                     <div class="col">
                         <label>Домашний телефон</label>
                         <input class="form-control"
                                type="text"
-                               name="homePhone"
-                               id="homePhone"
+                               name="home_phone"
+                               id="home_phone"
                                placeholder="Введите домашний телефон"
-                               value="{{old('homePhone', $clientform->homePhone)}}">
+                               value="{{old('home_phone', $clientForm->home_phone)}}">
                     </div>
                 </div>
             </div>
@@ -126,19 +126,20 @@
                         <input class="form-control"
                                required
                                type="text"
-                               name="passportSeries" id="passportSeries"
+                               name="passport_series"
+                               id="passport_series"
                                placeholder="Серия"
-                               value="{{old('passportSeries', $clientform->Passport ?
-                                        $clientform->Passport->passportSeries : null )}}">
+                               value="{{old('passport_series', $clientForm->passport ?
+                                        $clientForm->passport->passport_series : null )}}">
                     </div>
                     <div class="col">
                         <label>Номер</label>
                         <input class="form-control"
                                required
                                type="text"
-                               name="passportNumber" id="passportNumber"
-                               value="{{old('passportNumber', $clientform->Passport ?
-                                        $clientform->Passport->passportNumber : null)}}"
+                               name="passport_number" id="passport_number"
+                               value="{{old('passport_number', $clientForm->passport ?
+                                        $clientForm->passport->passport_number : null)}}"
                                placeholder="Номер">
                     </div>
                     <div class="col">
@@ -146,11 +147,11 @@
                         <input class="form-control"
                                required
                                type="date"
-                               name="passportDateIssue"
-                               id="passportDateIssue"
+                               name="passport_date_issue"
+                               id="passport_date_issue"
                                placeholder="Дата выдачи"
-                               value="{{old('passportDateIssue', $clientform->Passport ?
-                                        $clientform->Passport->passportDateIssue : null)}}">
+                               value="{{old('passport_date_issue', $clientForm->passport ?
+                                        $clientForm->passport->passport_date_issue : null)}}">
                     </div>
                 </div>
 
@@ -158,10 +159,10 @@
                     <label>Кем выдан</label>
                     <textarea class="form-control"
                               required
-                              id="passportIssuedBy"
-                              name="passportIssuedBy">
-                        {{old('passportIssuedBy', $clientform->Passport ?
-                          $clientform->Passport->passportIssuedBy : null)}}
+                              id="passport_issued_by"
+                              name="passport_issued_by">
+                        {{old('passport_issued_by', $clientForm->passport ?
+                          $clientForm->passport->passport_issued_by : null)}}
                     </textarea>
                 </div>
 
@@ -169,20 +170,20 @@
                     <label>Код подразделения</label>
                     <input class="form-control"
                            type="text"
-                           name="passportDepartamentCode"
-                           id="passportDepartamentCode"
-                           value="{{old('passportDepartamentCode', $clientform->Passport ?
-		            			    $clientform->Passport->passportDepartamentCode : null)}}"
+                           name="passport_department_code"
+                           id="passport_department_code"
+                           value="{{old('passport_department_code', $clientForm->passport ?
+		            			    $clientForm->passport->passport_department_code : null)}}"
                            placeholder="Введите код подразделения">
                 </div>
 
                 <div class="form-group edit-fields">
                     <label>Место рождения</label>
                     <textarea class="form-control"
-                              id="passportBirthplace"
-                              name="passportBirthplace">
-                        {{old('passportBirthplace', $clientform->Passport ?
-		            	$clientform->Passport->passportBirthplace : null)}}
+                              id="passport_birthplace"
+                              name="passport_birthplace">
+                        {{old('passport_birthplace', $clientForm->passport ?
+		            	$clientForm->passport->passport_birthplace : null)}}
                     </textarea>
                 </div>
 
@@ -194,15 +195,15 @@
                                name="snils"
                                id="snils"
                                placeholder="Введите СНИЛС"
-                               value="{{old('snils', $clientform->snils)}}">
+                               value="{{old('snils', $clientForm->snils)}}">
                     </div>
                     <div class="col">
                         <label>Пенсионное удостоверение №</label>
                         <input class="form-control"
                                type="text"
-                               name="pensionerId"
-                               id="pensionerId"
-                               value="{{old('pensionerId', $clientform->pensionerId)}}"
+                               name="pensioner_id"
+                               id="pensioner_id"
+                               value="{{old('pensioner_id', $clientForm->pensioner_id)}}"
                                placeholder="Введите пенсионное удостоверение">
                     </div>
                 </div>
@@ -214,9 +215,9 @@
                     <label>По паспорту</label>
                     <textarea class="form-control"
                               required
-                              name="passportResidenceAddress"
-                              id="passportResidenceAddress">
-                        {{old('passportResidenceAddress', $clientform->passportResidenceAddress)}}
+                              name="passport_residence_address"
+                              id="passport_residence_address">
+                        {{old('passport_residence_address', $clientForm->passport_residence_address)}}
                     </textarea>
                 </div>
 
@@ -224,9 +225,9 @@
                     <label>Фактически</label>
                     <textarea class="form-control"
                               required
-                              id="actualResidenceAddress"
-                              name="actualResidenceAddress">
-                        {{old('actualResidenceAddress', $clientform->actualResidenceAddress)}}
+                              id="actual_residence_address"
+                              name="actual_residence_address">
+                        {{old('actual_residence_address', $clientForm->actual_residence_address)}}
                     </textarea>
                 </div>
             </div>
@@ -238,16 +239,16 @@
                         <label>Семейное положение</label>
                         <select class="form-select"
                                 required
-                                name="maritalstatus_id"
-                                id="maritalstatus_id">
-                            @foreach($maritalstatuses as $maritalstatus)
-                                <option @if ( $maritalstatus->id == $clientform->maritalstatus_id )
+                                name="marital_status_id"
+                                id="marital_status_id">
+                            @foreach($maritalStatuses as $maritalStatus)
+                                <option @if ( $maritalStatus->id == $clientForm->marital_status_id )
                                         selected
                                         @endif
-                                        id="maritalstatus_id"
-                                        name="maritalstatus_id"
-                                        value=" {{ $maritalstatus->id }} ">
-                                    {{$maritalstatus->name}}
+                                        id="marital_status_id"
+                                        name="marital_status_id"
+                                        value=" {{ $maritalStatus->id }} ">
+                                    {{$maritalStatus->name}}
                                 </option>
                             @endforeach
                         </select>
@@ -256,10 +257,10 @@
                         <label>Количество детей</label>
                         <input class="form-control"
                                type="number"
-                               name="numberOfDependents"
-                               id="numberOfDependents"
-                               placeholder="Количество иждевенцов"
-                               value="{{old('numberOfDependents', $clientform->numberOfDependents)}}"
+                               name="number_of_dependents"
+                               id="number_of_dependents"
+                               placeholder="Количество иждивенцев"
+                               value="{{old('number_of_dependents', $clientForm->number_of_dependents)}}"
                                min="0">
                     </div>
                 </div>
@@ -272,17 +273,17 @@
                     <input class="form-control"
                            required
                            type="text"
-                           name="workPlaceName"
-                           id="workPlaceName"
+                           name="work_place_name"
+                           id="work_place_name"
                            placeholder="Введите наименование организации"
-                           value="{{old('workPlaceName', $clientform->workPlaceName)}}">
+                           value="{{old('work_place_name', $clientForm->work_place_name)}}">
                 </div>
                 <div class="form-group edit-fields">
                     <label>Адрес работы</label>
                     <textarea class="form-control"
-                              name="workPlaceAddress"
-                              id="workPlaceAddress">
-                        {{old('workPlaceAddress', $clientform->workPlaceAddress)}}
+                              name="work_place_address"
+                              id="work_place_address">
+                        {{old('work_place_address', $clientForm->work_place_address)}}
                     </textarea>
                 </div>
                 <div class="row">
@@ -290,9 +291,9 @@
                         <label>Должность</label>
                         <input class="form-control"
                                type="text"
-                               name="workPlacePosition"
-                               id="workPlacePosition"
-                               value="{{old('workPlacePosition', $clientform->workPlacePosition)}}"
+                               name="work_place_position"
+                               id="work_place_position"
+                               value="{{old('work_place_position', $clientForm->work_place_position)}}"
                                placeholder="Введите должность">
                     </div>
                     <div class="col">
@@ -302,7 +303,7 @@
                                 name="seniority_id"
                                 id="seniority_id">
                             @foreach($seniorities as $seniority)
-                                <option @if ( $seniority->id == $clientform->seniority_id )
+                                <option @if ($seniority->id == $clientForm->seniority_id)
                                         selected
                                         @endif
                                         id="seniority_id"
@@ -318,10 +319,10 @@
                     <label>Рабочий телефон</label>
                     <input class="form-control"
                            type="text"
-                           name="workPlacePhone"
-                           id="workPlacePhone"
+                           name="work_place_phone"
+                           id="work_place_phone"
                            placeholder="Введите рабочий телефон"
-                           value="{{old('workPlacePhone', $clientform->workPlacePhone)}}">
+                           value="{{old('work_place_phone', $clientForm->work_place_phone)}}">
                 </div>
                 <div class="row">
                     <div class="col">
@@ -333,9 +334,9 @@
                                    step="0.01"
                                    min="0"
                                    placeholder="Введите основной доход"
-                                   name="constainIncome"
-                                   id="constainIncome"
-                                   value="{{old('constainIncome', $clientform->constainIncome)}}">
+                                   name="constain_income"
+                                   id="constain_income"
+                                   value="{{old('constain_income', $clientForm->constain_income)}}">
                             <span class="input-group-text">руб.</span>
                         </div>
                     </div>
@@ -347,10 +348,10 @@
                                    type="number"
                                    step="0.01"
                                    min="0"
-                                   name="additionalIncome"
-                                   id="additionalIncome"
+                                   name="additional_income"
+                                   id="additional_income"
                                    placeholder="Введите доп. доход"
-                                   value="{{old('additionalIncome', $clientform->additionalIncome)}}">
+                                   value="{{old('additional_income', $clientForm->additional_income)}}">
                             <span class="input-group-text">руб.</span>
                         </div>
                     </div>
@@ -368,10 +369,10 @@
                                    type="number"
                                    step="0.01"
                                    min="0"
-                                   name="loanCost"
-                                   id="loanCost"
+                                   name="loan_cost"
+                                   id="loan_cost"
                                    placeholder="Сумма займа"
-                                   value="{{old('loanCost', $clientform->loanCost)}}">
+                                   value="{{old('loan_cost', $clientForm->loan_cost)}}">
                             <span class="input-group-text">руб.</span>
                         </div>
                     </div>
@@ -380,12 +381,12 @@
                             type="number"
                             required
                             rusname="Срок займа"
-                            name="daysAmount"
+                            name="days_amount"
                             path="{{route('loanterm.axiosList')}}"
-                            id="loanTerm"
+                            id="loan_term"
                             group-text="дней"
-                            given-value="{{old('loanTerm', $clientform->loanTerm)}}"
-                            selector="loanTerm"
+                            given-value="{{old('loan_term', $clientForm->loan_term)}}"
+                            selector="loan_term"
                         />
                     </div>
 
@@ -394,12 +395,12 @@
                             type="number"
                             required
                             rusname="Процентная ставка"
-                            name="percentValue"
+                            name="percent_value"
                             path="{{route('interestrate.axiosList')}}"
-                            id="interestRate"
+                            id="interest_rate"
                             group-text="%"
                             step="0.001"
-                            given-value="{{old('interestRate', $clientform->interestRate)}}"
+                            given-value="{{old('interest_rate', $clientForm->interest_rate)}}"
                         />
 
                     </div>
@@ -411,18 +412,18 @@
                         <input class="form-control"
                                required
                                type="date"
-                               name="loanDate"
-                               id="loanDate"
+                               name="loan_date"
+                               id="loan_date"
                                placeholder="Введите дату оформления"
-                               value="{{old('loanDate', $clientform->loanDate)}}">
+                               value="{{old('loan_date', $clientForm->loan_date)}}">
                     </div>
                     <div class="col">
                         <label>Дата погашения</label>
                         <input class="form-control"
                                disabled
                                type="date"
-                               id="loanMaturityDate"
-                               name="loanMaturityDate"
+                               id="loan_maturity_date"
+                               name="loan_maturity_date"
                                placeholder="Дата погашения">
                     </div>
                 </div>
@@ -432,12 +433,12 @@
                         <label>Имеются ли действующие кредиты, займы</label>
                         <select class="form-select"
                                 required
-                                name="hasCredits"
-                                id="hasCredits">
-                            <option value="0" @if(!$clientform->hasCredits) selected @endif>
+                                name="has_credits"
+                                id="has_credits">
+                            <option value="0" @if(!$clientForm->has_credits) selected @endif>
                                 нет
                             </option>
-                            <option value="1" @if($clientform->hasCredits) selected @endif>
+                            <option value="1" @if($clientForm->has_credits) selected @endif>
                                 да
                             </option>
                         </select>
@@ -449,11 +450,11 @@
                                    type="number"
                                    step="0.01"
                                    min="0"
-                                   @if(!$clientform->hasCredits) readonly @endif
-                                   name="monthlyPayment"
-                                   id="monthlyPayment"
+                                   @if(!$clientForm->has_credits) readonly @endif
+                                   name="monthly_payment"
+                                   id="monthly_payment"
                                    placeholder="Ежемесячный платеж"
-                                   value="{{old('monthlyPayment', $clientform->monthlyPayment)}}">
+                                   value="{{old('monthly_payment', $clientForm->monthly_payment)}}">
                             <span class="input-group-text">руб.</span>
                         </div>
                     </div>
@@ -469,22 +470,22 @@
                     <div class="form-check form-check-inline">
                         <input class="form-check-input"
                                type="radio"
-                               name="isBankrupt"
+                               name="is_bankrupt"
                                id="bankruptTrue"
                                value="1"
-                               @if($clientform->isBankrupt) checked @endif>
+                               @if($clientForm->is_bankrupt) checked @endif>
                         <label class="form-check-label" for="inlineRadio1">Да</label>
                     </div>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input"
                                type="radio"
-                               name="isBankrupt"
+                               name="is_bankrupt"
                                id="bankruptFalse"
                                value="0"
-                               @if(!$clientform->isBankrupt) checked @endif>
+                               @if(!$clientForm->is_bankrupt) checked @endif>
                         <label class="form-check-label" for="inlineRadio2">Нет</label>
                     </div>
-                    @if(!$clientform->exists)
+                    @if(!$clientForm->exists)
                         <a class="btn btn-warning"
                            target="_blank"
                            href="{{\App\Models\ClientForm::CHECK_CREDITS_LINK}}"
@@ -498,9 +499,9 @@
             <div class="block-section">
                 <h4>Комментарий кассира</h4>
                 <textarea class="form-control"
-                          id="cashierComment"
-                          name="cashierComment">
-                    {{old('cashierComment', $clientform->cashierComment)}}
+                          id="cashier_comment"
+                          name="cashier_comment">
+                    {{old('cashier_comment', $clientForm->cashier_comment)}}
                 </textarea>
             </div>
         </form>
@@ -545,11 +546,11 @@
                                        placeholder="Отчество">
                             </div>
                             <div class="form-group edit-fields">
-                                <label for="birthDate">Дата рождения</label>
+                                <label for="birt_dDate">Дата рождения</label>
                                 <input class="form-control"
                                        type="date"
-                                       name="birthDate"
-                                       id="birthDate"
+                                       name="birt_dDate"
+                                       id="birt_dDate"
                                        placeholder="Дата рождения"
                                        oninput="validate()">
                             </div>

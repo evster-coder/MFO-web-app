@@ -62,11 +62,11 @@
                             @csrf
                             <div class="row">
                                 <div class="form-group edit-fields">
-                                    <label for="percentValue">Процентная ставка</label>
+                                    <label for="percent_value">Процентная ставка</label>
                                     <input class="form-control"
                                            type="number"
                                            step="0.001"
-                                           name="percentValue"
+                                           name="percent_value"
                                            id="form-data"
                                            placeholder="Процентная ставка"
                                            oninput="validate()">

@@ -18,7 +18,7 @@ class InterestRateController extends Controller
      */
     public function index()
     {
-        $items = InterestRate::orderBy('percentValue')->paginate(10);
+        $items = InterestRate::orderBy('percent_value')->paginate(10);
         return view('dictfields.interestrate.index', ['rates' => $items]);
     }
 
@@ -26,8 +26,8 @@ class InterestRateController extends Controller
     {
         $query = $req->get('query');
 
-        $terms = InterestRate::where('percentValue', 'like', '%'.$query.'%') 
-                        ->orderBy('percentValue')->get();
+        $terms = InterestRate::where('percent_value', 'like', '%'.$query.'%')
+                        ->orderBy('percent_value')->get();
         return Response::json($terms);
 
     }
@@ -40,8 +40,8 @@ class InterestRateController extends Controller
             $query = $req->get('query');
             $query = str_replace(" ", "%", $query);
 
-            $rates = InterestRate::where('percentValue', 'like', '%'.$query.'%')
-                        ->orderBy('percentValue')
+            $rates = InterestRate::where('percent_value', 'like', '%'.$query.'%')
+                        ->orderBy('percent_value')
                         ->paginate(10);
 
             return view('components.interestrates-tbody', compact('rates'))->render();
@@ -59,11 +59,11 @@ class InterestRateController extends Controller
     {
         //simple validation (no need to add Request class)
         $request->validate([
-                'percentValue' => 'required|numeric|between:0,1000000.999',
+                'percent_value' => 'required|numeric|between:0,1000000.999',
         ]);
 
         $rateId = $request->dataId;
-        InterestRate::updateOrCreate(['id' => $rateId],['percentValue' => $request->percentValue]);
+        InterestRate::updateOrCreate(['id' => $rateId],['percent_value' => $request->get('percent_value')]);
         if(empty($request->dataId))
             $msg = 'Элемент успешно создан.';
         else
@@ -76,7 +76,7 @@ class InterestRateController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\InterestRate  $interestRate
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -88,7 +88,7 @@ class InterestRateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\InterestRate  $interestRate
+     * @param $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

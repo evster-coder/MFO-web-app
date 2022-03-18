@@ -14,20 +14,20 @@
         < К списку
     </a>
     <h1>
-        Согласование заявки на займ №{{$clientform->id}}
-        от {{date(config('app.date_format', 'd-m-Y'), strtotime($clientform->loanDate))}}
+        Согласование заявки на займ №{{$clientForm->id}}
+        от {{date(config('app.date_format', 'd-m-Y'), strtotime($clientForm->loan_date))}}
     </h1>
 
     <div class="content-block">
         <x-auth-session-status class="mb-4" :status="session('status')"/>
         <x-auth-validation-errors class="mb-4" :errors="$errors"/>
         <div class="block-padding d-flex">
-            @if(!$clientform->director_approval_id)
+            @if(!$clientForm->director_approval_id)
                 <form method="POST"
                       action="{{route('directorApproval.accept')}}"
                       id="accept">
                     @csrf
-                    <input type="hidden" name="clientform_id" value="{{$clientform->id}}">
+                    <input type="hidden" name="client_form_id" value="{{$clientForm->id}}">
                     <input type="hidden" name="comment" value="">
                     <button type="submit" class="btn btn-primary">
                         Одобрить
@@ -37,7 +37,7 @@
                       action="{{route('directorApproval.reject')}}"
                       id="reject">
                     @csrf
-                    <input type="hidden" name="clientform_id" value="{{$clientform->id}}">
+                    <input type="hidden" name="client_form_id" value="{{$clientForm->id}}">
                     <input type="hidden" name="comment" value="wto">
                     <button type="submit" class="btn btn-warning">
                         Отклонить
@@ -56,7 +56,7 @@
             <h4>Клиент</h4>
             <a class="btn btn-info"
                target="_blank"
-               href="{{route('client.show', ['id' => $clientform->client_id])}}">
+               href="{{route('client.show', ['id' => $clientForm->client_id])}}">
                 Проверка клиента
             </a>
             <hr>
@@ -64,20 +64,20 @@
                 <tbody>
                 <tr>
                     <td>Фамилия</td>
-                    <td>{{$clientform->Client->surname}}</td>
+                    <td>{{$clientForm->client->surname}}</td>
                 </tr>
                 <tr>
                     <td>Имя</td>
-                    <td>{{$clientform->Client->name}}</td>
+                    <td>{{$clientForm->client->name}}</td>
                 </tr>
                 <tr>
                     <td>Отчество</td>
-                    <td>{{$clientform->Client->patronymic}}</td>
+                    <td>{{$clientForm->client->patronymic}}</td>
                 </tr>
 
                 <tr>
                     <td>Дата рождения</td>
-                    <td>{{date('d.m.Y', strtotime($clientform->Client->birthDate))}}</td>
+                    <td>{{date('d.m.Y', strtotime($clientForm->client->birth_date))}}</td>
                 </tr>
                 </tbody>
             </table>
@@ -86,7 +86,7 @@
             <h4>Анкета</h4>
             <a class="btn btn-info"
                target="_blank"
-               href="{{route('clientform.show', ['id' => $clientform->id])}}">
+               href="{{route('clientForm.show', ['id' => $clientForm->id])}}">
                 Проверка анкеты
             </a>
             <hr>
@@ -94,19 +94,19 @@
                 <tbody>
                 <tr>
                     <td>Дата оформления</td>
-                    <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientform->loanDate))}}</td>
+                    <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientForm->loan_date))}}</td>
                 </tr>
                 <tr>
                     <td>Сумма займа</td>
-                    <td>{{$clientform->loanCost}} руб.</td>
+                    <td>{{$clientForm->loan_cost}} руб.</td>
                 </tr>
                 <tr>
                     <td>Срок займа</td>
-                    <td>{{$clientform->loanTerm}} дней</td>
+                    <td>{{$clientForm->loan_term}} дней</td>
                 </tr>
                 <tr>
                     <td>Процентная ставка</td>
-                    <td>{{$clientform->interestRate}} %</td>
+                    <td>{{$clientForm->interest_rate}} %</td>
                 </tr>
                 </tbody>
             </table>

@@ -15,17 +15,17 @@ class InterestRateSeeder extends Seeder
     public function run()
     {
         $items = [
-            ['percentValue' => 0.4],
-            ['percentValue' => 0.5],
-            ['percentValue' => 0.65],
-            ['percentValue' => 1],
-            ['percentValue' => 0.3],
-            ['percentValue' => 2],
+            ['percent_value' => 0.4],
+            ['percent_value' => 0.5],
+            ['percent_value' => 0.65],
+            ['percent_value' => 1],
+            ['percent_value' => 0.3],
+            ['percent_value' => 2],
         ];
 
         foreach ($items as $item) {
             InterestRate::create([
-                'percentValue' => $item['percentValue'],
+                'percent_value' => $item['percent_value'],
             ]);
         }
 

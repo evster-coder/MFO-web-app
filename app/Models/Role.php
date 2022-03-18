@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -19,6 +20,19 @@ use Illuminate\Support\Collection;
  *
  * @property-read Collection|Permission[] $permissions
  * @property-read Collection|User[] $users
+ * @property-read int|null $permissions_count
+ * @property-read int|null $users_count
+ *
+ * @method static Builder|Role newModelQuery()
+ * @method static Builder|Role newQuery()
+ * @method static Builder|Role query()
+ * @method static Builder|Role whereCreatedAt($value)
+ * @method static Builder|Role whereId($value)
+ * @method static Builder|Role whereName($value)
+ * @method static Builder|Role whereSlug($value)
+ * @method static Builder|Role whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
  */
 class Role extends Model
 {

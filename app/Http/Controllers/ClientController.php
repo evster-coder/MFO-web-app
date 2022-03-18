@@ -4,16 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\ClientRequest;
-
-
 use App\Models\ClientForm;
 use App\Models\Loan;
 use App\Models\Client;
 use App\Models\OrgUnit;
-
 use App\Exports\ClientsExport;
-
 use DateTime;
+
 class ClientController extends Controller
 {
     /**
@@ -22,11 +19,11 @@ class ClientController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
-        $orgunit = OrgUnit::find(session('OrgUnit'))->getDictsOrgUnit();
+    {
+        $orgUnit = OrgUnit::find(session('orgUnit'))->getDictsOrgUnit();
 
-        $clients = Client::where('orgunit_id', $orgunit->id)
-                            ->orderBy('surname')    
+        $clients = Client::where('org_unit_id', $orgUnit->id)
+                            ->orderBy('surname')
                             ->paginate(20);
     	return view('clients.index', ['clients' => $clients]);
     }
@@ -40,7 +37,7 @@ class ClientController extends Controller
         $surname = str_replace(" ", "%", $req->get('surname'));
         $name = str_replace(" ", "%", $req->get('name'));
         $patronymic = str_replace(" ", "%", $req->get('patronymic'));
-        $birthDate = str_replace(" ", "%", $req->get('birth-date'));
+        $birthDate = str_replace(" ", "%", $req->get('birth_date'));
 
         return (new ClientsExport($surname, $name, $patronymic, $birthDate))->download($filename);
     }
@@ -58,10 +55,10 @@ class ClientController extends Controller
                 $endDate = date("Y-m-d", strtotime(date("Y-m-d", strtotime(now())) . " + 365 day"));
             else
                 $endDate = $req->get('dateTo');
-            $clientforms = ClientForm::where('client_id', $id)
-                                    ->whereBetween('loanDate', [$startDate, $endDate])
+            $clientForms = ClientForm::where('client_id', $id)
+                                    ->whereBetween('loan_date', [$startDate, $endDate])
                                     ->get();
-            return view('components.client-clientforms-tbody', compact('clientforms'))->render();
+            return view('components.client-clientforms-tbody', compact('clientForms'))->render();
         }
     }
 
@@ -69,20 +66,18 @@ class ClientController extends Controller
     {
         if($req->ajax())
         {
-            $loanNumber = str_replace(" ", "%", $req->get('loanNumber'));
-            $loanConclusionDate = str_replace(" ", "%",$req->get('loanConclusionDate'));
+            $loanNumber = str_replace(" ", "%", $req->get('loan_number'));
+            $loanConclusionDate = str_replace(" ", "%",$req->get('loan_conclusion_date'));
 
-            $loans = Loan::join('client_forms', 'loans.clientform_id', '=', 'client_forms.id')
+            $loans = Loan::join('client_forms', 'loans.client_form_id', '=', 'client_forms.id')
                                     ->where('client_forms.client_id', $id)
-                                    ->where('loanNumber', 'like', '%'.$loanNumber.'%')
-                                    ->where('loanConclusionDate', 'like', '%'.$loanConclusionDate.'%')
+                                    ->where('loan_number', 'like', '%'.$loanNumber.'%')
+                                    ->where('loan_conclusion_date', 'like', '%'.$loanConclusionDate.'%')
                                     ->select('loans.*')
                                     ->get();
 
             return view('components.client-loans-tbody', compact('loans'))->render();
         }
-
-
     }
 
     //возвращает клиентов с такими же фио и датой рождения
@@ -93,15 +88,15 @@ class ClientController extends Controller
             $surname = $req->get('surname');
             $name = $req->get('name');
             $patronymic = $req->get('patronymic');
-            $birthDate = $req->get('birthDate');
+            $birthDate = $req->get('birth_date');
 
-            $orgunit = OrgUnit::find(session('OrgUnit'))->getDictsOrgUnit();
+            $orgUnit = OrgUnit::find(session('orgUnit'))->getDictsOrgUnit();
 
-            $clients = Client::where('orgunit_id', $orgunit->id)
+            $clients = Client::where('org_unit_id', $orgUnit->id)
                                 ->where('name', $name)
                                 ->where('surname', $surname)
                                 ->where('patronymic', $patronymic)
-                                ->where('birthDate', $birthDate)
+                                ->where('birth_date', $birthDate)
                                 ->get();
 
             return view('components.same-client', compact('clients'))->render();
@@ -112,19 +107,19 @@ class ClientController extends Controller
     {
         if($req->ajax())
         {
-            //Получить параметры поиска   
+            //Получить параметры поиска
             $surname = str_replace(" ", "%", $req->get('surname'));
             $name = str_replace(" ", "%", $req->get('name'));
             $patronymic = str_replace(" ", "%", $req->get('patronymic'));
-            $birthDate = str_replace(" ", "%", $req->get('birth-date'));
+            $birthDate = str_replace(" ", "%", $req->get('birth_date'));
 
             //поиск клиентов с похожими параметрами
-            $orgunit = OrgUnit::find(session('OrgUnit'))->getDictsOrgUnit();
+            $orgUnit = OrgUnit::find(session('orgUnit'))->getDictsOrgUnit();
 
-            $clients = Client::where('orgunit_id', $orgunit->id)
+            $clients = Client::where('org_unit_id', $orgUnit->id)
                         ->where('surname', 'like', '%'.$surname.'%')
                         ->where('name', 'like', '%'.$name.'%')
-                        ->where('birthDate', 'like', '%'.$birthDate.'%');
+                        ->where('birth_date', 'like', '%'.$birthDate.'%');
 
             if($patronymic == "")
                 $clients = $clients->where(function($query){
@@ -148,25 +143,20 @@ class ClientController extends Controller
      */
     public function create()
     {
-        $newClient = new Client();
-
-        $orgunit = OrgUnit::find(session('OrgUnit'))->getDictsOrgUnit();
-        $clients = Client::where('orgunit_id', $orgunit->id);
-
-        return view('clients.create', ['curClient' => $newClient]);
+        return view('clients.create', ['curClient' => new Client()]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param ClientRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(ClientRequest $request)
     {
         //создаем клиента
         $client = new Client($request->all());
-        $client->orgunit_id = OrgUnit::find(session('OrgUnit'))->getDictsOrgUnit()->id;
+        $client->org_unit_id = OrgUnit::find(session('orgUnit'))->getDictsOrgUnit()->id;
 
         $client->save();
 

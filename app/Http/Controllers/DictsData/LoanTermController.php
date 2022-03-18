@@ -18,7 +18,7 @@ class LoanTermController extends Controller
      */
     public function index()
     {
-        $items = LoanTerm::orderBy('daysAmount')->paginate(10);
+        $items = LoanTerm::orderBy('days_amount')->paginate(10);
         return view('dictfields.loanterm.index', ['terms' => $items]);
     }
 
@@ -26,8 +26,8 @@ class LoanTermController extends Controller
     {
         $query = $req->get('query');
 
-        $terms = LoanTerm::where('daysAmount', 'like', '%'.$query.'%') 
-                        ->orderBy('daysAmount')->get();
+        $terms = LoanTerm::where('days_amount', 'like', '%'.$query.'%')
+                        ->orderBy('days_amount')->get();
         return Response::json($terms);
     }
 
@@ -39,8 +39,8 @@ class LoanTermController extends Controller
             $query = $req->get('query');
             $query = str_replace(" ", "%", $query);
 
-            $terms = LoanTerm::where('daysAmount', 'like', '%'.$query.'%')
-                        ->orderBy('daysAmount')
+            $terms = LoanTerm::where('days_amount', 'like', '%'.$query.'%')
+                        ->orderBy('days_amount')
                         ->paginate(10);
 
             return view('components.loanterms-tbody', compact('terms'))->render();
@@ -50,18 +50,18 @@ class LoanTermController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         //simple validation (no need to add Request class)
         $request->validate([
-                'daysAmount' => 'required|numeric|between:1, 1000',
+                'days_amount' => 'required|numeric|between:1,1000',
         ]);
 
         $termId = $request->dataId;
-        LoanTerm::updateOrCreate(['id' => $termId],['daysAmount' => $request->daysAmount]);
+        LoanTerm::updateOrCreate(['id' => $termId],['days_amount' => $request->get('days_amount')]);
         if(empty($request->dataId))
             $msg = 'Элемент успешно создан.';
         else

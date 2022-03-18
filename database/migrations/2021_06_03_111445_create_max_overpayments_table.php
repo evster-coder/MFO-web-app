@@ -15,8 +15,8 @@ class CreateMaxOverpaymentsTable extends Migration
     {
         Schema::create('max_overpayments', function (Blueprint $table) {
             $table->id();
-            $table->date('dateFrom')->nullable();
-            $table->date('dateTo')->nullable();
+            $table->date('date_from')->nullable();
+            $table->date('date_to')->nullable();
             $table->decimal('multiplicity', 6, 3);
         });
     }

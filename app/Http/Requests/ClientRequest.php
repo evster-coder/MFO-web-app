@@ -26,7 +26,7 @@ class ClientRequest extends FormRequest
         return [
             'surname' => 'required|string|min:3|max:50',
             'name' => 'required|string|min:3|max:50',
-            'birthDate' => 'date',
+            'birth_date' => 'date',
         ];
     }
 }

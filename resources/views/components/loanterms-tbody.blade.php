@@ -9,7 +9,7 @@
 @foreach($terms as $loanTerm)
     <tr>
         <td>
-            {{$loanTerm->daysAmount}}
+            {{$loanTerm->days_amount}}
         </td>
         <td>
             <div class="d-flex manage-btns">

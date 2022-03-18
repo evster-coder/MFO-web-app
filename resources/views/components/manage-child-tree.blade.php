@@ -7,7 +7,7 @@
                 @else
                     <i class="fas fa-book"></i>
                 @endif
-                <strong data-value="{{$child->id}}">{{$child->orgUnitCode}}</strong>
+                <strong data-value="{{$child->id}}">{{$child->org_unit_code}}</strong>
                 @if($child->childOrgUnits)
                     <x-manage-child-tree :childs="$child->childOrgUnits"/>
                 @endif

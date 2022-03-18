@@ -15,7 +15,7 @@ class CreateLoanTermsTable extends Migration
     {
         Schema::create('loan_terms', function (Blueprint $table) {
             $table->id();
-            $table->integer('daysAmount');
+            $table->integer('days_amount');
         });
     }
 

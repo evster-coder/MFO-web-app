@@ -1,20 +1,20 @@
 @extends('layouts.user')
 
 @section('title')
-    Подразделение {{$orgunit->orgUnitCode}}
+    Подразделение {{$orgunit->org_unit_code}}
 @endsection
 
 @section('content')
     <a class="btn btn-default" href="{{route('orgunit.index')}}">< К списку</a>
 
-    <h1> Подразделение {{$orgunit->orgUnitCode}}</h1>
+    <h1> Подразделение {{$orgUnit->org_unit_code}}</h1>
 
     <div class="block-content">
 
         <div class="block-padding d-flex">
             @perm('edit-orgunit')
             <a class="btn btn-info"
-               href="{{route('orgunit.edit', [$orgunit->id]) }}"
+               href="{{route('orgunit.edit', [$orgUnit->id]) }}"
                role="button">
                 Редактировать
             </a>
@@ -22,7 +22,7 @@
             @endperm
 
             @perm('delete-orgunit')
-            <form method="POST" action="{{route('orgunit.destroy', [$orgunit->id]) }}">
+            <form method="POST" action="{{route('orgunit.destroy', [$orgUnit->id]) }}">
                 @method('DELETE')
                 @csrf
                 <button class="btn btn-danger"
@@ -65,20 +65,20 @@
         </ul>
         <div class="tab-content">
             <div class="tab-pane active" id="tabs-1" role="tabpanel">
-                <h5>Сведения: </h5><br>
-                <p>Код: {{$orgunit->orgUnitCode}}</p>
+                <h5>Сведения:</h5><br>
+                <p>Код: {{$orgUnit->org_unit_code}}</p>
                 <p>Справочники:
-                    @if($orgunit->hasDictionaries)
+                    @if($orgUnit->has_dictionaries)
                         Разрешены
                     @else
                         Запрещены
                     @endif
                 </p>
                 <p>Родительское подразделение:
-                    @if($orgunit->parent)
+                    @if($orgUnit->parent)
                         <a class="btn btn-link"
-                           href="{{route('orgunit.show', [$orgunit->parent->id])}}">
-                            {{$orgunit->parent->orgUnitCode}}
+                           href="{{route('orgunit.show', [$orgUnit->parent->id])}}">
+                            {{$orgUnit->parent->org_unit_code}}
                             <i class="fas fa-external-link-alt"></i>
                         </a>
                     @else
@@ -86,14 +86,14 @@
                     @endif
                 </p>
                 <p>Дочерние подразделения:
-                    @if(count($orgunit->children) == 0)
+                    @if(count($orgUnit->children) == 0)
                         нет
                 @else
                     <ul>
-                        @foreach ($orgunit->children as $child)
+                        @foreach ($orgUnit->children as $child)
                             <li>
                                 <a class="btn btn-link" href="{{route('orgunit.show', [$child->id])}}">
-                                    {{$child->orgUnitCode}}
+                                    {{$child->org_unit_code}}
                                     <i class="fas fa-external-link-alt"></i>
                                 </a>
                             </li>
@@ -115,21 +115,21 @@
                     <tbody>
                     @foreach($params as $param)
                         <tr>
-                            @if($param->OrgUnitParam)
-                                <td>{{$param->OrgUnitParam->name}}</td>
+                            @if($param->orgUnitParam)
+                                <td>{{$param->orgUnitParam->name}}</td>
                                 <td>
-                                    @if($param->OrgUnitParam->dataType == 'date')
-                                        {{$param->dataAsDate}}
-                                    @elseif($param->OrgUnitParam->dataType == 'number')
-                                        {{$param->dataAsNumber}}
-                                    @elseif($param->OrgUnitParam->dataType == 'string')
-                                        {{$param->dataAsString}}
+                                    @if($param->orgUnitParam->data_type == 'date')
+                                        {{$param->data_as_date}}
+                                    @elseif($param->orgUnitParam->data_type == 'number')
+                                        {{$param->data_as_number}}
+                                    @elseif($param->orgUnitParam->data_type == 'string')
+                                        {{$param->data_as_string}}
                                     @else
                                         - Не установлено
                                     @endif
                                 </td>
                                 <td align="right">
-                                    {{$param->OrgUnit->orgUnitCode}}
+                                    {{$param->orgUnit->org_unit_code}}
                                 </td>
                             @else
                                 <td>{{$param->name}}</td>
@@ -155,7 +155,7 @@
                         <tr>
                             <td>
                                 <a href="{{route('user.show', [$user->id])}}">
-                                    {{$user->username}} ({{$user->FIO}})
+                                    {{$user->username}} ({{$user->full_name}})
                                 </a>
                             </td>
                             <td>

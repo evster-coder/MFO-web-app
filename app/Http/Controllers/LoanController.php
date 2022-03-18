@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 use App\Models\ClientForm;
@@ -23,7 +24,7 @@ class LoanController extends Controller
      */
     public function index()
     {
-        $loans = Loan::whereIn('orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('id'))->paginate(20);
+        $loans = Loan::whereIn('org_unit_id', OrgUnit::whereDescendantOrSelf(session('orgUnit'))->pluck('id'))->paginate(20);
 
         return view('loans.index', [
             'loans' => $loans,
@@ -32,15 +33,15 @@ class LoanController extends Controller
 
     //экспорт таблицы в эксель
     public function export(Request $req)
-    {        
+    {
         $now = new DateTime('NOW');
         $filename = 'loans' . date_format($now, 'ymd') . '.xlsx';
 
-        //Получить параметры поиска   
-        $loanNumber = str_replace(" ", "%", $req->get('loanNumber'));
-        $loanConclusionDate = str_replace(" ", "%", $req->get('loanConclusionDate'));
+        //Получить параметры поиска
+        $loanNumber = str_replace(" ", "%", $req->get('loan_number'));
+        $loanConclusionDate = str_replace(" ", "%", $req->get('loan_conclusion_date'));
         $clientFio = str_replace(" ", "%", $req->get('clientFio'));
-        $statusOpen = str_replace(" ", "%", $req->get('statusOpen'));
+        $statusOpen = str_replace(" ", "%", $req->get('status_open'));
 
         return (new LoansExport($loanNumber, $loanConclusionDate, $clientFio, $statusOpen))->download($filename);
     }
@@ -49,31 +50,31 @@ class LoanController extends Controller
     //получение списка займов  в виде компонента
     public function getLoans(Request $req)
     {
-        //Получить параметры поиска   
-        $loanNumber = str_replace(" ", "%", $req->get('loanNumber'));
-        $loanConclusionDate = str_replace(" ", "%", $req->get('loanConclusionDate'));
+        //Получить параметры поиска
+        $loanNumber = str_replace(" ", "%", $req->get('loan_number'));
+        $loanConclusionDate = str_replace(" ", "%", $req->get('loan_conclusion_date'));
         $clientFio = str_replace(" ", "%", $req->get('clientFio'));
-        $statusOpen = str_replace(" ", "%", $req->get('statusOpen'));
+        $statusOpen = str_replace(" ", "%", $req->get('status_open'));
 
         $sortBy = $req->get('sortby');
         $sortDesc = $req->get('sortdesc');
 
         //сортировка фильтрация пагинация
-        $loans = Loan::whereIn('loans.orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('orgunits.id'))
-                            ->where('loanNumber', 'like', '%'.$loanNumber.'%')
-                            ->where('loanConclusionDate', 'like', '%'.$loanConclusionDate.'%')
-                            ->where('statusOpen', 'like', '%'.$statusOpen.'%');
+        $loans = Loan::whereIn('loans.org_unit_id', OrgUnit::whereDescendantOrSelf(session('orgUnit'))->pluck('org_units.id'))
+                            ->where('loan_number', 'like', '%'.$loanNumber.'%')
+                            ->where('loan_conclusion_date', 'like', '%'.$loanConclusionDate.'%')
+                            ->where('status_open', 'like', '%'.$statusOpen.'%');
 
         if($clientFio != "")
-            $loans = $loans->join('client_forms', 'loans.clientform_id', 'client_forms.id')
+            $loans = $loans->join('client_forms', 'loans.client_form_id', 'client_forms.id')
                             ->join('clients', 'client_forms.client_id', 'clients.id')
                             ->where(DB::raw('CONCAT_WS(" ", `surname`, `name`, `patronymic`) '),
-                                                         'like', 
+                                                         'like',
                                                 '%'.$clientFio.'%')
                             ->select('loans.*');
 
         $loans = $loans->orderBy($sortBy, $sortDesc)
-                        ->paginate(20); 
+                        ->paginate(20);
 
         return view('components.loans-tbody', compact('loans'))->render();
     }
@@ -86,37 +87,36 @@ class LoanController extends Controller
      */
     public function store(Request $request)
     {
-        $clientform = ClientForm::find($request->get('clientform_id'));
+        $clientForm = ClientForm::find($request->get('client_form_id'));
 
-        if($clientform->SecurityApproval 
-            && $clientform->SecurityApproval ->approval)
+        if($clientForm->securityApproval
+            && $clientForm->securityApproval ->approval)
         {
             $newLoan = new Loan();
 
             $now = new DateTime('NOW');
             $now->setTimeZone(new DateTimeZone('Asia/Novosibirsk'));
 
-            $newLoan->orgunit_id = session('OrgUnit');
-            $newLoan->clientform_id = $clientform->id;
+            $newLoan->org_unit_id = session('orgUnit');
+            $newLoan->client_form_id = $clientForm->id;
 
             //получаем имя населенного пункта для номера договора
-            $localityName = OrgUnit::find(session('OrgUnit'))
+            $localityName = OrgUnit::find(session('orgUnit'))
                             ->params()
-                            ->where('OrgUnitParam.slug', 'slug-locality')
+                            ->where('orgUnitParam.slug', 'slug-locality')
                             ->first();
 
-            if($localityName != null && $localityName->dataAsString != null)
-                $loanNumberName = $localityName->dataAsString;
+            if($localityName != null && $localityName->data_as_string != null)
+                $loanNumberName = $localityName->data_as_string;
             else
                 $loanNumberName = 'DOGO';
 
-            $newLoan->loanNumber = $loanNumberName . '/' . date_format($now, 'ymdHi');
+            $newLoan->loan_number = $loanNumberName . '/' . date_format($now, 'ymdHi');
 
-            $newLoan->loanConclusionDate = $now;
-            $newLoan->statusOpen = true;
+            $newLoan->loan_conclusion_date = $now;
+            $newLoan->status_open = true;
 
-            $newLoan->save();
-            if ($newLoan)
+            if ($newLoan->save())
                 return redirect()->route('loan.show', $newLoan->id);
             else
                 return back()->withErrors(['msg' => "Ошибка создания займа"])->withInput();
@@ -134,8 +134,8 @@ class LoanController extends Controller
 
 
         $loan = Loan::find($id);
-        $loan->statusOpen = false;
-        $loan->loanClosingDate = $now;
+        $loan->status_open = false;
+        $loan->loan_closing_date = $now;
 
         $loan->save();
 
@@ -152,8 +152,7 @@ class LoanController extends Controller
      */
     public function show($id)
     {
-        $loan = Loan::find($id);
-        return view('loans.show', ['loan' => $loan]);
+        return view('loans.show', ['loan' => Loan::find($id)]);
     }
 
 
@@ -174,13 +173,13 @@ class LoanController extends Controller
                 return redirect()->route('loan.index')
                         ->with(['status' => 'Договор успешно удален']);
             }
-            catch (\Illuminate\Database\QueryException $e){
+            catch (QueryException $e){
                 return back()->withErrors(['msg' => 'Невозможно удалить Договор займа']);
             }
         }
         else
         {
-            return redirect()->route('clientform.index')
+            return redirect()->route('clientForm.index')
                 ->withErrors(['msg' => 'Ошибка удаления в ClientFormController::destroy']);
         }
     }

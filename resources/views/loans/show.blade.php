@@ -1,8 +1,8 @@
 @extends('layouts.user')
 
 @section('title')
-    Договор займа № {{$loan->loanNumber}} от
-    {{date(config('app.date_format', 'd-m-Y'), strtotime($loan->loanConclusionDate))}}
+    Договор займа № {{$loan->loan_number}} от
+    {{date(config('app.date_format', 'd-m-Y'), strtotime($loan->loan_conclusion_date))}}
 @endsection
 
 @push('assets')
@@ -15,8 +15,8 @@
         < К списку
     </a>
     <div class="d-flex justify-content-between">
-        <h1>Договор займа № {{$loan->loanNumber}} от
-            {{date(config('app.date_format', 'd-m-Y'), strtotime($loan->loanConclusionDate))}}
+        <h1>Договор займа № {{$loan->loan_number}} от
+            {{date(config('app.date_format', 'd-m-Y'), strtotime($loan->loan_conclusion_date))}}
         </h1>
         <div style="margin-top:auto; margin-bottom: auto;">
             <a class="btn btn-secondary" href="#">
@@ -26,7 +26,7 @@
     </div>
 
     <div class="block-content">
-        @if($loan->statusOpen)
+        @if($loan->status_open)
             <a class="btn btn-warning"
                href="{{route('loan.close', ['id' => $loan->id])}}">
                 Закрыть договор
@@ -71,26 +71,26 @@
                     <tbody>
                     <tr>
                         <td>Договор</td>
-                        <td><p>Договор займа № {{$loan->loanNumber}} от
-                                {{date(config('app.date_format', 'd-m-Y'), strtotime($loan->loanConclusionDate))}}</p>
+                        <td><p>Договор займа № {{$loan->loan_number}} от
+                                {{date(config('app.date_format', 'd-m-Y'), strtotime($loan->loan_conclusion_date))}}</p>
                         </td>
                     </tr>
                     <tr>
                         <td>Подразделение</td>
-                        <td>{{$loan->OrgUnit->orgUnitCode}}</td>
+                        <td>{{$loan->orgUnit->org_unit_code}}</td>
                     </tr>
                     <tr>
                         <td>Заемщик</td>
-                        <td>{{$loan->ClientForm->Client->text}}
+                        <td>{{$loan->clientForm->client->text}}
                         </td>
                     </tr>
                     <tr>
                         <td>Сумма займа</td>
-                        <td>{{$loan->ClientForm->loanCost}} руб.</td>
+                        <td>{{$loan->clientForm->loan_cost}} руб.</td>
                     </tr>
                     <tr>
                         <td>Процентная ставка</td>
-                        <td>{{$loan->ClientForm->interestRate}} %</td>
+                        <td>{{$loan->clientForm->interest_rate}} %</td>
                     </tr>
                     <tr>
                         <td>Задолженность</td>
@@ -98,7 +98,7 @@
                     </tr>
                     <tr>
                         <td>Статус</td>
-                        <td>@if($loan->statusOpen)
+                        <td>@if($loan->status_open)
                                 Открыт
                             @else
                                 Закрыт
@@ -113,12 +113,12 @@
                 <div class="d-flex block-padding">
                     <a class="btn btn-info"
                        target="_blank"
-                       href="{{route('clientform.show', $loan->ClientForm->id)}}">
+                       href="{{route('clientForm.show', $loan->clientForm->id)}}">
                         Страница анкеты
                     </a>
                 </div>
 
-                <x-clientform-info :clientform="$loan->ClientForm"/>
+                <x-clientform-info :clientForm="$loan->clientForm"/>
             </div>
             <div class="tab-pane" id="g-tabs-3" role="tabpanel">
                 <div class="d-flex justify-content-between">
@@ -146,7 +146,7 @@
                 </div>
 
                 <div class="d-flex block-padding">
-                    @if($loan->statusOpen)
+                    @if($loan->status_open)
                         <a class="btn btn-primary"
                            href="{{route('payment.create', $loan->id)}}">
                             Внести платеж
@@ -163,7 +163,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @if($loan->Payments->count() == 0)
+                    @if($loan->payments->count() == 0)
                         <tr>
                             <td>
                                 <strong>Платежи отсутствуют</strong>
@@ -171,15 +171,15 @@
                         </tr>
                     @endif
 
-                    @foreach($loan->Payments as $payment)
+                    @foreach($loan->payments as $payment)
                         <tr>
                             <td>
                                 <strong>
-                                    {{date(config('app.date_format', 'd-m-Y'), strtotime($payment->paymentDate))}}
+                                    {{date(config('app.date_format', 'd-m-Y'), strtotime($payment->payment_date))}}
                                 </strong>
                             </td>
                             <td>
-                                {{$payment->paymentSum}} руб.
+                                {{$payment->payment_sum}} руб.
                             </td>
                             <td>
                                 <div class="d-flex manage-btns">

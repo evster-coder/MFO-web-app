@@ -96,14 +96,14 @@
                 </div>
 
                 <div class="form-group edit-fields">
-                    <label for="birthDate">Дата рождения</label>
+                    <label for="birth_date">Дата рождения</label>
                     <input class="form-control"
                            required
-                           name="birthDate"
-                           id="birthDate"
+                           name="birth_date"
+                           id="birth_date"
                            type="date"
                            placeholder="Введите Дату рождения"
-                           value="{{old('birthDate', $curClient->birthDate)}}">
+                           value="{{old('birth_date', $curClient->birth_date)}}">
                 </div>
             </div>
         </form>

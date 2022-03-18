@@ -23,73 +23,74 @@ class OrgUnitController extends Controller
      */
     public function index()
     {
-        $orgunits = OrgUnit::all();
+        $orgUnits = OrgUnit::all();
 
-        $grouped = $orgunits->groupBy('parent_id');
+        $grouped = $orgUnits->groupBy('parent_id');
 
-        foreach ($orgunits as $orgunit) {
-            if ($grouped->has($orgunit->id)) {
-                $orgunit->childOrgUnits = $grouped[$orgunit->id];
+        foreach ($orgUnits as $orgUnit) {
+            if ($grouped->has($orgUnit->id)) {
+                $orgUnit->childOrgUnits = $grouped[$orgUnit->id];
             }
         }
-        $orgunits = $orgunits->where('parent_id', null);
+        $orgUnits = $orgUnits->where('parent_id', null);
 
-        return view('orgunits.index', ['orgunits' => $orgunits]);
+        return view('orgunits.index', ['orgUnits' => $orgUnits]);
     }
 
     public function changeorgunit(Request $request)
     {
-        $orgUnitIdChange = $request->input('orgUnit');
+        $orgUnitIdChange = $request->input('org_unit');
 
+        if ($orgUnitIdChange != null
+            && Auth::user()->canSetOrgUnit($orgUnitIdChange)) {
+            session([
+                'orgUnit' => $orgUnitIdChange,
+                'orgUnitCode' => OrgUnit::find($orgUnitIdChange)->org_unit_code,
+            ]);
 
-    	if($orgUnitIdChange != null 
-        && Auth::user()->canSetOrgUnit($orgUnitIdChange))
-        {
-            session(['OrgUnit' => $orgUnitIdChange,
-                     'OrgUnitCode' => OrgUnit::find($orgUnitIdChange)->orgUnitCode],);
             return back();
-        }
-        else
+        } else {
             abort(403, 'Нет прав на данное действие');
+        }
     }
 
     public function create($parentId)
     {
-        if(OrgUnit::whereDescendantOrSelf(Auth::user()->orgunit_id)
-                                ->get()
-                                ->contains('id', $parentId))
-        {
+        if (OrgUnit::whereDescendantOrSelf(Auth::user()->org_unit_id)
+            ->get()
+            ->contains('id', $parentId)) {
             $parent = OrgUnit::find($parentId);
 
-            $orgunitparams = OrgUnitParam::orderBy('name')->get();
+            $orgUnitParams = OrgUnitParam::orderBy('name')->get();
 
             $paramsArr = [];
-            foreach($orgunitparams as $param)
+            foreach ($orgUnitParams as $param) {
                 $paramsArr[] = $param->getClosestValue($parentId);
+            }
             $params = collect($paramsArr);
 
 
-            $orgunit = new OrgUnit();
+            $orgUnit = new OrgUnit();
+
             return view('orgunits.create', [
-                'currOrgunit' => $orgunit,
+                'currOrgUnit' => $orgUnit,
                 'parent' => $parent,
-                'params' => $params]);
-        }
-        else
+                'params' => $params,
+            ]);
+        } else {
             return back()->withErrors(['msg' => "Недостаточно прав для добавления в это подразделение!"]);
+        }
     }
 
     public function store(Request $req)
     {
-        if(OrgUnit::whereDescendantOrSelf(Auth::user()->orgunit_id)
-                        ->get()
-                        ->contains('id', $req->get('parent_id')))
-
-        {
+        if (OrgUnit::whereDescendantOrSelf(Auth::user()->org_unit_id)
+            ->get()
+            ->contains('id', $req->get('parent_id'))) {
             $orgUnit = new OrgUnit();
 
-            $orgUnit->orgUnitCode = $req->get('orgUnitCode');
-            $orgUnit->hasDictionaries = $req->get('hasDictionaries');
+            $orgUnit->org_unit_code = $req->get('$this->org_unit_code');
+            $orgUnit->has_dictionaries = $req->get('has_dictionaries');
 
             $orgUnit->parent_id = $req->get('parent_id');
 
@@ -97,27 +98,25 @@ class OrgUnitController extends Controller
 
             //запись параметров
             $params = $req->params;
-            foreach($params as $key=>$value)
-            {
-                if($value != null)
-                {
+            foreach ($params as $key => $value) {
+                if ($value != null) {
                     $param = OrgUnitParam::where('slug', $key)->first();
                     $paramValue = ParamValue::create(
                         [
-                            'orgunit_id' => $orgUnit->id,
-                            'orgunit_param_id' => $param->id,
+                            'org_unit_id' => $orgUnit->id,
+                            'org_unit_param_id' => $param->id,
                         ]);
 
-                    switch($param->dataType)
-                    {
-                        case 'string':
-                            $paramValue->dataAsString = $value; break;
+                    switch ($param->data_type) {
                         case 'number':
-                            $paramValue->dataAsNumber = $value; break;
+                            $paramValue->data_as_number = $value;
+                            break;
                         case 'date':
-                            $paramValue->dataAsDate = $value; break;
+                            $paramValue->data_as_date = $value;
+                            break;
                         default:
-                            $paramValue->dataAsString = $value; break;
+                            $paramValue->data_as_string = $value;
+                            break;
                     }
 
                     $paramValue->save();
@@ -125,158 +124,153 @@ class OrgUnitController extends Controller
             }
 
             return redirect()->route('orgunit.show', $orgUnit->id);
-        }
-        else
+        } else {
             return back()->withErrors(['msg' => "Недостаточно прав для Добавления к этому подразделению!"]);
+        }
 
     }
 
     public function update(Request $req, $id)
     {
-        $editOrgunit = OrgUnit::find($id);
+        $editOrgUnit = OrgUnit::find($id);
 
-        if(OrgUnit::whereDescendantOrSelf(Auth::user()->orgunit_id)
-                        ->get()
-                        ->contains('id', $id))
-        {
-            if($req->get('hasDictionaries') == 0)
-            {
+        if (OrgUnit::whereDescendantOrSelf(Auth::user()->org_unit_id)
+            ->get()
+            ->contains('id', $id)) {
+            if ($req->get('has_dictionaries') == 0) {
                 //рекурсивный запрет справочников для дочерних узлов
-                $childs = OrgUnit::whereDescendantOrSelf($editOrgunit)->get();
-                foreach($childs as $child)
-                {
-                    $child->hasDictionaries = false;
+                $childs = OrgUnit::whereDescendantOrSelf($editOrgUnit)->get();
+                foreach ($childs as $child) {
+                    $child->has_dictionaries = false;
                     $child->save();
                 }
+            } else {
+                $editOrgUnit->has_dictionaries = true;
             }
-            else
-                $editOrgunit->hasDictionaries = true;
 
-            $editOrgunit->orgUnitCode = $req->get('orgUnitCode');
+            $editOrgUnit->org_unit_code = $req->get('$this->org_unit_code');
 
-            $editOrgunit->save();
+            if ($editOrgUnit->save()) {
+                //запись параметров
+                $params = $req->params;
+                foreach ($params as $key => $value) {
+                    if ($value != null) {
+                        $param = OrgUnitParam::where('slug', $key)->first();
+                        $paramValue = ParamValue::updateOrCreate(
+                            [
+                                'org_unit_id' => $editOrgUnit->id,
+                                'org_unit_param_id' => $param->id,
+                            ], []);
 
-            if($editOrgunit)
-            {
-            //запись параметров
-            $params = $req->params;
-            foreach($params as $key=>$value)
-            {
-                if($value != null)
-                {
-                    $param = OrgUnitParam::where('slug', $key)->first();
-                    $paramValue = ParamValue::updateOrCreate(
-                        [
-                            'orgunit_id' => $editOrgunit->id,
-                            'orgunit_param_id' => $param->id,
-                        ], []);
+                        switch ($param->data_type) {
+                            case 'string':
+                                $paramValue->data_as_string = $value;
+                                break;
+                            case 'number':
+                                $paramValue->data_as_number = $value;
+                                break;
+                            case 'date':
+                                $paramValue->data_as_date = $value;
+                                break;
+                            default:
+                                $paramValue->data_as_string = $value;
+                                break;
+                        }
 
-                    switch($param->dataType)
-                    {
-                        case 'string':
-                            $paramValue->dataAsString = $value; break;
-                        case 'number':
-                            $paramValue->dataAsNumber = $value; break;
-                        case 'date':
-                            $paramValue->dataAsDate = $value; break;
-                        default:
-                            $paramValue->dataAsString = $value; break;
-                    }
+                        $paramValue->save();
 
-                    $paramValue->save();
-
-                    if($req->params_cb)
-                    {
-                        $deletedItems = $req->params_cb;
-                        foreach($deletedItems as $key=>$value)
-                        {
-                            $delete = ParamValue::where('orgunit_id', $editOrgunit->id)
-                                        ->where('orgunit_param_id', $value)
-                                        ->first();
-                            if($delete)
-                                $delete->delete();
+                        if ($req->params_cb) {
+                            $deletedItems = $req->params_cb;
+                            foreach ($deletedItems as $key => $value) {
+                                $delete = ParamValue::where('org_unit_id', $editOrgUnit->id)
+                                    ->where('org_unit_param_id', $value)
+                                    ->first();
+                                if ($delete) {
+                                    $delete->delete();
+                                }
+                            }
                         }
                     }
                 }
-            }
 
-                return redirect()->route('orgunit.show', $editOrgunit->id)
-                        ->with(['status' => 'Успешно изменен']);
-            }
-            else
-            {
-                return redirect()->route('orgunit.show', $editOrgunit->id)
-                        ->withErrors(['msg' => "Ошибка обновления записи"]);
+                return redirect()->route('orgunit.show', $editOrgUnit->id)
+                    ->with(['status' => 'Успешно изменен']);
+            } else {
+                return redirect()->route('orgunit.show', $editOrgUnit->id)
+                    ->withErrors(['msg' => "Ошибка обновления записи"]);
 
             }
-        }
-        else
+        } else {
             return back()->withErrors(['msg' => "Недостаточно прав для Редактирования этого подразделения!"]);
+        }
 
     }
 
     public function show($id)
     {
-        $orgunit = OrgUnit::find($id);
-        $params = $orgunit->params();
+        $orgUnit = OrgUnit::find($id);
+        $params = $orgUnit->params();
 
-        $users = User::where('orgunit_id', $id)->get();
+        $users = User::where('org_unit_id', $id)->get();
+
         //dd($params);
-        return view('orgunits.show', ['orgunit' => $orgunit, 
-                                        'users' => $users,
-                                        'params' => $params]);
+        return view('orgunits.show', [
+            'orgUnit' => $orgUnit,
+            'users' => $users,
+            'params' => $params,
+        ]);
     }
 
     public function destroy(Request $req, $id = null)
     {
-        if($id == null)
-            $id = $req->orgunit_id;
+        if ($id == null) {
+            $id = $req->org_unit_id;
+        }
 
-        if(OrgUnit::whereDescendantOrSelf(Auth::user()->orgunit_id)
-                                ->get()
-                                ->contains('id', $id))
-        {
-            if(OrgUnit::find($id)->isLeaf())
-            {
-                $orgunit = OrgUnit::find($id);
-                $orgunit->delete();
+        if (OrgUnit::whereDescendantOrSelf(Auth::user()->org_unit_id)
+            ->get()
+            ->contains('id', $id)) {
+            if (OrgUnit::find($id)->isLeaf()) {
+                $orgUnit = OrgUnit::find($id);
+                $orgUnit->delete();
+
                 return redirect()->route('orgunit.index')->with(['status' => 'Успешно удален.']);
 
-            }
-            else
+            } else {
                 return back()->withErrors(['msg' => 'Невозможно удалить подразделение, т.к. у него присутствуют дочерние узлы']);
-        }
-        else
+            }
+        } else {
             return back()->withErrors(['msg' => "Недостаточно прав для удаления этого подразделения!"]);
+        }
 
     }
 
     public function edit($id)
     {
-        if(OrgUnit::whereDescendantOrSelf(Auth::user()->orgunit_id)
-                                ->get()
-                                ->contains('id', $id))
-        {
-            $editOrgunit = OrgUnit::find($id);
+        if (OrgUnit::whereDescendantOrSelf(Auth::user()->org_unit_id)
+            ->get()
+            ->contains('id', $id)) {
+            $editOrgUnit = OrgUnit::find($id);
 
-            $parent = $editOrgunit->parent()->first();
+            $parent = $editOrgUnit->parent()->first();
 
-            $orgunitparams = OrgUnitParam::orderBy('name')->get();
+            $orgUnitParams = OrgUnitParam::orderBy('name')->get();
 
             $paramsArr = [];
-            foreach($orgunitparams as $param)
+            foreach ($orgUnitParams as $param) {
                 $paramsArr[] = $param->getClosestValue($id);
+            }
             $params = collect($paramsArr);
 
 
-            return view('orgunits.create',[
-                'currOrgunit' => $editOrgunit,
+            return view('orgunits.create', [
+                'currOrgUnit' => $editOrgUnit,
                 'parent' => $parent,
                 'params' => $params,
             ]);
-        }
-        else
+        } else {
             return back()->withErrors(['msg' => "Недостаточно прав для редактирования этого подразделения!"]);
+        }
 
     }
 }

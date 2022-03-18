@@ -15,13 +15,13 @@ class LoanTermSeeder extends Seeder
     public function run()
     {
         $items = [
-            ['daysAmount' => 15],
-            ['daysAmount' => 30],
+            ['days_amount' => 15],
+            ['days_amount' => 30],
         ];
 
         foreach ($items as $item) {
             LoanTerm::create([
-                'daysAmount' => $item['daysAmount'],
+                'days_amount' => $item['days_amount'],
             ]);
         }
     }

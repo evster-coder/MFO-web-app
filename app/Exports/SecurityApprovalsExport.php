@@ -27,26 +27,26 @@ class SecurityApprovalsExport implements FromQuery, WithMapping, WithHeadings, S
     */
     public function query()
     {
-		return ClientForm::whereIn('orgunit_id', OrgUnit::whereDescendantOrSelf(session('OrgUnit'))->pluck('id'))
+		return ClientForm::whereIn('org_unit_id', OrgUnit::whereDescendantOrSelf(session('orgUnit'))->pluck('id'))
 		    ->whereNotNull('security_approval_id')
 		    ->join('security_approvals', 'security_approvals.id', '=', 'client_forms.security_approval_id')
-		    ->whereBetween('security_approvals.approvalDate', [$this->startDate, $this->endDate])
-		    ->orderBy('security_approvals.approvalDate');
+		    ->whereBetween('security_approvals.approval_date', [$this->startDate, $this->endDate])
+		    ->orderBy('security_approvals.approval_date');
     }
 
-    public function map($clientform): array
-    {    	
-    	if($clientform->SecurityApproval->approval)
+    public function map($clientForm): array
+    {
+    	if($clientForm->securityApproval->approval)
     		$state = 'Одобрена';
     	else
     		$state = 'Отклонена';
-    	$numDate = '№' . $clientform->id . ' от ' . date('d.m.Y', strtotime($clientform->loanDate));
+    	$numDate = '№' . $clientForm->id . ' от ' . date('d.m.Y', strtotime($clientForm->loan_date));
         return [
             $numDate,
-            date('d.m.Y', strtotime($clientform->SecurityApproval->approvalDate)),
-            $clientform->Client->fullName,
-            $clientform->loanCost . ' руб.',
-            $clientform->SecurityApproval->User->username . ' (' . $clientform->SecurityApproval->User->FIO  . ')',
+            date('d.m.Y', strtotime($clientForm->securityApproval->approval_date)),
+            $clientForm->client->fullName,
+            $clientForm->loan_cost . ' руб.',
+            $clientForm->securityApproval->user->username . ' (' . $clientForm->securityApproval->user->full_name  . ')',
             $state
         ];
     }

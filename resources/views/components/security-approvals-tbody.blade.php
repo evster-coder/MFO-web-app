@@ -1,4 +1,4 @@
-@if($clientforms->total() == 0)
+@if($clientForms->total() == 0)
     <tr>
         <td colspan="5">
             Ничего не найдено...
@@ -6,24 +6,24 @@
     </tr>
 @endif
 
-@foreach($clientforms as $clientform)
+@foreach($clientForms as $clientForm)
     <tr>
-        <td>№{{$clientform->id}} от {{date(config('app.date_format', 'd-m-Y'), strtotime($clientform->loanDate))}}</td>
-        <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientform->SecurityApproval->approvalDate))}}</td>
-        <td>{{$clientform->Client->fullName}}</td>
-        <td>{{$clientform->loanCost}}</td>
-        <td>{{$clientform->User->username}} ({{$clientform->User->FIO}})</td>
-        <td>{{$clientform->SecurityApproval->approval ? 'Одобрена' : 'Отклонена'}}</td>
+        <td>№{{$clientForm->id}} от {{date(config('app.date_format', 'd-m-Y'), strtotime($clientForm->loan_date))}}</td>
+        <td>{{date(config('app.date_format', 'd-m-Y'), strtotime($clientForm->securityApproval->approval_date))}}</td>
+        <td>{{$clientForm->client->fullName}}</td>
+        <td>{{$clientForm->loan_cost}}</td>
+        <td>{{$clientForm->user->username}} ({{$clientForm->user->full_name}})</td>
+        <td>{{$clientForm->securityApproval->approval ? 'Одобрена' : 'Отклонена'}}</td>
         <td>
             <div class="d-flex manage-btns">
                 <a class="btn btn-success"
-                   href="{{route('securityApproval.show', ['id' => $clientform->security_approval_id])}}"
+                   href="{{route('securityApproval.show', ['id' => $clientForm->security_approval_id])}}"
                    role="button">
                     <i class="fas fa-eye"></i>
                 </a>
-                @if(!$clientform->Loan)
+                @if(!$clientForm->loan)
                     <form method="POST"
-                          action="{{route('securityApproval.destroy', [$clientform->SecurityApproval->id])}}">
+                          action="{{route('securityApproval.destroy', [$clientForm->securityApproval->id])}}">
                         @method('DELETE')
                         @csrf
                         <button class="btn btn-danger"

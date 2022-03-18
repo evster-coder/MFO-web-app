@@ -45,7 +45,7 @@
                         <form action="{{route('orgunit.destroy')}}" method="POST" id="formDelete">
                             @method('DELETE')
                             @csrf
-                            <input type="hidden" name="orgunit_id" id="orgunit_id">
+                            <input type="hidden" name="org_unit_id" id="org_unit_id">
                             <a class="btn btn-danger disabled"
                                href=""
                                data-url="/orgunit"
@@ -57,24 +57,24 @@
 
                     </div>
                     <div class="col-md-6">
-                        @if($orgunits->count() == 0)
+                        @if($orgUnits->count() == 0)
                             <h5>Отсутствуют структурные подразделения!</h5>
                         @else
                             <ul id="treeStructure">
 
-                                @foreach($orgunits as $orgunit)
+                                @foreach($orgUnits as $orgUnit)
                                     <div class="d-flex">
 
                                         <li class="expanded-orgunit single-unit">
-                                            @if($orgunit->childOrgUnits)
+                                            @if($orgUnit->childOrgUnits)
                                                 <i class="fas fa-search-minus can-expand"></i>
                                             @else
                                                 <i class="fas fa-book"></i>
                                             @endif
-                                            <strong data-value="{{$orgunit->id}}">{{$orgunit->orgUnitCode }}</strong>
-                                            @if($orgunit->childOrgUnits)
+                                            <strong data-value="{{$orgUnit->id}}">{{$orgUnit->org_unit_code }}</strong>
+                                            @if($orgUnit->childOrgUnits)
                                                 <x-manage-child-tree
-                                                    :childs="$orgunit->childOrgUnits"></x-manage-child-tree>
+                                                    :childs="$orgUnit->childOrgUnits"></x-manage-child-tree>
                                             @endif
                                         </li>
                                     </div>

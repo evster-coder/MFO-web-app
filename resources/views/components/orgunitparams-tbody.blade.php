@@ -15,7 +15,7 @@
             {{$param->slug}}
         </td>
         <td>
-            {{$param->dataType}}
+            {{$param->data_type}}
         </td>
         <td>
             <div class="d-flex manage-btns">

@@ -9,8 +9,8 @@
 @foreach($users as $user)
     <tr>
         <td>{{ $user->username }}</td>
-        <td>{{ $user->FIO }}</td>
-        <td>{{ $user->orgUnit ? $user->orgUnit->orgUnitCode : "" }}</td>
+        <td>{{ $user->full_name }}</td>
+        <td>{{ $user->orgUnit ? $user->orgUnit->org_unit_code : "" }}</td>
         <td>{{$user->blocked ? 'Да' : 'Нет'}}</td>
         <td>
             <ul>

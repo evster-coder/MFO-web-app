@@ -48,10 +48,10 @@ class UserTableSeeder extends Seeder
 
         $user->username = self::DEFAULT_ADMIN[self::USERNAME];
         $user->password = Hash::make(self::DEFAULT_ADMIN[self::PASSWORD]);
-        $user->FIO = self::DEFAULT_ADMIN[self::NAME];
-        $user->orgunit_id = $orgUnit->id;
+        $user->full_name = self::DEFAULT_ADMIN[self::NAME];
+        $user->org_unit_id = $orgUnit->id;
         $user->blocked = false;
-        $user->needChangePassword = false;
+        $user->need_change_password = false;
         $user->remember_token = Str::random(10);
 
         $user->save();
@@ -60,10 +60,10 @@ class UserTableSeeder extends Seeder
 
         $directorUser->username = self::DEFAULT_DIRECTOR[self::USERNAME];
         $directorUser->password = Hash::make(self::DEFAULT_DIRECTOR[self::PASSWORD]);
-        $directorUser->FIO = self::DEFAULT_DIRECTOR[self::NAME];
-        $directorUser->orgunit_id = $orgUnit->children()->first()->id;
+        $directorUser->full_name = self::DEFAULT_DIRECTOR[self::NAME];
+        $directorUser->org_unit_id = $orgUnit->children()->first()->id;
         $directorUser->blocked = false;
-        $directorUser->needChangePassword = false;
+        $directorUser->need_change_password = false;
         $directorUser->remember_token = Str::random(10);
 
         $directorUser->save();
@@ -73,10 +73,10 @@ class UserTableSeeder extends Seeder
 
         $cashier->username = self::DEFAULT_CASHIER[self::USERNAME];
         $cashier->password = Hash::make(self::DEFAULT_CASHIER[self::PASSWORD]);
-        $cashier->FIO = self::DEFAULT_CASHIER[self::NAME];
-        $cashier->orgunit_id = $orgUnit->children()->first()->children()->first()->id;
+        $cashier->full_name = self::DEFAULT_CASHIER[self::NAME];
+        $cashier->org_unit_id = $orgUnit->children()->first()->children()->first()->id;
         $cashier->blocked = false;
-        $cashier->needChangePassword = false;
+        $cashier->need_change_password = false;
         $cashier->remember_token = Str::random(10);
 
         $cashier->save();
@@ -86,10 +86,10 @@ class UserTableSeeder extends Seeder
 
         $security->username = self::DEFAULT_SECURITY[self::USERNAME];
         $security->password = Hash::make(self::DEFAULT_SECURITY[self::PASSWORD]);
-        $security->FIO = self::DEFAULT_SECURITY[self::NAME];
-        $security->orgunit_id = $orgUnit->children()->first()->children()->first()->id;
+        $security->full_name = self::DEFAULT_SECURITY[self::NAME];
+        $security->org_unit_id = $orgUnit->children()->first()->children()->first()->id;
         $security->blocked = false;
-        $security->needChangePassword = false;
+        $security->need_change_password = false;
         $security->remember_token = Str::random(10);
 
         $security->save();

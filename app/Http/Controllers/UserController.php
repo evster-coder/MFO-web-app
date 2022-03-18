@@ -42,7 +42,7 @@ class UserController extends Controller
 
     public function changePassword()
     {
-        if(Auth::user()->needChangePassword)
+        if(Auth::user()->need_change_password)
             return view('users.change-password');
         else abort(404);
     }
@@ -64,7 +64,7 @@ class UserController extends Controller
 
         $user = User::find(Auth::user()->id);
         $user->password = Hash::make($req->get('new-password'));
-        $user->needChangePassword = false;
+        $user->need_change_password = false;
         $user->save();
         return redirect()->route('user.profile')->with(['status' => 'Пароль был успешно изменен!']);
     }
@@ -78,7 +78,7 @@ class UserController extends Controller
     public function resetYourselfPassword()
     {
         $user = Auth::user();
-        $user->needChangePassword = true;
+        $user->need_change_password = true;
         $user->save();
         return redirect()->route('user.profile')->with(['status' => 'Запрошена смена пароля!']);
     }
@@ -105,10 +105,10 @@ class UserController extends Controller
             $users = User::find(Auth::user()->id)
                         ->getDownUsers()
                         ->select('users.*')
-                        ->join('orgunits', 'orgunits.id', '=', 'users.orgunit_id')
+                        ->join('org_units', 'org_units.id', '=', 'users.org_unit_id')
                         ->where('username', 'like', '%'.$query.'%')
-                        ->OrWhere('orgunits.orgUnitCode', 'like', '%'.$query.'%')
-                        ->OrWhere('FIO', 'like', '%'.$query.'%')
+                        ->OrWhere('org_units.org_unit_code', 'like', '%'.$query.'%')
+                        ->OrWhere('full_name', 'like', '%'.$query.'%')
                         ->orderBy($sortBy, $sortDesc)
                         ->with(['roles', 'orgUnit'])
                         ->paginate(10);
@@ -122,24 +122,23 @@ class UserController extends Controller
         //dd("create");
     	$newUser = new User();
 
-        $orgunit = OrgUnit::find(Auth::user()->orgunit_id);
+        $orgUnit = OrgUnit::find(Auth::user()->org_unit_id);
 
-        $orgunits = OrgUnit::whereDescendantOrSelf($orgunit)
-                            ->select('id', 'orgUnitCode as text')
+        $orgUnits = OrgUnit::whereDescendantOrSelf($orgUnit)
+                            ->select(['id', 'org_unit_code as text'])
                             ->get();
 
         $roles = Role::all();
 
-    	return view('users.create', 
+    	return view('users.create',
     				['curUser' => $newUser,
-                    'orgUnits' => $orgunits,
+                    'orgUnits' => $orgUnits,
                     'roles' => $roles,
                 ]);
     }
 
     public function store(StoreUserRequest $req)
     {
-        //dd("store");
         $data = $req->all();
 
         //создаем пользователя
@@ -147,11 +146,9 @@ class UserController extends Controller
 
         $user->password = Hash::make($data['password']);
         $user->blocked = false;
-        $user->needChangePassword = false;
+        $user->need_change_password = false;
 
-        $user->save();
-
-        if ($user)
+        if ($user->save())
         {
             //заполняем его роли
             $roles = $req->get('roles');
@@ -169,14 +166,12 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        //dd("edit");
         $curUser = User::find($id);
 
-
         //получаем опции для селектов
-        $orgunit = OrgUnit::find(Auth::user()->orgunit_id);
-        $orgunits = OrgUnit::whereDescendantOrSelf($orgunit)
-                            ->select('id', 'orgUnitCode as text')
+        $orgUnit = OrgUnit::find(Auth::user()->org_unit_id);
+        $orgUnits = OrgUnit::whereDescendantOrSelf($orgUnit)
+                            ->select(['id', 'org_unit_code as text'])
                             ->get();
 
         $roles = Role::all();
@@ -185,7 +180,7 @@ class UserController extends Controller
         return view('users.create',
         [
             'curUser' => $curUser,
-            'orgUnits' => $orgunits,
+            'orgUnits' => $orgUnits,
             'roles' => $roles
         ]);
 
@@ -193,8 +188,6 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $req, $id)
     {
-        //dd("update");
-        
         $editUser = User::find($id);
 
         if(empty($editUser))
@@ -203,9 +196,7 @@ class UserController extends Controller
         $data = $req->all();
         $result = $editUser->fill($data);
 
-        $result->save();
-
-        if($result)
+        if($result->save())
         {
             $curRoles = $result->roles;
 
@@ -237,7 +228,6 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        //dd("destroy");
         $deletingItem = User::find($id);
 
         if($deletingItem)
@@ -253,7 +243,6 @@ class UserController extends Controller
 
     public function block($id)
     {
-        //dd("block");
         if(Auth::user()->id == $id)
             return back()->withErrors(['msg' => 'Нельзя заблокировать себя']);
         else
@@ -263,7 +252,7 @@ class UserController extends Controller
             if($banUser == null)
                 return response()->json(['Ошибка' => 'Вы не можете заблокировать этого пользователя!']);
 
-            if(Auth::user()->canSetOrgUnit($banUser->orgunit_id))
+            if(Auth::user()->canSetOrgUnit($banUser->org_unit_id))
             {
                 $banUser->blocked = true;
                 $banUser->save();
@@ -278,8 +267,6 @@ class UserController extends Controller
 
     public function unblock($id)
     {
-        //dd("unblock");
-
         if(Auth::user()->id == $id)
             return back()->withErrors(['msg' => 'Нельзя разблокировать себя']);
         else
@@ -289,7 +276,7 @@ class UserController extends Controller
             if($unbanUser == null)
                 return response()->json(['Ошибка' => 'Вы не можете разблокировать этого пользователя!']);
 
-            if(Auth::user()->canSetOrgUnit($unbanUser->orgunit_id))
+            if(Auth::user()->canSetOrgUnit($unbanUser->org_unit_id))
             {
                 $unbanUser->blocked = false;
                 $unbanUser->save();
@@ -305,19 +292,16 @@ class UserController extends Controller
 
     public function resetPassword($id)
     {
-        //dd("resetPassword");
-        
         $user = User::find($id);
 
         if($user == null)
             return response()->json(['Ошибка' => 'Вы не можете сбросить пароль этого пользователя!']);
 
-        if(Auth::user()->canSetOrgUnit($user->orgunit_id))
+        if(Auth::user()->canSetOrgUnit($user->org_unit_id))
         {
-            $user->needChangePassword = true;
+            $user->need_change_password = true;
             $user->password = Hash::make($user->username);
             $user->save();
-
 
             return redirect()->route('user.show', $user->id)->with(['status' => 'Пароль успешно сброшен! Он совпадает с логином пользователя, его необходимо сменить при следующей авторизации пользователя.']);
         }

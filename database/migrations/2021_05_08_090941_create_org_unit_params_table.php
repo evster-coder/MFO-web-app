@@ -13,11 +13,11 @@ class CreateOrgUnitParamsTable extends Migration
      */
     public function up()
     {
-        Schema::create('orgunit_params', function (Blueprint $table) {
+        Schema::create('org_unit_params', function (Blueprint $table) {
             $table->id();
             $table->string('name', 250);
             $table->string('slug', 50);
-            $table->string('dataType', 100);
+            $table->string('data_type', 100);
         });
     }
 
@@ -28,6 +28,6 @@ class CreateOrgUnitParamsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orgunit_params');
+        Schema::dropIfExists('org_unit_params');
     }
 }

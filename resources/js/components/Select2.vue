@@ -8,10 +8,10 @@
 	import Select2 from "select2";
 
 	export default{
-		props: ['options', 'value', 'orgUnitCode'],
+		props: ['options', 'value', 'org_unit_code'],
 
 		mounted(){
-			var vm = this;
+			let vm = this;
 
 			$(this.$el).select2({
 				theme: "bootstrap-5",

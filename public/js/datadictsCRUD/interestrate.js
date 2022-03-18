@@ -1,6 +1,6 @@
   function validate()
   {
-    if(document.dataForm.percentValue.value !='')
+    if(document.dataForm.percent_value.value !='')
       document.dataForm.btnsave.disabled=false
     else
       document.dataForm.btnsave.disabled=true

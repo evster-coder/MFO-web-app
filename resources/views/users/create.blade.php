@@ -82,25 +82,25 @@
                     </div>
 
                     <div class="form-group edit-fields">
-                        <label for="FIO">ФИО</label>
+                        <label for="full_name">ФИО</label>
                         <input required
                                class="form-control"
-                               name="FIO"
-                               id="FIO"
+                               name="full_name"
+                               id="full_name"
                                type="text"
                                placeholder="Введите ФИО сотрудника"
-                               value="{{ old( 'FIO', $curUser->FIO) }}">
+                               value="{{ old( 'full_name', $curUser->full_name) }}">
                     </div>
 
                     <div class="form-group edit-fields">
-                        <label for="orgunit_id">Подразделение</label>
+                        <label for="org_unit_id">Подразделение</label>
                         <select2 required
                                  class="form-group"
                                  data-width="100%"
                                  :options="{{$orgUnits}}"
-                                 name="orgunit_id"
-                                 id="orgunit_id"
-                                 value="{{old('orgunit_id', $curUser->orgunit_id)}}">
+                                 name="org_unit_id"
+                                 id="org_unit_id"
+                                 value="{{old('org_unit_id', $curUser->org_unit_id)}}">
                             <option value="" disabled> Введите Подразделение</option>
                         </select2>
                     </div>
@@ -176,6 +176,4 @@
                 @endperm
             </form>
     </div>
-
-
 @endsection

@@ -5,19 +5,20 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
 use App\Models\OrgUnit;
+use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
     /**
      * Display the login view.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         return view('auth.login');
     }
@@ -25,8 +26,9 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      *
-     * @param  \App\Http\Requests\Auth\LoginRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param LoginRequest $request
+     * @return RedirectResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(LoginRequest $request)
     {
@@ -35,8 +37,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         //помещаем ключ подразделения в сессию
-        $request->session()->put('OrgUnit', Auth::user()->orgunit_id);
-        $request->session()->put('OrgUnitCode', OrgUnit::find(Auth::user()->orgunit_id)->orgUnitCode);
+        $request->session()->put('orgUnit', Auth::user()->org_unit_id);
+        $request->session()->put('orgUnitCode', OrgUnit::find(Auth::user()->org_unit_id)->org_unit_code);
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
@@ -44,8 +46,8 @@ class AuthenticatedSessionController extends Controller
     /**
      * Destroy an authenticated session.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @param Request $request
+     * @return RedirectResponse
      */
     public function destroy(Request $request)
     {
@@ -56,8 +58,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         //извлекаем ключ подразделения
-        $request->session()->forget('OrgUnit');
-        $request->session()->forget('OrgUnitCode');
+        $request->session()->forget('orgUnit');
+        $request->session()->forget('orgUnitCode');
 
         return redirect('/');
     }

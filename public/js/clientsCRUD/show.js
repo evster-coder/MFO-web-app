@@ -61,7 +61,7 @@ function ready()
 		var dateTo = document.getElementById('searchTo').value;
 
     	$.ajax({
-	     url:"/client-clientforms/" + clientId + 
+	     url:"/client-clientforms/" + clientId +
 	     "/?dateFrom=" + dateFrom
 	     + "&dateTo=" + dateTo,
 	     success:function(data)
@@ -78,9 +78,9 @@ function ready()
 		var date = document.getElementById('searchLoanConslusionDate').value;
 
     	$.ajax({
-	     url:"/client-loans/" + clientId + 
-	     "/?loanNumber=" + number
-	     + "&loanConclusionDate=" + date,
+	     url:"/client-loans/" + clientId +
+	     "/?loan_number=" + number
+	     + "&loan_conclusion_date=" + date,
 	     success:function(data)
 	       {
 	        loansTable.innerHTML = "";

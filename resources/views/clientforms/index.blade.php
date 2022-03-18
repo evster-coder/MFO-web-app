@@ -25,7 +25,7 @@
                 <li>
                     <a class="dropdown-item"
                        id="exportExcel"
-                       data-export="{{route('clientform.export')}}">
+                       data-export="{{route('clientForm.export')}}">
                         <i class="fas fa-file-excel"></i> Excel
                     </a>
                 </li>
@@ -39,7 +39,7 @@
         @perm('create-clientform')
         <div class="add-clientform-btn">
             <a class="btn btn-primary"
-               href="{{route('clientform.create')}}"
+               href="{{route('clientForm.create')}}"
                role="button">
                 Добавить
             </a>
@@ -98,7 +98,7 @@
             </tr>
             </thead>
             <tbody>
-            <x-clientforms-tbody :clientforms="$clientforms"/>
+            <x-clientforms-tbody :clientForms="$clientForms"/>
             </tbody>
         </table>
         <input type="hidden" name="hiddenPage" id="hiddenPage" value="1"/>

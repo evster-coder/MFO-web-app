@@ -12,7 +12,7 @@ $(document).ready(function () {
 
 		//показываем окно
 		$('#crud-modal').modal('show');
-	}); 
+	});
 
 	//редактирование объекта
 	$('body').on('click', '#edit-data', function () {
@@ -32,11 +32,11 @@ $(document).ready(function () {
 			$('#crud-modal').modal('show');
 
 			//запись значений в поля
-			$('#dataType').attr("disabled", true);
+			$('#data_type').attr("disabled", true);
 			$('#dataId').val(data['id']);
 			$('#name').val(data['name']);
 			$('#slug').val(data['slug']);
-			$('#dataType option[value=' + data['dataType'] + ']').prop('selected', true);
+			$('#data_type option[value=' + data['data_type'] + ']').prop('selected', true);
 		});
 	});
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,18 +14,24 @@ use Illuminate\Support\Collection;
  * @property int $id
  * @property string $name
  * @property string $slug
- * @property string $dataType
+ * @property string $data_type
  *
- * @property-read Collection|ParamValue[] $ParamValues
+ * @property-read Collection|ParamValue[] $paramValues
+ * @property-read int|null $param_values_count
+ *
+ * @method static Builder|OrgUnitParam newModelQuery()
+ * @method static Builder|OrgUnitParam newQuery()
+ * @method static Builder|OrgUnitParam query()
+ * @method static Builder|OrgUnitParam whereDataType($value)
+ * @method static Builder|OrgUnitParam whereId($value)
+ * @method static Builder|OrgUnitParam whereName($value)
+ * @method static Builder|OrgUnitParam whereSlug($value)
+ *
+ * @mixin \Eloquent
  */
 class OrgUnitParam extends Model
 {
     use HasFactory;
-
-    /**
-     * @var string
-     */
-    protected $table = 'orgunit_params';
 
     /**
      * @var bool
@@ -41,18 +48,18 @@ class OrgUnitParam extends Model
     /**
      * Значение параметра для подразделения
      *
-     * @param int $orgunit_id
+     * @param int $org_unit_id
      * @return $this
      */
-    public function getClosestValue(int $orgunit_id)
+    public function getClosestValue(int $org_unit_id)
     {
         /** @var OrgUnit $orgUnit */
-        $orgUnit = OrgUnit::find($orgunit_id);
-        $values = ParamValue::where('orgunit_param_id', $this->id)->get();
+        $orgUnit = OrgUnit::find($org_unit_id);
+        $values = ParamValue::where('org_unit_param_id', $this->id)->get();
         $paramValue = null;
 
         while ($orgUnit != null) {
-            $paramValue = $values->firstWhere('orgunit_id', $orgUnit->id);
+            $paramValue = $values->firstWhere('org_unit_id', $orgUnit->id);
 
             if ($paramValue != null) {
                 break;
@@ -64,7 +71,7 @@ class OrgUnitParam extends Model
         if ($paramValue == null) {
             return $this;
         } else {
-            return $paramValue->load('OrgUnitParam');
+            return $paramValue->load('orgUnitParam');
         }
     }
 
@@ -73,11 +80,11 @@ class OrgUnitParam extends Model
      *
      * @return HasMany
      */
-    public function ParamValues(): HasMany
+    public function paramValues(): HasMany
     {
         return $this->hasMany(ParamValue::class,
-            'orgunit_params',
-            'orgunit_param_id'
+            'org_unit_params',
+            'org_unit_param_id'
         );
     }
 }

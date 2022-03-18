@@ -17,13 +17,13 @@ class PaymentController extends Controller
      */
     public function index($id)
     {
-        return Loan::find($id)->Payments;
+        return Loan::find($id)->payments;
     }
 
     //экспорт таблицы в эксель
     public function export(Request $req)
     {
-        
+
     }
 
     /**
@@ -35,7 +35,7 @@ class PaymentController extends Controller
     {
         $user = Auth::user();
         $loan = Loan::find($id);
-        return view('payments.create', 
+        return view('payments.create',
             ['loan' => $loan,
             'user' => $user,
         ]);
@@ -50,15 +50,13 @@ class PaymentController extends Controller
     public function store(Request $req)
     {
         $payment = new Payment();
-        $payment->paymentDate = $req->get('paymentDate');
+        $payment->payment_date = $req->get('payment_date');
         $payment->user_id = Auth::user()->id;
-        $payment->orgunit_id = session('OrgUnit');
-        $payment->paymentSum = $req->get('paymentSum');
+        $payment->org_unit_id = session('org_unit');
+        $payment->payment_sum = $req->get('payment_sum');
         $payment->loan_id = $req->get('loan_id');
 
-        $payment->save();
-
-        if($payment)
+        if($payment->save())
             return redirect()->route('payment.show', $payment->id)
                         ->with(['status' => 'Платеж создан']);
         else

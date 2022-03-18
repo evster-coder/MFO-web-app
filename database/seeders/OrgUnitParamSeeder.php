@@ -15,31 +15,31 @@ class OrgUnitParamSeeder extends Seeder
     public function run()
     {
         $params = [
-            ['slug' => 'org-name', 'name' => 'Наименование организации', 'dataType' => 'string'],
-            ['slug' => 'org-fullname', 'name' => 'Наименование организации (полное)', 'dataType' => 'string'],
-            ['slug' => 'org-regnum', 'name' => 'Регистрационный номер', 'dataType' => 'string'],
-            ['slug' => 'orgunit-name', 'name' => 'Наименование подразделения', 'dataType' => 'string'],
-            ['slug' => 'org-address', 'name' => 'Местонахождение организации', 'dataType' => 'string'],
-            ['slug' => 'orgunit-address', 'name' => 'Местонахождение подразделения', 'dataType' => 'string'],
-            ['slug' => 'ogrn', 'name' => 'ОГРН', 'dataType' => 'string'],
-            ['slug' => 'inn', 'name' => 'ИНН', 'dataType' => 'string'],
-            ['slug' => 'kpp', 'name' => 'КПП', 'dataType' => 'string'],
-            ['slug' => 'accounting', 'name' => 'Счет', 'dataType' => 'string'],
-            ['slug' => 'bank-name', 'name' => 'Наименование банка', 'dataType' => 'string'],
-            ['slug' => 'bank-inn', 'name' => 'ИНН Банка', 'dataType' => 'string'],
-            ['slug' => 'bank-kpp', 'name' => 'КПП Банка', 'dataType' => 'string'],
-            ['slug' => 'bik', 'name' => 'БИК', 'dataType' => 'string'],
-            ['slug' => 'corr-accounting', 'name' => 'Корр. счет', 'dataType' => 'string'],
-            ['slug' => 'site', 'name' => 'Сайт', 'dataType' => 'string'],
-            ['slug' => 'phone-number', 'name' => 'Телефон', 'dataType' => 'string'],
-            ['slug' => 'slug-locality', 'name' => 'Сокращение населенного пункта', 'dataType' => 'string'],
+            ['slug' => 'org-name', 'name' => 'Наименование организации', 'data_type' => 'string'],
+            ['slug' => 'org-fullname', 'name' => 'Наименование организации (полное)', 'data_type' => 'string'],
+            ['slug' => 'org-regnum', 'name' => 'Регистрационный номер', 'data_type' => 'string'],
+            ['slug' => 'orgunit-name', 'name' => 'Наименование подразделения', 'data_type' => 'string'],
+            ['slug' => 'org-address', 'name' => 'Местонахождение организации', 'data_type' => 'string'],
+            ['slug' => 'orgunit-address', 'name' => 'Местонахождение подразделения', 'data_type' => 'string'],
+            ['slug' => 'ogrn', 'name' => 'ОГРН', 'data_type' => 'string'],
+            ['slug' => 'inn', 'name' => 'ИНН', 'data_type' => 'string'],
+            ['slug' => 'kpp', 'name' => 'КПП', 'data_type' => 'string'],
+            ['slug' => 'accounting', 'name' => 'Счет', 'data_type' => 'string'],
+            ['slug' => 'bank-name', 'name' => 'Наименование банка', 'data_type' => 'string'],
+            ['slug' => 'bank-inn', 'name' => 'ИНН Банка', 'data_type' => 'string'],
+            ['slug' => 'bank-kpp', 'name' => 'КПП Банка', 'data_type' => 'string'],
+            ['slug' => 'bik', 'name' => 'БИК', 'data_type' => 'string'],
+            ['slug' => 'corr-accounting', 'name' => 'Корр. счет', 'data_type' => 'string'],
+            ['slug' => 'site', 'name' => 'Сайт', 'data_type' => 'string'],
+            ['slug' => 'phone-number', 'name' => 'Телефон', 'data_type' => 'string'],
+            ['slug' => 'slug-locality', 'name' => 'Сокращение населенного пункта', 'data_type' => 'string'],
         ];
 
         foreach ($params as $param) {
             OrgUnitParam::create([
                 'name' => $param['name'],
                 'slug' => $param['slug'],
-                'dataType' => $param['dataType'],
+                'data_type' => $param['data_type'],
             ]);
         }
 
