@@ -142,9 +142,9 @@ class OrgUnit extends Model
     /**
      * Справочники подразделения
      *
-     * @return mixed
+     * @return OrgUnit
      */
-    public function getDictsOrgUnit()
+    public function getDictsOrgUnit(): OrgUnit
     {
         $orgUnits = self::whereAncestorOrSelf($this->id)->get();
 

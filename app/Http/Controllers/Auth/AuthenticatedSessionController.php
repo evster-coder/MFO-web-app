@@ -8,7 +8,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\OrgUnit;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -28,17 +28,17 @@ class AuthenticatedSessionController extends Controller
      *
      * @param LoginRequest $request
      * @return RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
-    public function store(LoginRequest $request)
+    public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        //помещаем ключ подразделения в сессию
+        // Помещаем ключ подразделения в сессию
         $request->session()->put('orgUnit', Auth::user()->org_unit_id);
-        $request->session()->put('orgUnitCode', OrgUnit::find(Auth::user()->org_unit_id)->org_unit_code);
+        $request->session()->put('orgUnitCode', Auth::user()->orgUnit->org_unit_code);
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
@@ -49,7 +49,7 @@ class AuthenticatedSessionController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
 
@@ -57,7 +57,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        //извлекаем ключ подразделения
+        // Извлекаем ключ подразделения
         $request->session()->forget('orgUnit');
         $request->session()->forget('orgUnitCode');
 

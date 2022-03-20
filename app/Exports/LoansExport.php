@@ -5,7 +5,7 @@ namespace App\Exports;
 use App\Models\Loan;
 use App\Models\OrgUnit;
 
-use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -18,21 +18,12 @@ class LoansExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSiz
 {
     use Exportable;
 
-    /**
-     * @var
-     */
     protected $loanNumber;
-    /**
-     * @var
-     */
+
     protected $loanConclusionDate;
-    /**
-     * @var
-     */
+
     protected $clientFio;
-    /**
-     * @var
-     */
+
     protected $statusOpen;
 
     /**
@@ -54,9 +45,9 @@ class LoansExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSiz
     }
 
     /**
-     * @return Collection
+     * @return Builder
      */
-    public function query()
+    public function query(): Builder
     {
         //сортировка фильтрация пагинация
         $loans = Loan::whereIn('loans.org_unit_id',
@@ -78,7 +69,7 @@ class LoansExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSiz
     }
 
     /**
-     * @param mixed $loan
+     * @param Loan $loan
      * @return array
      */
     public function map($loan): array
@@ -111,6 +102,4 @@ class LoansExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSiz
             'Статус',
         ];
     }
-
-
 }

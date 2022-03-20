@@ -10,14 +10,16 @@ class BannedUser
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param Request $request
+     * @param \Closure $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!auth()->check() || auth()->user()->blocked)
+        if (!auth()->check() || auth()->user()->blocked) {
             return redirect()->route('user.banned');
+        }
+
         return $next($request);
     }
 }

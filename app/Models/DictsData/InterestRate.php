@@ -34,6 +34,6 @@ class InterestRate extends Model
      * @var string[]
      */
     protected $guarded = [
-        'percent_value',
+        'id',
     ];
 }

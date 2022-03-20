@@ -11,7 +11,7 @@ class ClientRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,11 +21,12 @@ class ClientRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'surname' => 'required|string|min:3|max:50',
             'name' => 'required|string|min:3|max:50',
+            'patronymic' => 'string',
             'birth_date' => 'date',
         ];
     }

@@ -5,7 +5,7 @@ namespace App\Exports;
 use App\Models\ClientForm;
 use App\Models\OrgUnit;
 use App\Models\Client;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -17,21 +17,12 @@ class ClientFormsExport implements FromQuery, WithMapping, WithHeadings, ShouldA
 {
     use Exportable;
 
-    /**
-     * @var
-     */
     protected $id;
-    /**
-     * @var
-     */
+
     protected $loanDate;
-    /**
-     * @var
-     */
+
     protected $clientFio;
-    /**
-     * @var
-     */
+
     protected $state;
 
     /**
@@ -61,7 +52,7 @@ class ClientFormsExport implements FromQuery, WithMapping, WithHeadings, ShouldA
                 Client::where(DB::raw('CONCAT_WS(" ", `surname`, `name`, `patronymic`) '),
                     'like',
                     '%' . $this->clientFio . '%')->pluck('id'));
-        //фильтрация по статусу
+
         if ($this->state == 'considered') {
             //получить заявки в рассмотрении
             $clientForms = $clientForms
@@ -132,5 +123,4 @@ class ClientFormsExport implements FromQuery, WithMapping, WithHeadings, ShouldA
             'Статус заявки',
         ];
     }
-
 }

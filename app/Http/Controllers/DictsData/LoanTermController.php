@@ -4,9 +4,10 @@ namespace App\Http\Controllers\DictsData;
 
 use App\Models\DictsData\LoanTerm;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
 use Response;
 
 class LoanTermController extends Controller
@@ -14,58 +15,70 @@ class LoanTermController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
-        $items = LoanTerm::orderBy('days_amount')->paginate(10);
-        return view('dictfields.loanterm.index', ['terms' => $items]);
+        $terms = LoanTerm::orderBy('days_amount')
+            ->paginate(config('app.admin.page_size', 20));
+
+        return view('dictfields.loanterm.index', compact('terms'));
     }
 
-    public function axiosTerms(Request $req)
+    /**
+     * @param Request $req
+     * @return JsonResponse
+     */
+    public function axiosTerms(Request $req): JsonResponse
     {
         $query = $req->get('query');
 
-        $terms = LoanTerm::where('days_amount', 'like', '%'.$query.'%')
-                        ->orderBy('days_amount')->get();
+        $terms = LoanTerm::where('days_amount', 'like', "%$query%")
+            ->orderBy('days_amount')
+            ->get();
+
         return Response::json($terms);
     }
 
-    //возврат данных по запросу
-    public function getTerms(Request $req)
+    /**
+     * @param Request $req
+     * @return string
+     */
+    public function getTerms(Request $req): string
     {
-        if($req->ajax())
-        {
-            $query = $req->get('query');
-            $query = str_replace(" ", "%", $query);
+        if ($req->ajax()) {
+            $query = str_replace(" ", "%", $req->get('query', ''));
 
-            $terms = LoanTerm::where('days_amount', 'like', '%'.$query.'%')
-                        ->orderBy('days_amount')
-                        ->paginate(10);
+            $terms = LoanTerm::where('days_amount', 'like', "%$query%")
+                ->orderBy('days_amount')
+                ->paginate(config('app.admin.page_size', 20));
 
             return view('components.loanterms-tbody', compact('terms'))->render();
         }
+
+        return '';
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //simple validation (no need to add Request class)
         $request->validate([
-                'days_amount' => 'required|numeric|between:1,1000',
+            'days_amount' => 'required|numeric|between:1,1000',
         ]);
 
-        $termId = $request->dataId;
-        LoanTerm::updateOrCreate(['id' => $termId],['days_amount' => $request->get('days_amount')]);
-        if(empty($request->dataId))
-            $msg = 'Элемент успешно создан.';
-        else
-            $msg = 'Элемент успешно обновлен.';
+        $termId = $request->get('dataId');
+        LoanTerm::updateOrCreate(['id' => $termId], ['days_amount' => $request->get('days_amount')]);
+        if (empty($rateId)) {
+            $msg = trans('message.model.created.success');
+        } else {
+            $msg = trans('message.model.updated.success');
+        }
+
         return redirect()->route('loanterm.index')->with(['status' => $msg]);
 
     }
@@ -73,32 +86,34 @@ class LoanTermController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\LoanTerm  $loanTerm
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function edit($id)
+    public function edit(int $id): JsonResponse
     {
-        $loanTerm = LoanTerm::find($id);
-        return Response::json($loanTerm);
+        return Response::json(LoanTerm::find($id));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\LoanTerm  $loanTerm
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
         $deletingItem = LoanTerm::find($id);
 
-        if($deletingItem)
-        {
-            $deletingItem->delete();
-            return redirect()->route('loanterm.index')->with(['status' => 'Элемент успешно удален.']);
-        }
-        else
+        if ($deletingItem && $deletingItem->delete()) {
             return redirect()->route('loanterm.index')
-                ->withErrors(['msg' => 'Ошибка удаления в LoanTermController::destroy']);
+                ->with(['status' => trans('message.model.deleted.success')]);
+        } else {
+            return redirect()->route('loanterm.index')
+                ->withErrors([
+                    'msg' => trans('message.model.deleted.fail', [
+                        'error' => ' в LoanTermController::destroy',
+                    ]),
+                ]);
+        }
     }
 }

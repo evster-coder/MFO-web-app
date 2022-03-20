@@ -2,85 +2,97 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
 use App\Models\Permission;
 use App\Models\Role;
-
-use Redirect,Response;
+use Response;
 
 class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
         $perms = Permission::orderBy('name')
-                            ->paginate(10);
+            ->paginate(config('app.admin.page_size', 20));
 
-        return view('perms.index', ['perms' => $perms]);
+        return view('perms.index', compact('perms'));
     }
 
-
-    public function getPerms(Request $req)
+    /**
+     * @param Request $req
+     * @return string
+     */
+    public function getPerms(Request $req): string
     {
-        if($req->ajax())
-        {
+        if ($req->ajax()) {
             $sortBy = $req->get('sortby');
             $sortDesc = $req->get('sortdesc');
             $query = $req->get('query');
             $query = str_replace(" ", "%", $query);
 
-            $perms = Permission::where('name', 'like', '%'.$query.'%')
-                        ->OrWhere('slug','like', '%'.$query.'%')
-                        ->orderBy($sortBy, $sortDesc)
-                        ->paginate(10);
+            $perms = Permission::where('name', 'like', "%$query%")
+                ->OrWhere('slug', 'like', "%$query%")
+                ->orderBy($sortBy, $sortDesc)
+                ->paginate(config('app.admin.page_size', 20));
 
             return view('components.perms-tbody', compact('perms'))->render();
         }
+
+        return '';
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
-    {   
-        //simple validation (no need to add Request class)
+    public function store(Request $request): RedirectResponse
+    {
         $request->validate([
-                'name' => 'required|string|min:2|max:100',
-                'slug' => 'required|string|min:2|max:100',
+            'name' => 'required|string|min:2|max:100',
+            'slug' => 'required|string|min:2|max:100',
+        ]);
+
+        $sameName = Permission::where('name', $request->get('name'))->first();
+        $sameSlug = Permission::where('slug', $request->get('slug'))->first();
+
+        if ($sameName != null && (empty($request->permId) || $sameName->id != $request->permId)) {
+            return redirect()->route('perm.index')->withErrors([
+                'msg' => 'Запись с таким значением Названия уже существует',
             ]);
-
-        $sameName = Permission::where('name', $request->name)->first();
-        $sameSlug = Permission::where('slug', $request->slug)->first();
-        if($sameName != null && (empty($request->permId) || $sameName->id != $request->permId))
-        {
-            return redirect()->route('perm.index')->withErrors(['msg' => 'Запись с таким значением Названия уже существует']);
         }
 
-        if($sameSlug != null && (empty($request->permId) || $sameSlug->id != $request->permId))
-        {
-            return redirect()->route('perm.index')->withErrors(['msg' => 'Запись с таким значением slug уже существует']);
+        if ($sameSlug != null && (empty($request->permId) || $sameSlug->id != $request->permId)) {
+            return redirect()->route('perm.index')->withErrors([
+                'msg' => 'Запись с таким значением slug уже существует',
+            ]);
         }
-        $permId = $request->permId;
-        $perm = Permission::updateOrCreate(['id' => $permId],['name' => $request->name, 'slug' => $request->slug]);
-        if(empty($request->permId))
-        {
+
+        $permId = $request->get('permId');
+        $perm = Permission::updateOrCreate(['id' => $permId], [
+            'name' => $request->get('name'),
+            'slug' => $request->get('slug'),
+        ]);
+
+        if (empty($request->permId)) {
             //добавляем все новые права админу
             $admins = Role::where('slug', 'admin')->get();
-            foreach($admins as $admin)
+            foreach ($admins as $admin) {
                 $admin->permissions()->attach($perm->id);
+            }
 
-            $msg = 'Право успешно создано.';
+            $msg = trans('message.model.created.success');
+        } else {
+            $msg = trans('message.model.updated.success');
         }
-        else
-            $msg = 'Право успешно обновлено';
 
         return redirect()->route('perm.index')->with(['status' => $msg]);
     }
@@ -88,32 +100,35 @@ class PermissionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function edit($id)
+    public function edit(int $id): JsonResponse
     {
         $perm = Permission::find($id);
+
         return Response::json($perm);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
         $deletingItem = Permission::find($id);
 
-        if($deletingItem)
-        {
-            $deletingItem->delete();
-            return redirect()->route('perm.index')->with(['status' => 'Право успешно удалено.']);
-        }
-        else
+        if ($deletingItem && $deletingItem->delete()) {
             return redirect()->route('perm.index')
-                ->withErrors(['msg' => 'Ошибка удаления в PermissionController::destroy']);
+                ->with(['status' => trans('message.model.deleted.success')]);
+        } else {
+            return redirect()->route('perm.index')
+                ->withErrors([
+                    'msg' => trans('message.model.deleted.fail',
+                        ['error' => ' в PermissionController::destroy']),
+                ]);
+        }
     }
 }

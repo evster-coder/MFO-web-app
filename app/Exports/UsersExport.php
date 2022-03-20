@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -12,46 +13,55 @@ use Illuminate\Support\Facades\Auth;
 
 class UsersExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSize
 {
-	use Exportable;
+    use Exportable;
 
-	protected $params;
+    protected $params;
 
     public function __construct($params)
     {
         $this->params = $params;
     }
+
     /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function query()
+     * @return Builder
+     */
+    public function query(): Builder
     {
         return User::find(Auth::user()->id)
-                    ->getDownUsers()
-                    ->select('users.*')
-                    ->join('org_units', 'org_units.id', '=', 'users.org_unit_id')
-                    ->where('username', 'like', '%'.$this->params.'%')
-                    ->OrWhere('org_units.org_unit_code', 'like', '%'.$this->params.'%')
-                    ->OrWhere('full_name', 'like', '%'.$this->params.'%')
-                    ->with(['roles', 'orgUnit']);
+            ->getDownUsers()
+            ->select('users.*')
+            ->join('org_units', 'org_units.id', '=', 'users.org_unit_id')
+            ->where('username', 'like', '%' . $this->params . '%')
+            ->OrWhere('org_units.org_unit_code', 'like', '%' . $this->params . '%')
+            ->OrWhere('full_name', 'like', '%' . $this->params . '%')
+            ->with(['roles', 'orgUnit']);
 
     }
 
+    /**
+     * @param User $user
+     * @return array
+     */
     public function map($user): array
     {
-    	$roles = "";
-    	foreach($user->roles as $role)
-    		$roles = $roles . $role->name . " ";
-    	$blocked = $user->blocked ? 'Да' : 'Нет';
+        $roles = "";
+        foreach ($user->roles as $role) {
+            $roles = $roles . $role->name . " ";
+        }
+        $blocked = $user->blocked ? 'Да' : 'Нет';
 
         return [
             $user->username,
             $user->full_name,
             $user->orgUnit->org_unit_code,
             $blocked,
-            $roles
+            $roles,
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function headings(): array
     {
         return [
@@ -59,7 +69,7 @@ class UsersExport implements FromQuery, WithMapping, WithHeadings, ShouldAutoSiz
             'ФИО',
             'Код подразделения',
             'Блокировка',
-            'Роли'
+            'Роли',
         ];
     }
 }

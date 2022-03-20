@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\Permission;
-
 use App\Http\Requests\RoleRequest;
-
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -14,167 +14,160 @@ class RoleController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
-        $roles = Role::orderBy('name')->paginate(10);
+        $roles = Role::orderBy('name')
+            ->paginate(config('app.admin.page_size', 20));
 
-        return view('roles.index', ['roles' => $roles]);
+        return view('roles.index', compact('roles'));
     }
 
-    //экспорт таблицы в эксель
     public function export(Request $req)
     {
-        
     }
 
-    public function getRoles(Request $req)
+    /**
+     * @param Request $req
+     * @return string
+     */
+    public function getRoles(Request $req): string
     {
-        if($req->ajax())
-        {
+        if ($req->ajax()) {
             $sortBy = $req->get('sortby');
             $sortDesc = $req->get('sortdesc');
             $query = $req->get('query');
             $query = str_replace(" ", "%", $query);
 
-            $roles = Role::where('name', 'like', '%'.$query.'%')
-                        ->OrWhere('slug','like', '%'.$query.'%')
-                        ->orderBy($sortBy, $sortDesc)
-                        ->paginate(10);
+            $roles = Role::where('name', 'like', "%$query%")
+                ->OrWhere('slug', 'like', "%$query%")
+                ->orderBy($sortBy, $sortDesc)
+                ->paginate(10);
 
             return view('components.roles-tbody', compact('roles'))->render();
         }
 
+        return '';
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
-        $newRole = new Role();
-
+        $role = new Role();
         $permissions = Permission::orderBy('name')->get();
 
-        return view('roles.show', 
-                    ['role' => $newRole,
-                    'permissions' => $permissions,
-                ]);
+        return view('roles.show', compact(['role', 'permissions']));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param RoleRequest $request
+     * @return RedirectResponse
      */
-    public function store(RoleRequest $request)
+    public function store(RoleRequest $request): RedirectResponse
     {
-        $data = $request->all();
-        $role = new Role($data);
+        $role = new Role($request->all());
 
-        $role->save();
-
-        if ($role)
-        {
+        if ($role->save()) {
             //заполняем ее права
             $permissions = $request->get('perm');
-            foreach ($permissions as $key => $value)
-            {
-                if($value == "1")
-                {
+            foreach ($permissions as $key => $value) {
+                if ($value == "1") {
                     $role->permissions()->attach($key);
-                }
-                else
-                {
+                } else {
                     $role->permissions()->detach($key);
                 }
             }
 
-            return redirect()->route('role.index')->with(['status' => "Роль ".$role->name." yспешно добавлена"]);
+            return redirect()->route('role.index')
+                ->with(['status' => "Роль " . $role->name . " успешно добавлена"]);
+        } else {
+            return back()->withErrors(['msg' => trans('message.model.created.fail')])
+                ->withInput();
         }
-        else
-            return back()->withErrors(['msg' => "Ошибка создания объекта"])->withInput();
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return View|RedirectResponse
      */
-    public function show($id)
+    public function show(int $id)
     {
         $role = Role::find($id);
         $permissions = Permission::orderBy('name')->get();
 
 
-        if($role != null)
-            return view('roles.show', ['role' => $role,
-                                       'permissions' => $permissions]);
-        else
-            return back()->withErrors(['msg' => "Указанная роль не найдена!"]);
+        return $role != null
+            ? view('roles.show', compact(['role', 'permissions']))
+            : back()->withErrors(['msg' => trans('message.model.not_found')]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param int $id
+     * @return RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, int $id): RedirectResponse
     {
         $editRole = Role::find($id);
 
-        if(empty($editRole))
-            return back()->withErrors(['msg' => "Обновляемый объект не найден"])->withInput();
+        if (!$editRole) {
+            return back()->withErrors(['msg' => trans('message.model.not_found')])
+                ->withInput();
+        }
 
-
-        //получаем и обновляем права
+        // Получаем и обновляем права
         $permissions = $request->get('perm');
-        if($permissions)
-            foreach ($permissions as $key => $value)
-            {
-                if($value == "1")
-                {
-                    if(!$editRole->permissions->contains('id', $key))
+
+        if ($permissions) {
+            foreach ($permissions as $key => $value) {
+
+                if ($value == "1") {
+                    if (!$editRole->permissions->contains('id', $key)) {
                         $editRole->permissions()->attach($key);
-                }
-                else
-                {
-                    if($editRole->permissions->contains('id', $key))
+                    }
+                } else {
+                    if ($editRole->permissions->contains('id', $key)) {
                         $editRole->permissions()->detach($key);
+                    }
                 }
             }
+        }
 
-        return redirect()->route('role.index')->with(['status' => "Роль ".$editRole->name." yспешно обновлена"]);
+        return redirect()->route('role.index')
+            ->with(['status' => "Роль " . $editRole->name . " успешно обновлена"]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
         $deletingRole = Role::find($id);
 
-        if($deletingRole)
-        {
-            $deletingRole->delete();
-            return redirect()->route('role.index')->with(['status' => 'Роль успешно удалена']);
-        }
-        else
-        {
+        if ($deletingRole && $deletingRole->delete()) {
             return redirect()->route('role.index')
-                ->withErrors(['msg' => 'Ошибка удаления в RoleController::destroy']);
-
+                ->with(['status' => trans('message.model.deleted.success')]);
+        } else {
+            return redirect()->route('role.index')
+                ->withErrors([
+                    'msg' => trans('message.model.deleted.success', [
+                        'error' => ' в RoleController::destroy',
+                    ]),
+                ]);
         }
     }
 }

@@ -1,7 +1,7 @@
 @extends('layouts.user')
 
 @section('title')
-    Подразделение {{$orgunit->org_unit_code}}
+    Подразделение {{$orgUnit->org_unit_code}}
 @endsection
 
 @section('content')

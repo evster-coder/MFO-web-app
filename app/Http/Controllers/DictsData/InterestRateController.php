@@ -4,106 +4,112 @@ namespace App\Http\Controllers\DictsData;
 
 use App\Models\DictsData\InterestRate;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
 use Response;
 
 class InterestRateController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $items = InterestRate::orderBy('percent_value')->paginate(10);
-        return view('dictfields.interestrate.index', ['rates' => $items]);
+        $rates = InterestRate::orderBy('percent_value')
+            ->paginate(config('app.admin.page_size', 20));
+
+        return view('dictfields.interestrate.index', compact('rates'));
     }
 
-    public function axiosRates(Request $req)
+    /**
+     * @param Request $req
+     * @return JsonResponse
+     */
+    public function axiosRates(Request $req): JsonResponse
     {
-        $query = $req->get('query');
+        $query = $req->get('query', '');
 
-        $terms = InterestRate::where('percent_value', 'like', '%'.$query.'%')
-                        ->orderBy('percent_value')->get();
+        $terms = InterestRate::where('percent_value', 'like', "%$query%")
+            ->orderBy('percent_value')->get();
+
         return Response::json($terms);
-
     }
 
-    //получение данных по запросу
-    public function getRates(Request $req)
+    /**
+     * @param Request $req
+     * @return string
+     */
+    public function getRates(Request $req): string
     {
-        if($req->ajax())
-        {
-            $query = $req->get('query');
-            $query = str_replace(" ", "%", $query);
+        if ($req->ajax()) {
+            $query = str_replace(" ", "%", $req->get('query', ''));
 
-            $rates = InterestRate::where('percent_value', 'like', '%'.$query.'%')
-                        ->orderBy('percent_value')
-                        ->paginate(10);
+            $rates = InterestRate::where('percent_value', 'like', "%$query%")
+                ->orderBy('percent_value')
+                ->paginate(config('app.admin.page_size', 20));
 
             return view('components.interestrates-tbody', compact('rates'))->render();
         }
+
+        return '';
     }
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //simple validation (no need to add Request class)
         $request->validate([
-                'percent_value' => 'required|numeric|between:0,1000000.999',
+            'percent_value' => 'required|numeric|between:0,1000000.999',
         ]);
 
-        $rateId = $request->dataId;
-        InterestRate::updateOrCreate(['id' => $rateId],['percent_value' => $request->get('percent_value')]);
-        if(empty($request->dataId))
-            $msg = 'Элемент успешно создан.';
-        else
-            $msg = 'Элемент успешно обновлен.';
-        return redirect()->route('interestrate.index')->with(['status' => $msg]);
+        $rateId = $request->get('dataId');
+        InterestRate::updateOrCreate(['id' => $rateId], ['percent_value' => $request->get('percent_value')]);
 
+        if (empty($rateId)) {
+            $msg = trans('message.model.created.success');
+        } else {
+            $msg = trans('message.model.updated.success');
+        }
+
+        return redirect()->route('interestrate.index')->with(['status' => $msg]);
     }
 
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function edit($id)
+    public function edit(int $id): JsonResponse
     {
-        $interestRate = InterestRate::find($id);
-        return Response::json($interestRate);
+        return Response::json(InterestRate::find($id));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
         $deletingItem = InterestRate::find($id);
 
-        if($deletingItem)
-        {
-            $deletingItem->delete();
+        if ($deletingItem && $deletingItem->delete()) {
             return redirect()->route('interestrate.index')
-                            ->with(['status' => 'Элемент успешно удален.']);
+                ->with(['status' => trans('message.model.deleted.success')]);
+        } else {
+            return redirect()->route('interestrate.index')
+                ->withErrors([
+                    'msg' => trans('message.model.deleted.fail', [
+                        'error' => ' в InterestRateController::destroy',
+                    ]),
+                ]);
         }
-        else
-            return redirect()->route('interestrate.index')
-                ->withErrors(['msg' => 'Ошибка удаления в InterestRateController::destroy']);
 
     }
 }

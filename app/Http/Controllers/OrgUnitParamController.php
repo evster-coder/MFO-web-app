@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
 use App\Models\OrgUnitParam;
-
 use Response;
 
 class OrgUnitParamController extends Controller
@@ -13,90 +14,99 @@ class OrgUnitParamController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
-        $params = OrgUnitParam::orderBy('name')->paginate(10);
+        $params = OrgUnitParam::orderBy('name')
+            ->paginate(config('app.admin.page_size', 20));
 
         return view('orgunits.params.index', ['params' => $params]);
     }
 
-    //возврат данных по запросу
-    public function getParams(Request $req)
+    /**
+     * @param Request $req
+     * @return string
+     */
+    public function getParams(Request $req): string
     {
-        if($req->ajax())
-        {
+        if ($req->ajax()) {
             $query = $req->get('query');
             $query = str_replace(" ", "%", $query);
 
-            $params = OrgUnitParam::where('name', 'like', '%'.$query.'%')
-                        ->orWhere('slug', 'like', '%'.$query.'%')
-                        ->orderBy('name')
-                        ->paginate(10);
+            $params = OrgUnitParam::where('name', 'like', "%$query%")
+                ->orWhere('slug', 'like', "%$query%")
+                ->orderBy('name')
+                ->paginate(10);
 
             return view('components.orgunitparams-tbody', compact('params'))->render();
         }
 
+        return '';
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //simple validation (no need to add Request class)
         $request->validate([
             'name' => 'required|string|min:3|max:100',
             'slug' => 'required|string|min:3|max:50',
         ]);
 
-        $paramId = $request->dataId;
+        $paramId = $request->get('dataId');
 
-        //Если добавление
-        if(empty($request->dataId))
-        {
-            $dataTypeValue = "";
-            if($request->data_type == 'number')
+        // Добавление
+        if (empty($request->dataId)) {
+            $dataType = $request->get('data_type');
+
+            if ($dataType == 'number') {
                 $dataTypeValue = 'number';
-            else if ($request->data_type == 'date')
-                $dataTypeValue = 'date';
-            else $dataTypeValue = 'string';
+            } else {
+                if ($dataType == 'date') {
+                    $dataTypeValue = 'date';
+                } else {
+                    $dataTypeValue = 'string';
+                }
+            }
+
             OrgUnitParam::create([
                 'name' => $request->name,
                 'slug' => $request->slug,
                 'data_type' => $dataTypeValue,
-                ]);
-            $msg = 'Элемент успешно создан.';
-        }
-        else
-        {
+            ]);
+
+            $msg = trans('message.model.created.success');
+        } else {
             $param = OrgUnitParam::find($paramId);
 
-            if($param == null)
+            if ($param == null) {
                 return redirect()->route('param.index')
-                    ->withErrors(['msg' => 'Обновляемая запись не найдена']);
+                    ->withErrors(['msg' => trans('message.model.not_found')]);
+            }
 
             $param->name = $request->name;
             $param->slug = $request->slug;
             $param->save();
 
-            $msg = 'Элемент успешно обновлен.';
+            $msg = trans('message.model.updated.success');
         }
-        return redirect()->route('param.index')->with(['status' => $msg]);
 
+        return redirect()->route('param.index')
+            ->with(['status' => $msg]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return JsonResponse
      */
-    public function edit($id)
+    public function edit(int $id): JsonResponse
     {
         return Response::json(OrgUnitParam::find($id));
     }
@@ -104,21 +114,22 @@ class OrgUnitParamController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return RedirectResponse
      */
-    public function destroy($id)
+    public function destroy(int $id): RedirectResponse
     {
         $deletingItem = OrgUnitParam::find($id);
 
-        if($deletingItem)
-        {
-            $deletingItem->delete();
-            return redirect()->route('param.index')->with(['status' => 'Элемент успешно удален.']);
-        }
-        else
+        if ($deletingItem && $deletingItem->delete()) {
             return redirect()->route('param.index')
-                ->withErrors(['msg' => 'Ошибка удаления в OrgUnitParamController::destroy']);
-
+                ->with(['status' => trans('message.model.deleted.success')]);
+        } else {
+            return redirect()->route('param.index')
+                ->withErrors([
+                    'msg' => trans('message.model.deleted.fail',
+                        ['error' => ' в OrgUnitParamController::destroy']),
+                ]);
+        }
     }
 }

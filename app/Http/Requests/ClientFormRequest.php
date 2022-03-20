@@ -11,7 +11,7 @@ class ClientFormRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,7 +21,7 @@ class ClientFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'client_id' => 'required',
@@ -44,7 +44,7 @@ class ClientFormRequest extends FormRequest
             'interest_rate' => 'required|numeric|min:0',
             'loan_date' => 'required|date',
             'has_credits' => 'required|boolean',
-            'cashier_comment' => 'present|string|nullable'
+            'cashier_comment' => 'present|string|nullable',
         ];
     }
 }

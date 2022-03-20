@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $comment
  * @property Carbon $approval_date
  *
- * @property-read User $User
+ * @property-read User $user
  *
  * @method static Builder|DirectorApproval newModelQuery()
  * @method static Builder|DirectorApproval newQuery()
@@ -49,7 +49,7 @@ class DirectorApproval extends Model
     /**
      * @return BelongsTo
      */
-    public function User(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
